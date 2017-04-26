@@ -47,6 +47,7 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 |
 */
 
+define('VERSION', trim(file_get_contents(__DIR__.'/../VERSION')));
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(

@@ -35,10 +35,10 @@
 
   <div class="right menu">
     <div class="item">
-      <div class="ui primary button"><i class="add user icon"></i> @lang('user.signup')</div>
+      <a href="{{ url('/signup') }}" class="ui primary button"><i class="signup icon"></i> @lang('user.signup')</a>
     </div>
     <div class="item">
-      <div class="ui button"><i class="sign in icon"></i> @lang('user.login')</div>
+      <a href="{{ url('/login') }}" class="ui button"><i class="sign in icon"></i> @lang('user.login')</a>
     </div>
   </div>
 </div>

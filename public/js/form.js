@@ -17,20 +17,23 @@ function initAjaxForms() {
     form.prepend('<div class="ui active inverted dimmer"><div class="ui text loader">' + localization.loading + '</div></div>')
 
     // Get data
-    var data = form.serializeArray()
+    var data = objectifyForm(form.serializeArray())
 
     // Submit data
     $.ajax({
       url: form.attr('action'),
       method: form.attr('method'),
-      data: data,
+      data: JSON.stringify(data),
       contentType: 'application/json',
       dataType: 'json',
-      success: function (data) {
-        if (data.status)
-          displaySuccess(form, data.success)
-        else
-          displayError(form, data.error)
+      success: function (response) {
+        if (response.status) {
+          if (form.attr('data-ajax-custom-callback'))
+            window[form.attr('data-ajax-custom-callback')](data, response)
+          displaySuccess(form, response.success)
+        } else {
+          displayError(form, response.error)
+        }
         removeDimmer(form)
       },
       statusCode: {
@@ -76,3 +79,12 @@ function initAjaxForms() {
   })
 }
 initAjaxForms()
+
+
+function objectifyForm(formArray) { //serialize data function
+  var returnArray = {};
+  for (var i = 0; i < formArray.length; i++){
+    returnArray[formArray[i]['name']] = formArray[i]['value'];
+  }
+  return returnArray;
+}

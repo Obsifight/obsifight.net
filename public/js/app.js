@@ -1,8 +1,9 @@
 /*
-  === NAVBAR ===
+=== GLOBAL ===
 */
 $(document).ready(function () {
   $('.dropdown').dropdown({on: 'hover'})
+  $('.ui.checkbox').checkbox()
 })
 
 /*

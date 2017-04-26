@@ -41,5 +41,6 @@
         </script>
         <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
         <script type="text/javascript" src="{{ url('/js/form.js') }}"></script>
+        @yield('script')
     </body>
 </html>

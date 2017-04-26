@@ -14,6 +14,14 @@
 Route::get('/', function () {
     return view('pages.home');
 });
+
+/*
+===========
+  USERS
+===========
+*/
 Route::get('/login', function () {
     return view('user.login');
 });
+Route::post('/login', 'UserController@login');
+Route::post('/login/two-factor-auth', 'UserController@validLogin');

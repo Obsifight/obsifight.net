@@ -9,5 +9,7 @@ return [
   'error.badrequest' => 'Les informations envoyées sont incomplètes ou fausses.',
   'error.methodnotallowed' => 'La méthode utilisé pour soumettre les informations est incorrecte',
 
+  'error.fields' => 'Vous devez remplir tous les champs',
+
   'success.title' => 'Succès'
 ];

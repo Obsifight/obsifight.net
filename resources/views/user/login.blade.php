@@ -95,9 +95,18 @@
 @section('script')
   <script type="text/javascript">
     function afterLogin(req, res) {
-      if (!res.twoFactorAuth) return
+      var redirect = function () {
+        if (from = getURLParameter('from'))
+          document.location = from
+        else
+          document.location = '{{ url('/') }}'
+      }
+
+      if (!res.twoFactorAuth)
+        return redirect()
       $('#login-content').slideUp(150)
       $('#two-factor-auth-content').slideDown(150)
+      redirect()
     }
   </script>
 @endsection

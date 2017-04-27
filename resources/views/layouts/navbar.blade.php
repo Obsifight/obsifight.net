@@ -34,11 +34,20 @@
   </div>
 
   <div class="right menu">
-    <div class="item">
-      <a href="{{ url('/signup') }}" class="ui primary button"><i class="signup icon"></i> @lang('user.signup')</a>
-    </div>
-    <div class="item">
-      <a href="{{ url('/login') }}" class="ui button"><i class="sign in icon"></i> @lang('user.login')</a>
-    </div>
+    @if (Auth::user())
+      <div class="item">
+        <a href="{{ url('/user') }}" class="ui primary button"><i class="user icon"></i> {{ Auth::user()->username }}</a>
+      </div>
+      <div class="item">
+        <a href="{{ url('/logout') }}" class="ui button"><i class="sign out icon"></i> @lang('user.logout')</a>
+      </div>
+    @else
+      <div class="item">
+        <a href="{{ url('/signup') }}" class="ui primary button"><i class="signup icon"></i> @lang('user.signup')</a>
+      </div>
+      <div class="item">
+        <a href="{{ url('/login') }}" class="ui button"><i class="sign in icon"></i> @lang('user.login')</a>
+      </div>
+    @endif
   </div>
 </div>

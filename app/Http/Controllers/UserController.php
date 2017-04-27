@@ -5,6 +5,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Illuminate\Support\Facades\Event;
+
+use Illuminate\Support\Facades\Auth;
 use App\User;
 
 class UserController extends Controller
@@ -101,34 +104,36 @@ class UserController extends Controller
 
   private function __loginSuccess($userId, $rememberMe, $request)
   {
-    // Connect user
-    session(['user' => ['id' => $userId]]);
+    // Log user
+    Auth::loginUsingId($userId, ($rememberMe ? true : false));
 
-    // Save remember token
-    if ($rememberMe) {
-      $token = str_random(100);
-      // save
-      $user = User::find($userId);
-      $user->remember_token = $token;
-      $user->save();
-    }
+    return response()->json([
+      'status' => true,
+      'success' => __('user.login.success')
+    ]);
+  }
 
-    // log this connection
-    $log = new \App\UsersConnectionLog();
-    $log->user_id = $userId;
-    $log->ip = $request->ip();
-    $log->save();
+  public function logout(Request $request)
+  {
+    Auth::logout();
+    return redirect('/');
+  }
 
-    // Send to user
-    if ($rememberMe)
+  public function signup(Request $request)
+  {
+    // Check form
+    if (!$request->has('username') || !$request->has('password'))
       return response()->json([
-        'status' => true,
-        'success' => __('user.login.success')
-      ])->withCookie('remember_me', $token, 60 * 24 * 7);
-    else
-      return response()->json([
-        'status' => true,
-        'success' => __('user.login.success')
+        'status' => false,
+        'error' => __('form.error.fields')
       ]);
+
+    // Check if username or email is already used
+
+    // register user
+
+    // log user
+
+    // success response
   }
 }

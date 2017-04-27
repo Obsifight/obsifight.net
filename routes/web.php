@@ -25,3 +25,8 @@ Route::get('/login', function () {
 });
 Route::post('/login', 'UserController@login');
 Route::post('/login/two-factor-auth', 'UserController@validLogin');
+Route::get('/logout', 'UserController@logout');
+Route::get('/signup', function () {
+    return view('user.signup');
+});
+Route::post('/signup', 'UserController@signup');

@@ -2,6 +2,7 @@
 return [
   'signup' => "S'inscrire",
   'login' => 'Se connecter',
+  'logout' => 'Se déconnecter',
   'login.two_factor_auth' => 'Confirmer la connexion (Double authentification)',
 
   // FIELDS

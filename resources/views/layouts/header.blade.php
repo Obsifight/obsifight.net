@@ -9,7 +9,7 @@
       <p>Le xénotium et l'obsidienne n'étaient pas présent au début de la v1 mais sont arrivés pendant cette version.</p>
     </h2>
 
-    <div class="text-center">
+    <!--<div class="text-center">
       <a href="https://www.facebook.com/ObsiFight/" class="ui facebook button">
         <i class="facebook icon"></i> Facebook
       </a>
@@ -19,6 +19,6 @@
       <a href="https://www.youtube.com/user/WaVeiTv" class="ui youtube button">
         <i class="youtube icon"></i> YouTube
       </a>
-    </div>
+    </div>-->
   </div>
 </div>

@@ -33,7 +33,7 @@ body {
 
   padding: 10px;
   padding-top: 1px;
-  height: 380px;
+  height: 300px;
 
   border-bottom: 3px solid #A94545;
 }
@@ -66,11 +66,29 @@ body {
 }
 
 /* ====
+  SUBHEADER
+======= */
+.sub-header {
+  background-color: rgba(0,0,0,0.02);
+
+  padding: 30px 0;
+
+  color: #414141;
+  text-align: center;
+}
+.sub-header .header {
+  font-weight: 300;
+}
+
+/* ====
   BLOCKS/CONTENT
 ======= */
 
 .parallax-block .header {
   color: #fff;
+}
+.parallax-block .segment .header {
+  color: #333;
 }
 
 .parallax-block .huge.header {

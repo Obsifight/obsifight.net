@@ -122,10 +122,15 @@ class UserController extends Controller
   public function signup(Request $request)
   {
     // Check form
-    if (!$request->has('username') || !$request->has('password'))
+    if (!$request->has('username') || !$request->has('password') || !$request->has('password_confirmation') || !$request->has('email'))
       return response()->json([
         'status' => false,
         'error' => __('form.error.fields')
+      ]);
+    if (!$request->has('legal'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.legal')
       ]);
 
     // Check if username or email is already used

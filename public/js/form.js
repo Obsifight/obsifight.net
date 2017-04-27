@@ -34,33 +34,26 @@ function initAjaxForms() {
         } else {
           displayError(form, response.error)
         }
-        removeDimmer(form)
       },
       statusCode: {
         404: function () {
           displayError(form, localization.error.notfound)
-          removeDimmer(form)
         },
         403: function () {
           displayError(form, localization.error.forbidden)
-          removeDimmer(form)
         },
         500: function () {
           displayError(form, localization.error.internal)
-          removeDimmer(form)
         },
         400: function () {
           displayError(form, localization.error.badrequest)
-          removeDimmer(form)
         },
         405: function () {
           displayError(form, localization.error.methodnotallowed)
-          removeDimmer(form)
         }
       },
       error: function () {
         displayError(form, localization.error.internal)
-        removeDimmer(form)
       }
     })
 
@@ -72,9 +65,11 @@ function initAjaxForms() {
     // Display messages
     function displaySuccess(form, message) {
       form.find('.ajax-message').html('<div class="ui positive message"><div class="header">' + localization.success.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
+      removeDimmer(form)
     }
     function displayError(form, message) {
       form.find('.ajax-message').html('<div class="ui negative message"><div class="header">' + localization.error.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
+      removeDimmer(form)
     }
   })
 }

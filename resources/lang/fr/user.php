@@ -25,5 +25,19 @@ return [
   // SIGNUP
   'signup.join_now' => 'Rejoignez-nous dès maintenant !',
   'signup.field.legal' => "J'accepte le <a href=\":link\">réglement</a> d'ObsiFight",
-  'signup.error.legal' => 'Vous devez accepter le réglement avant de vous inscrire.'
+  'signup.error.legal' => 'Vous devez accepter le réglement avant de vous inscrire.',
+  'signup.error.captcha' => 'Vous devez valider le captcha pour vous inscrire.',
+  'signup.error.username' => 'Le pseudo doit être alpha-numérique entre 2 et 16 charactères.',
+  'signup.error.username.taken' => 'Ce pseudo est déjà utilisé par un autre joueur.',
+  'signup.error.email' => 'Cet email est invalide.',
+  'signup.error.email.taken' => 'Cet email est déjà utilisé par un autre joueur.',
+  'signup.error.passwords' => 'Les mots de passe ne sont pas identiques.',
+  'signup.success' => 'Vous avez bien été inscrit sur notre serveur !',
+  'signup.email.subject' => "Confirmation de l'email",
+  'signup.email.confirmed' => 'Votre email a bien été confirmé !',
+  'signup.email.confirmation.sended' => "L'email de confirmation a bien été renvoyé !",
+
+  // PROFILE
+  'profile.confirmed.title' => 'Vous venez de vous inscrire',
+  'profile.confirmed.description' => "Vous devez confirmer votre email pour pouvoir utiliser complètement votre compte.<a class=\"block-right\" href=\":url\">Renvoyer l'email</a>"
 ];

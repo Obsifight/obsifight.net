@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Waavi\ReCaptcha\ReCaptchaServiceProvider::class
     ],
 
     /*
@@ -225,7 +226,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'ReCaptcha' => Waavi\ReCaptcha\Facades\ReCaptcha::class,
+        'Uuid' => Webpatser\Uuid\Uuid::class
     ],
 
 ];

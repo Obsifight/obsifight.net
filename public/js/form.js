@@ -19,6 +19,10 @@ function initAjaxForms() {
     // Get data
     var data = objectifyForm(form.serializeArray())
 
+    // ReCaptcha
+    if (typeof grecaptcha !== "undefined" && typeof grecaptcha.getResponse() !== "undefined")
+      data['g-recaptcha-response'] = grecaptcha.getResponse()
+
     // Submit data
     $.ajax({
       url: form.attr('action'),
@@ -31,6 +35,8 @@ function initAjaxForms() {
           if (form.attr('data-ajax-custom-callback'))
             window[form.attr('data-ajax-custom-callback')](data, response)
           displaySuccess(form, response.success)
+          if (response.redirect)
+            window.location = response.redirect
         } else {
           displayError(form, response.error)
         }
@@ -70,6 +76,8 @@ function initAjaxForms() {
     function displayError(form, message) {
       form.find('.ajax-message').html('<div class="ui negative message"><div class="header">' + localization.error.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
       removeDimmer(form)
+      if (typeof grecaptcha !== "undefined")
+        grecaptcha.reset()
     }
   })
 }

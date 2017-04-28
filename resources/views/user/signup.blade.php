@@ -10,7 +10,7 @@
     <div class="ui container page-content">
 
       <div class="ui grid">
-        <div class="eleven wide column explain">
+        <div class="ten wide column explain">
           <h2>Pourquoi s'inscrire sur ObsiFight ?</h2>
 
           <p>Nous avons choisi de créer un système d'inscription des joueurs, retenant leurs identifiants et autres données dans notre base de données. Cela nous permet d'ajouter de nombreuses fonctionnalités, en plus d'une protection optimale.</p>
@@ -39,7 +39,7 @@
             </li>
           </ul>
         </div>
-        <div class="five wide column">
+        <div class="six wide column">
           <div class="ui raised padded segment">
             <h2 class="ui header">
               <i class="signup icon"></i>
@@ -79,6 +79,9 @@
                   <input type="password" name="password_confirmation" placeholder="*********">
                   <i class="lock icon"></i>
                 </div>
+              </div>
+              <div class="field">
+                {!! ReCaptcha::render() !!}
               </div>
               <div class="field">
                 <div class="ui checkbox">

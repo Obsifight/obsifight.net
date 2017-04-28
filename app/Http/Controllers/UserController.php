@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -9,6 +10,10 @@ use Illuminate\Support\Facades\Event;
 
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use \App\UsersToken;
+
+use App\Mail\UserSignup;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -132,13 +137,106 @@ class UserController extends Controller
         'status' => false,
         'error' => __('user.signup.error.legal')
       ]);
+    $gResponse = \ReCaptcha::parseInput($request->input('g-recaptcha-response'));
+    if (!$gResponse->isSuccess())
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.captcha')
+      ]);
+
+    // Check username
+    if (!preg_match('`^([a-zA-Z0-9_]{2,16})$`', $request->input('username')))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.username')
+      ]);
+    // Check email
+    if (Validator::make(['email' => $request->input('email')], ['email' => 'required|email'])->fails())
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.email')
+      ]);
+    // Check passwords
+    if ($request->input('password') !== $request->input('password_confirmation'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.passwords')
+      ]);
 
     // Check if username or email is already used
+    $findUserWithUsernameOrEmail = User::where('username', $request->input('username'))->orWhere('email', $request->input('email'))->first();
+    if (!empty($findUserWithUsernameOrEmail)) {
+      if ($findUserWithUsernameOrEmail->username == $request->input('username'))
+        return response()->json([
+          'status' => false,
+          'error' => __('user.signup.error.username.taken')
+        ]);
+      else
+        return response()->json([
+          'status' => false,
+          'error' => __('user.signup.error.email.taken')
+        ]);
+    }
 
     // register user
+    $user = new User();
+    $user->username = $request->input('username');
+    $user->email = $request->input('email');
+    $user->password = User::hash($request->input('password'), $request->input('username'));
+    $user->ip = $request->ip();
+    $user->save();
+
+    // generate confirmation token
+    $token = UsersToken::generate('EMAIL', $user->id);
+    $link = action('UserController@confirmEmail', ['token' => $token]);
+
+    // send confirmation mail
+    Mail::to($user->email)->send(new UserSignup($user, $link));
 
     // log user
+    Auth::loginUsingId($user->id, false);
 
     // success response
+    return response()->json([
+      'status' => true,
+      'success' => __('user.signup.success'),
+      'redirect' => url('/user')
+    ]);
+  }
+
+  public function confirmEmail(Request $request)
+  {
+    // Find token
+    $token = UsersToken::where('token', $request->token)->where('type', 'EMAIL')->where('used_ip', null)->firstOrFail();
+
+    // Set token as used
+    $token->used_ip = $request->ip();
+    $token->save();
+
+    // Redirect with flash
+    return redirect('/user')->with('flash.success', __('user.signup.email.confirmed'));
+  }
+
+  public function sendConfirmationMail(Request $request)
+  {
+    // Find token
+    $token = UsersToken::where('user_id', Auth::user()->id)->where('type', 'EMAIL')->where('used_ip', null)->firstOrFail();
+    $link = action('UserController@confirmEmail', ['token' => $token->token]);
+
+    // send confirmation mail
+    Mail::to(Auth::user()->email)->send(new UserSignup(Auth::user(), $link));
+
+    // Redirect with flash
+    return redirect('/user')->with('flash.success', __('user.signup.email.confirmation.sended'));
+  }
+
+  public function profile(Request $request)
+  {
+    // EMAIL CONFIRMED
+    $emailToken = UsersToken::where('user_id', Auth::user()->id)->where('type', 'EMAIL')->where('used_ip', null)->first();
+    $confirmedAccount = (empty($emailToken));
+
+    // RENDER
+    return view('user.profile', compact('confirmedAccount'));
   }
 }

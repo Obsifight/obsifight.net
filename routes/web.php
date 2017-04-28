@@ -22,7 +22,7 @@ Route::get('/', function () {
 */
 Route::get('/login', function () {
     return view('user.login');
-});
+})->name('login');
 Route::post('/login', 'UserController@login');
 Route::post('/login/two-factor-auth', 'UserController@validLogin');
 Route::get('/logout', 'UserController@logout');
@@ -30,3 +30,6 @@ Route::get('/signup', function () {
     return view('user.signup');
 });
 Route::post('/signup', 'UserController@signup');
+Route::get('/user/email/confirm/{token}', 'UserController@confirmEmail')->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+Route::get('/user/email/send', 'UserController@sendConfirmationMail')->middleware('auth');
+Route::get('/user', 'UserController@profile')->middleware('auth');

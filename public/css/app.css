@@ -21,6 +21,38 @@ body {
 .text-center {
   text-align: center;
 }
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+.block-right {
+  float: right;
+}
+.block-left {
+  float: left;
+}
+
+/* ====
+  MESSAGES
+======= */
+.ui.warning.message a {
+  color: #794B02;
+  text-decoration: underline;
+}
+.ui.success.message a {
+  color: #1A531B;
+  text-decoration: underline;
+}
+.ui.info.message a {
+  color: #0E566C;
+  text-decoration: underline;
+}
+.ui.error.message a {
+  color: #912D2B;
+  text-decoration: underline;
+}
 
 /* ====
   HEADER

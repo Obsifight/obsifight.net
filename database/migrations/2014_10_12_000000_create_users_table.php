@@ -17,12 +17,12 @@ class CreateUsersTable extends Migration
       $table->string('username', 16)->unique();
       $table->string('email', 50)->unique();
       $table->string('password', 50);
-      $table->integer('role');
-      $table->integer('vote');
-      $table->float('money');
+      $table->integer('role')->default(1);
+      $table->integer('vote')->default(0);
+      $table->float('money')->default(0);
       $table->ipAddress('ip');
-      $table->boolean('skin');
-      $table->boolean('cape');
+      $table->boolean('skin')->default(0);
+      $table->boolean('cape')->default(0);
       $table->rememberToken();
       $table->timestamps();
     });
@@ -52,6 +52,17 @@ class CreateUsersTable extends Migration
       $table->ipAddress('ip');
       $table->timestamps();
     });
+
+    // Tokens (lost password / confirmation mail)
+    Schema::create('users_tokens', function (Blueprint $table) {
+      $table->increments('id');
+      $table->string('type', 10);
+      $table->integer('user_id');
+      //$table->foreign('user_id')->references('id')->on('users');
+      $table->uuid('token');
+      $table->ipAddress('used_ip')->nullable()->default(null);
+      $table->timestamps();
+    });
   }
   /**
    * Reverse the migrations.
@@ -64,5 +75,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_login_retries');
     Schema::dropIfExists('users_two_factor_auth_secrets');
     Schema::dropIfExists('users_connection_logs');
+    Schema::dropIfExists('users_tokens');
   }
 }

@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="{{ url('/css/app.css') }}">
       @yield('style')
 
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
       <script type="text/javascript" src="{{ url('/js/jquery-3.2.1.min.js') }}"></script>
     </head>
     <body>
@@ -38,6 +39,21 @@
               title: "@lang('form.success.title')"
             }
           }
+        </script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script type="text/javascript">
+          @if (session('flash.success'))
+            toastr.success("{{ session('flash.success') }}")
+          @endif
+          @if (session('flash.error'))
+            toastr.error("{{ session('flash.error') }}")
+          @endif
+          @if (session('flash.warning'))
+            toastr.warning("{{ session('flash.warning') }}")
+          @endif
+          @if (session('flash.info'))
+            toastr.info("{{ session('flash.info') }}")
+          @endif
         </script>
         <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
         <script type="text/javascript" src="{{ url('/js/form.js') }}"></script>

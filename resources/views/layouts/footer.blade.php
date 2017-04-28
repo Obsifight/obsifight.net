@@ -21,7 +21,9 @@
       <div class="seven wide column">
         <h4 class="ui inverted header">@lang('global.footer.title.credits')</h4>
         <p>@lang('global.footer.credit', ['link' => 'http://eywek.fr', 'username' => 'Eywek'])</p>
-        <p>@lang('global.footer.version', ['version' => VERSION])</p>
+        @if(defined('VERSION'))
+          <p>@lang('global.footer.version', ['version' => VERSION])</p>
+        @endif
       </div>
     </div>
   </div>

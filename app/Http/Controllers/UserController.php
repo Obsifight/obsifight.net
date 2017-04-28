@@ -138,7 +138,7 @@ class UserController extends Controller
         'error' => __('user.signup.error.legal')
       ]);
     $gResponse = \ReCaptcha::parseInput($request->input('g-recaptcha-response'));
-    if (!$gResponse->isSuccess())
+    if ((env('APP_ENV') !== 'testing' && !$gResponse->isSuccess()) || (env('APP_ENV') === 'testing' && $request->input('g-recaptcha-response') !== 'test'))
       return response()->json([
         'status' => false,
         'error' => __('user.signup.error.captcha')

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('pages.home');
+  return view('pages.home');
 });
 
 /*
@@ -21,13 +21,18 @@ Route::get('/', function () {
 ===========
 */
 Route::get('/login', function () {
-    return view('user.login');
+  return view('user.login');
 })->name('login');
 Route::post('/login', 'UserController@login');
+Route::get('/logged', function () {
+  return response()->json([
+    'logged' => Auth::check()
+  ]);
+});
 Route::post('/login/two-factor-auth', 'UserController@validLogin');
 Route::get('/logout', 'UserController@logout');
 Route::get('/signup', function () {
-    return view('user.signup');
+  return view('user.signup');
 });
 Route::post('/signup', 'UserController@signup');
 Route::get('/user/email/confirm/{token}', 'UserController@confirmEmail')->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');

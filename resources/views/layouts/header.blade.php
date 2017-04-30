@@ -6,7 +6,7 @@
       <div class="content">
         @lang('global.header.did-you-know')
       </div>
-      <p>Le xénotium et l'obsidienne n'étaient pas présent au début de la v1 mais sont arrivés pendant cette version.</p>
+      <p>{{ $didYouKnow }}</p>
     </h2>
 
     <!--<div class="text-center">

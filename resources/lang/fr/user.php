@@ -14,6 +14,15 @@ return [
   'field.two_factor_auth_code.placeholder' => "Vous trouvez ce code sur l'application mobile comme Google Authentificator",
 
   'password.forgot' => 'Mot de passe oublié',
+  'password.forgot.subtitle' => 'Retrouvez votre compte depuis votre email',
+  'password.forgot.send' => "Envoyer l'email de rénitialisation",
+  'password.forgot.user.notfound' => "Aucun utilisateur n'a été trouvé avec cet email",
+  'password.forgot.email.subject' => 'Rénitialisation du mot de passe',
+  'password.forgot.email.title' => 'Bonjour <strong>:username</strong> !',
+  'password.forgot.email.content' => 'Tu viens de demander une rénitialisation de ton mot de passe, pour procéder à celle-ci, il te suffit pour cela de cliquer sur le lien ci-dessous',
+  'password.forgot.success' => "L'email de rénitialisation a bien été envoyé ! Clique sur le lien qui est fourni pour procéder au changement de ton mot de passe.",
+
+  'password.reset' => 'Rénitialisation du mot de passe',
 
   // LOGIN
   'login.error.blocked' => 'Vous êtes temporairement bloqué pour avoir tenté trop de fois de vous connecter avec des identifiants incorrects.',
@@ -36,6 +45,8 @@ return [
   'signup.email.subject' => "Confirmation de l'email",
   'signup.email.confirmed' => 'Votre email a bien été confirmé !',
   'signup.email.confirmation.sended' => "L'email de confirmation a bien été renvoyé !",
+  'signup.email.title' => 'Bienvenue à toi <strong>:username</strong> !',
+  'signup.email.content' => 'Nous te remercions de rejoindre notre serveur ! Avant de commencer à jouer il est préférable que tu confirmes cet email. Il te suffit pour cela de cliquer sur le lien ci-dessous',
 
   // PROFILE
   'profile.confirmed.title' => 'Vous venez de vous inscrire',
@@ -46,5 +57,8 @@ return [
   'profile.menu.security' => 'Sécurité',
   'profile.menu.spendings' => 'Dépenses',
   'profile.menu.socials' => 'Social',
-  'profile.personnals.details' => 'Détails personnels'
+  'profile.personnals.details' => 'Détails personnels',
+  'money' => 'Points',
+  'votes' => 'Votes',
+  'rewards_waited' => 'Récompenses en attentes'
 ];

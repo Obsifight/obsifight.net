@@ -13,6 +13,7 @@ use App\User;
 use App\UsersToken;
 
 use App\Mail\UserSignup;
+use App\Mail\UserForgotPassword;
 use Illuminate\Support\Facades\Mail;
 
 use Carbon\Carbon;
@@ -253,5 +254,39 @@ class UserController extends Controller
 
     // RENDER
     return view('user.profile', compact('confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs'));
+  }
+
+  public function forgotPassword(Request $request)
+  {
+    if (!$request->has('email'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    // find user
+    $user = User::where('email', $request->input('email'))->first();
+    if (!$user)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.password.forgot.user.notfound')
+      ]);
+
+    // generate reset token
+    $token = UsersToken::generate('PASSWORD', $user->id);
+    $link = url('/user/password/reset/' . $token);
+
+    // send confirmation mail
+    Mail::to($user->email)->send(new UserForgotPassword($user, $link));
+
+    // success
+    return response()->json([
+      'status' => true,
+      'success' => __('user.password.forgot.success')
+    ]);
+  }
+
+  public function resetPassword(Request $request)
+  {
+
   }
 }

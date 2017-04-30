@@ -16,7 +16,7 @@ class DidYouKnow
     public function handle($request, Closure $next)
     {
       $findDidYouKnow = \App\DidYouKnow::get();
-      if (!$findDidYouKnow) return $next($request);
+      if (!$findDidYouKnow || empty($findDidYouKnow) || count($findDidYouKnow) === 0) return $next($request);
 
       $randomNumber = rand(0, count($findDidYouKnow)-1);
       \Illuminate\Support\Facades\View::share('didYouKnow', $findDidYouKnow[$randomNumber]->text);

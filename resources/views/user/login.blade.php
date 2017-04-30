@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="field">
-            <label>@lang('user.field.password') <small><em><a href="{{ url('/user/password/forgot') }}">@lang('user.password.forgot')</a></em></small></label>
+            <label>@lang('user.field.password') <small><em><a href="#" onClick="$('.ui.modal').modal({blurring: true}).modal('show')">@lang('user.password.forgot')</a></em></small></label>
             <div class="ui left icon input">
               <input type="password" name="password" placeholder="*********">
               <i class="lock icon"></i>
@@ -69,6 +69,27 @@
       </div>
     </div>
 
+  </div>
+
+  <div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+      @lang('user.password.forgot')
+    </div>
+    <div class="content">
+      <form action="{{ url('/user/password/forgot') }}" method="post" data-ajax>
+      <div class="ui form">
+        <h4 class="ui dividing header">@lang('user.password.forgot.subtitle')</h4>
+        <div class="field">
+          <label>@lang('user.field.email')</label>
+          <input type="text" name="email">
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="ui green button">@lang('user.password.forgot.send')</button>
+      </form>
+    </div>
   </div>
 @endsection
 @section('style')

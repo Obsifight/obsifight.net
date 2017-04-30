@@ -131,6 +131,39 @@ class UserControllerTest extends TestCase
   }
 
   /**
+   * Test forgot password
+   *
+   * @return void
+   */
+  public function testForgotPasswordWithoutEmail()
+  {
+    $response = $this->call('POST', '/user/password/forgot');
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testForgotPasswordWithInvalidEmail()
+  {
+    $response = $this->call('POST', '/user/password/forgot', ['email' => 'email']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.password.forgot.user.notfound'))), $response->getContent());
+  }
+  public function testForgotPassword()
+  {
+    Mail::fake();
+    $response = $this->call('POST', '/user/password/forgot', ['email' => 'test@test.com']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.password.forgot.success'))), $response->getContent());
+    // check token
+    $token = \App\UsersToken::where('user_id', 1)->where('type', 'PASSWORD')->first();
+    $this->assertEquals(true, !empty($token));
+    $this->assertEquals(null, $token->used_ip);
+    // check email
+    Mail::assertSent(UserForgotPassword::class, function ($mail) {
+      return ($mail->user->id === 1 && $mail->url === url('/user/password/reset/' . $token->$token));
+    });
+  }
+
+  /**
    * Test sign up
    *
    * @return void

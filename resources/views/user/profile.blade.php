@@ -86,7 +86,7 @@
             <div class="ui three statistics">
               <div class="statistic">
                 <div class="value">
-                  22
+                  {{ Auth::user()->money }}
                 </div>
                 <div class="label">
                   @lang('user.money')
@@ -94,7 +94,7 @@
               </div>
               <div class="statistic">
                 <div class="value">
-                  5
+                  {{ Auth::user()->vote }}
                 </div>
                 <div class="label">
                   @lang('user.votes')

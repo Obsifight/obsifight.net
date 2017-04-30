@@ -63,6 +63,15 @@ class CreateUsersTable extends Migration
       $table->ipAddress('used_ip')->nullable()->default(null);
       $table->timestamps();
     });
+
+    // ObsiGuard
+    Schema::create('users_obsiguard_ips', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id');
+      //$table->foreign('user_id')->references('id')->on('users');
+      $table->ipAddress('ip');
+      $table->timestamps();
+    });
   }
   /**
    * Reverse the migrations.
@@ -76,5 +85,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_two_factor_auth_secrets');
     Schema::dropIfExists('users_connection_logs');
     Schema::dropIfExists('users_tokens');
+    Schema::dropIfExists('users_obsiguard_ips');
   }
 }

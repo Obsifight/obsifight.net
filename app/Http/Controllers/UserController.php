@@ -10,13 +10,21 @@ use Illuminate\Support\Facades\Event;
 
 use Illuminate\Support\Facades\Auth;
 use App\User;
-use \App\UsersToken;
+use App\UsersToken;
 
 use App\Mail\UserSignup;
 use Illuminate\Support\Facades\Mail;
 
+use Carbon\Carbon;
+
 class UserController extends Controller
 {
+  public function __construct()
+  {
+    Carbon::setLocale(\Config::get('app.locale'));
+    Carbon::setToStringFormat('d/m/Y à H:i:s');
+  }
+
   public function login(Request $request)
   {
     // Check form
@@ -233,10 +241,17 @@ class UserController extends Controller
   public function profile(Request $request)
   {
     // EMAIL CONFIRMED
-    $emailToken = UsersToken::where('user_id', Auth::user()->id)->where('type', 'EMAIL')->where('used_ip', null)->first();
-    $confirmedAccount = (empty($emailToken));
+    $findEmailToken = UsersToken::where('user_id', Auth::user()->id)->where('type', 'EMAIL')->where('used_ip', null)->first();
+    $confirmedAccount = (empty($findEmailToken));
+
+    // TWO FACTOR AUTH
+    $findTwoFactorAuthSecret = \App\UsersTwoFactorAuthSecret::where('user_id', Auth::user()->id)->first();
+    $twoFactorEnabled = ($findTwoFactorAuthSecret && $findTwoFactorAuthSecret->enabled);
+
+    // OBSIGUARD
+    $findObsiGuardIPs = \App\UsersObsiguardIp::where('user_id', Auth::user()->id)->get();
 
     // RENDER
-    return view('user.profile', compact('confirmedAccount'));
+    return view('user.profile', compact('confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs'));
   }
 }

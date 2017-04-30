@@ -39,5 +39,12 @@ return [
 
   // PROFILE
   'profile.confirmed.title' => 'Vous venez de vous inscrire',
-  'profile.confirmed.description' => "Vous devez confirmer votre email pour pouvoir utiliser complètement votre compte.<a class=\"block-right\" href=\":url\">Renvoyer l'email</a>"
+  'profile.confirmed.description' => "Vous devez confirmer votre email pour pouvoir utiliser complètement votre compte.<a class=\"block-right\" href=\":url\">Renvoyer l'email</a>",
+  'profile.created.string' => 'Inscrit :date',
+  'profile.menu.infos' => 'Informations',
+  'profile.menu.appearence' => 'Apparance',
+  'profile.menu.security' => 'Sécurité',
+  'profile.menu.spendings' => 'Dépenses',
+  'profile.menu.socials' => 'Social',
+  'profile.personnals.details' => 'Détails personnels'
 ];

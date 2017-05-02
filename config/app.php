@@ -177,7 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        Waavi\ReCaptcha\ReCaptchaServiceProvider::class
+        Waavi\ReCaptcha\ReCaptchaServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class
     ],
 
     /*
@@ -227,7 +228,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'ReCaptcha' => Waavi\ReCaptcha\Facades\ReCaptcha::class,
-        'Uuid' => Webpatser\Uuid\Uuid::class
+        'Uuid' => Webpatser\Uuid\Uuid::class,
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class
     ],
 
 ];

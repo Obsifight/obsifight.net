@@ -75,5 +75,29 @@ class TestingUsersTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('users_tokens')->insert([
+        'type' => 'PASSWORD',
+        'user_id' => 1,
+        'token' => 'c0fb81a0-2d90-11e7-ba3f-0923098860d5',
+        'used_ip' => null,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('users_tokens')->insert([
+        'type' => 'PASSWORD',
+        'user_id' => 2,
+        'token' => 'c0fb81a0-2d90-11e7-ba3f-0923098860d4',
+        'used_ip' => '127.0.0.1',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('users_tokens')->insert([
+        'type' => 'PASSWORD',
+        'user_id' => 3,
+        'token' => 'c0fb81a0-2d90-11e7-ba3f-0923098860d3',
+        'used_ip' => null,
+        'created_at' => date('Y-m-d H:i:s', strtotime('-26 hours')),
+        'updated_at' => date('Y-m-d H:i:s', strtotime('-26 hours'))
+      ]);
     }
 }

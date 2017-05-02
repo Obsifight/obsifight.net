@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,7 +38,9 @@ Route::get('/user/email/confirm/{token}', 'UserController@confirmEmail')->where(
 Route::get('/user/email/send', 'UserController@sendConfirmationMail')->middleware('auth');
 Route::get('/user', 'UserController@profile')->middleware('auth');
 Route::post('/user/password/forgot', 'UserController@forgotPassword');
-Route::get('/user/password/reset/{token}', function () {
+Route::get('/user/password/reset/{token}', function (\Illuminate\Http\Request $request) {
+  // Find token
+  $token = \App\UsersToken::where('token', $request->token)->where('type', 'PASSWORD')->where('used_ip', null)->where('created_at', '>', date('Y-m-d H:i:s', strtotime('-24 hours')))->firstOrFail();
   return view('user.password_reset');
 })->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
-Route::post('/user/password/reset', 'UserController@resetPassword');
+Route::post('/user/password/reset/{token}', 'UserController@resetPassword')->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');

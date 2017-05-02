@@ -23,6 +23,8 @@ return [
   'password.forgot.success' => "L'email de rénitialisation a bien été envoyé ! Clique sur le lien qui est fourni pour procéder au changement de ton mot de passe.",
 
   'password.reset' => 'Rénitialisation du mot de passe',
+  'password.reset.action' => 'Rénitialiser mon mot de passe',
+  'password.reset.success' => 'Votre mot de passe a bien été modifié !',
 
   // LOGIN
   'login.error.blocked' => 'Vous êtes temporairement bloqué pour avoir tenté trop de fois de vous connecter avec des identifiants incorrects.',

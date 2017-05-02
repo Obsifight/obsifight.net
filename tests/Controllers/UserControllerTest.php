@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+use App\Mail\UserForgotPassword;
 use App\Mail\UserSignup;
 use Illuminate\Support\Facades\Mail;
 
@@ -131,7 +132,7 @@ class UserControllerTest extends TestCase
   }
 
   /**
-   * Test forgot password
+   * Test forgot/reset password
    *
    * @return void
    */
@@ -154,13 +155,81 @@ class UserControllerTest extends TestCase
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.password.forgot.success'))), $response->getContent());
     // check token
-    $token = \App\UsersToken::where('user_id', 1)->where('type', 'PASSWORD')->first();
+    $token = \App\UsersToken::where('user_id', 1)->where('type', 'PASSWORD')->orderBy('id', 'desc')->first();
     $this->assertEquals(true, !empty($token));
     $this->assertEquals(null, $token->used_ip);
     // check email
-    Mail::assertSent(UserForgotPassword::class, function ($mail) {
-      return ($mail->user->id === 1 && $mail->url === url('/user/password/reset/' . $token->$token));
+    Mail::assertSent(UserForgotPassword::class, function ($mail) use ($token) {
+      return ($mail->user->id === 1 && $mail->url === url('/user/password/reset/' . $token->token));
     });
+  }
+  public function testResetPasswordPageWithoutValidToken()
+  {
+    $response = $this->get('/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d3');
+    $response->assertStatus(404);
+  }
+  public function testResetPasswordPageWithExpiredToken()
+  {
+    $response = $this->get('/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d4');
+    $response->assertStatus(404);
+  }
+  public function testResetPasswordPageWithUsedToken()
+  {
+    $response = $this->get('/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d3');
+    $response->assertStatus(404);
+  }
+  public function testResetPasswordPage()
+  {
+    $response = $this->get('/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d5');
+    $response->assertStatus(200);
+  }
+  public function testResetPasswordWithoutValidToken()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d0', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(404);
+  }
+  public function testResetPasswordWithUsedToken()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d4', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(404);
+  }
+  public function testResetPasswordWithExpiredToken()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d3', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(404);
+  }
+  public function testResetPasswordWithoutPassword()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d5');
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testResetPasswordWithoutConfirmationPassword()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d5', ['password' => 'pass']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testResetPasswordWithPasswordNotEqualToConfirmation()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d5', ['password' => 'pass', 'password_confirmation' => 'yolo']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.passwords'))), $response->getContent());
+  }
+  public function testResetPassword()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d5', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.password.reset.success'), 'redirect' => url('/user'))), $response->getContent());
+    // check if token is used
+    $token = \App\UsersToken::where('token', 'c0fb81a0-2d90-11e7-ba3f-0923098860d5')->first();
+    $this->assertEquals('127.0.0.1', $token->used_ip);
+    // check password
+    $user = \App\User::where('id', $token->user_id)->first();
+    $this->assertEquals(\App\User::hash('pass', $user->username), $user->password);
+    // is logged
+    $logged = $this->get('/logged');
+    $this->assertEquals(json_encode(array('logged' => true)), $logged->getContent());
   }
 
   /**
@@ -190,6 +259,12 @@ class UserControllerTest extends TestCase
     $response = $this->call('POST', '/signup', ['username' => 'Test', 'password' => 'password']);
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testSignupWithPasswordNotEqualToConfirmation()
+  {
+    $response = $this->call('POST', '/user/password/reset/c0fb81a0-2d90-11e7-ba3f-0923098860d3', ['username' => 'Test', 'password' => 'pass', 'password_confirmation' => 'yolo']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.passwords'))), $response->getContent());
   }
   public function testSignupWithoutEmail()
   {
@@ -299,6 +374,9 @@ class UserControllerTest extends TestCase
   {
     $response = $this->call('GET', '/user/email/confirm/85ce3890-2c2c-11e7-ad60-a330f1f9660b');
     $response->assertStatus(302);
+    // check if token is used
+    $token = \App\UsersToken::where('token', '85ce3890-2c2c-11e7-ad60-a330f1f9660b')->first();
+    $this->assertEquals('127.0.0.1', $token->used_ip);
   }
 
   /**

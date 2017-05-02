@@ -287,6 +287,38 @@ class UserController extends Controller
 
   public function resetPassword(Request $request)
   {
+    // Check form
+    if (!$request->has('password') || !$request->has('password_confirmation'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    if ($request->input('password') !== $request->input('password_confirmation'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.passwords')
+      ]);
 
+    // Find token
+    $token = UsersToken::where('token', $request->token)->where('type', 'PASSWORD')->where('used_ip', null)->where('created_at', '>', date('Y-m-d H:i:s', strtotime('-24 hours')))->firstOrFail();
+
+    // Set token as used
+    $token->used_ip = $request->ip();
+    $token->save();
+
+    // edit password
+    $user = User::where('id', $token->user_id)->firstOrFail();
+    $user->password = User::hash($request->input('password'), $user->username);
+    $user->save();
+
+    // login
+    Auth::loginUsingId($user->id, false);
+
+    // Redirect with flash
+    return response()->json([
+      'status' => true,
+      'success' => __('user.password.reset.success'),
+      'redirect' => url('/user')
+    ]);
   }
 }

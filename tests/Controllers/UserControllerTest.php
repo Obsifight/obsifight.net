@@ -233,6 +233,128 @@ class UserControllerTest extends TestCase
   }
 
   /**
+   * Test edit password
+   *
+   * @return void
+   */
+  public function testEditPasswordNotLogged()
+  {
+    $response = $this->call('POST', '/user/password', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(302);
+  }
+  public function testEditPasswordWithoutPassword()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/password', []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testEditPasswordWithoutPasswordConfirmation()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/password', ['password' => 'pass']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testEditPasswordWithPasswordNotEqualToConfirmation()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/password', ['password' => 'pass', 'password_confirmation' => 'yolo']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.passwords'))), $response->getContent());
+  }
+  public function testEditPassword()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/password', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.password.edit.success'))), $response->getContent());
+    // check password
+    $user = \App\User::find(1);
+    $this->assertEquals(\App\User::hash('pass', $user->username), $user->password);
+  }
+
+  /**
+   * Test request new email
+   *
+   * @return void
+   */
+  public function testRequestEditEmailNotLogged()
+  {
+    $response = $this->call('POST', '/user/email', ['email' => 'new@email.com', 'reason' => 'why']);
+    $response->assertStatus(302);
+  }
+  public function testRequestEditEmailWithoutEmail()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testRequestEditEmailWithoutReason()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', ['email' => 'email@email.com']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testRequestEditEmailWithInvalidEmail()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', ['email' => 'invalid', 'reason' => 'why']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.email'))), $response->getContent());
+  }
+  public function testRequestEditEmailWithEmailAlreadyTaken()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', ['email' => 'test2@test.com', 'reason' => 'why']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.email.taken'))), $response->getContent());
+  }
+  public function testRequestEditEmailWhenAlreadyRequested()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', ['email' => 'test5@test.com', 'reason' => 'why']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.email.edit.request.already'))), $response->getContent());
+  }
+  public function testRequestEditEmail()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', ['email' => 'test5@test.com', 'reason' => 'why']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.email.edit.request.success'))), $response->getContent());
+    // check if database
+    $request = \App\UsersEmailEditRequest::where('user_id', 1)->first();
+    $this->assertEquals(false, empty($request));
+    $this->assertEquals('test5@test.com', $request->email);
+    $this->assertEquals('why', $request->reason);
+    $this->assertEquals('127.0.0.1', $request->ip);
+  }
+
+
+  /**
    * Test sign up
    *
    * @return void

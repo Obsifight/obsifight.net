@@ -321,4 +321,75 @@ class UserController extends Controller
       'redirect' => url('/user')
     ]);
   }
+
+  public function editPassword(Request $request)
+  {
+    // Check form
+    if (!$request->has('password') || !$request->has('password_confirmation'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    if ($request->input('password') !== $request->input('password_confirmation'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.passwords')
+      ]);
+
+    // edit password
+    $user = User::where('id', Auth::user()->id)->firstOrFail();
+    $user->password = User::hash($request->input('password'), $user->username);
+    $user->save();
+
+    // success
+    return response()->json([
+      'status' => true,
+      'success' => __('user.password.edit.success')
+    ]);
+  }
+
+  public function requestEditEmail(Request $request)
+  {
+    // Check form
+    if (!$request->has('email') || !$request->has('reason'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    // Check email
+    if (Validator::make(['email' => $request->input('email')], ['email' => 'required|email'])->fails())
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.email')
+      ]);
+    // Check if username or email is already used
+    $findUserWithEmail = User::where('email', $request->input('email'))->first();
+    if (!empty($findUserWithEmail))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.email.taken')
+      ]);
+
+    // check if already requested
+    $emailRequest = \App\UsersEmailEditRequest::where('user_id', Auth::user()->id)->first();
+    if (count($emailRequest) > 0)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.email.edit.request.already')
+      ]);
+
+    // add request
+    $emailRequest = new \App\UsersEmailEditRequest();
+    $emailRequest->user_id = Auth::user()->id;
+    $emailRequest->email = $request->input('email');
+    $emailRequest->reason = $request->input('reason');
+    $emailRequest->ip = $request->ip();
+    $emailRequest->save();
+
+    // success
+    return response()->json([
+      'status' => true,
+      'success' => __('user.email.edit.request.success')
+    ]);
+  }
 }

@@ -99,5 +99,14 @@ class TestingUsersTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s', strtotime('-26 hours')),
         'updated_at' => date('Y-m-d H:i:s', strtotime('-26 hours'))
       ]);
+      // email request
+      DB::table('users_email_edit_requests')->insert([
+        'user_id' => 2,
+        'email' => 'test10@test.com',
+        'reason' => 'why',
+        'ip' => '127.0.0.1',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
     }
 }

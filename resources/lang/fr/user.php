@@ -26,6 +26,11 @@ return [
   'password.reset.action' => 'Rénitialiser mon mot de passe',
   'password.reset.success' => 'Votre mot de passe a bien été modifié !',
 
+  'password.edit.success' => 'Vous avez bien modifié votre mot de passe !',
+
+  'email.edit.request.already' => "Vous avez déjà une demande de changement d'email en cours.",
+  'email.edit.request.success' => 'Votre demande a bien été enregistrée et sera traitée rapidement par notre équipe !',
+
   // LOGIN
   'login.error.blocked' => 'Vous êtes temporairement bloqué pour avoir tenté trop de fois de vous connecter avec des identifiants incorrects.',
   'login.error.notfound' => "Aucun joueur n'a été trouvé avec ce pseudo.",

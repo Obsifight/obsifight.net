@@ -72,6 +72,17 @@ class CreateUsersTable extends Migration
       $table->ipAddress('ip');
       $table->timestamps();
     });
+
+    // Email ask
+    Schema::create('users_email_edit_requests', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id');
+      //$table->foreign('user_id')->references('id')->on('users');
+      $table->string('email', 50);
+      $table->string('reason');
+      $table->ipAddress('ip');
+      $table->timestamps();
+    });
   }
   /**
    * Reverse the migrations.
@@ -86,5 +97,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_connection_logs');
     Schema::dropIfExists('users_tokens');
     Schema::dropIfExists('users_obsiguard_ips');
+    Schema::dropIfExists('users_email_edit_requests');
   }
 }

@@ -36,7 +36,9 @@ Route::get('/signup', function () {
 Route::post('/signup', 'UserController@signup');
 Route::get('/user/email/confirm/{token}', 'UserController@confirmEmail')->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 Route::get('/user/email/send', 'UserController@sendConfirmationMail')->middleware('auth');
+
 Route::get('/user', 'UserController@profile')->middleware('auth');
+
 Route::post('/user/password/forgot', 'UserController@forgotPassword');
 Route::get('/user/password/reset/{token}', function (\Illuminate\Http\Request $request) {
   // Find token
@@ -44,3 +46,6 @@ Route::get('/user/password/reset/{token}', function (\Illuminate\Http\Request $r
   return view('user.password_reset');
 })->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 Route::post('/user/password/reset/{token}', 'UserController@resetPassword')->where('token', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+Route::post('/user/password', 'UserController@editPassword')->middleware('auth');
+
+Route::post('/user/email', 'UserController@requestEditEmail')->middleware('auth');

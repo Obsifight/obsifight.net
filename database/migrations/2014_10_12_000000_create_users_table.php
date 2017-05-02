@@ -79,7 +79,7 @@ class CreateUsersTable extends Migration
       $table->integer('user_id');
       //$table->foreign('user_id')->references('id')->on('users');
       $table->string('email', 50);
-      $table->string('reason');
+      $table->text('reason');
       $table->ipAddress('ip');
       $table->timestamps();
     });

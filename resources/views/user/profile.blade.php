@@ -24,6 +24,14 @@
       </div>
     @endif
 
+    @if($notifications)
+      @foreach ($notifications as $notification)
+        <div class="ui {{ $notification['type'] }} message">
+          {!! $notification['message'] !!}
+        </div>
+      @endforeach
+    @endif
+
     <div class="ui grid two column">
       <div class="ui four wide column">
         <div class="ui vertical menu">

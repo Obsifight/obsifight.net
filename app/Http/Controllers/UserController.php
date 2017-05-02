@@ -252,8 +252,11 @@ class UserController extends Controller
     // OBSIGUARD
     $findObsiGuardIPs = \App\UsersObsiguardIp::where('user_id', Auth::user()->id)->get();
 
+    // NOTIFICATION
+    $notifications = \App\Notification::getUnseen(Auth::user()->id);
+
     // RENDER
-    return view('user.profile', compact('confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs'));
+    return view('user.profile', compact('confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'notifications'));
   }
 
   public function forgotPassword(Request $request)

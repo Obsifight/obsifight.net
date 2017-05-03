@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="field">
-            <label>@lang('user.field.password') <small><em><a href="#" onClick="$('.ui.modal').modal({blurring: true}).modal('show')">@lang('user.password.forgot')</a></em></small></label>
+            <label>@lang('user.field.password') <small><em><a href="#" onClick="$('.ui.modal#forgotPassword').modal({blurring: true}).modal('show')">@lang('user.password.forgot')</a></em></small></label>
             <div class="ui left icon input">
               <input type="password" name="password" placeholder="*********">
               <i class="lock icon"></i>
@@ -71,7 +71,7 @@
 
   </div>
 
-  <div class="ui modal">
+  <div class="ui modal" id="forgotPassword">
     <i class="close icon"></i>
     <div class="header">
       @lang('user.password.forgot')

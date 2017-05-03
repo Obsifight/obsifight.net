@@ -65,6 +65,14 @@ return [
   'profile.menu.spendings' => 'Dépenses',
   'profile.menu.socials' => 'Social',
   'profile.personnals.details' => 'Détails personnels',
+  'profile.username.edit' => 'Éditer mon pseudo',
+  'profile.email.edit' => 'Éditer mon email',
+  'profile.email.edit.reason' => 'Raison du changement',
+  'profile.email.edit.subtitle' => 'Soumettez-nous votre demande de changement d\'email',
+  'profile.email.edit.send' => 'Soumettre ma demande',
+  'profile.password.edit' => 'Éditer mon mot de passe',
+  'profile.password.edit.placeholder' => 'Entrez un nouveau de mot de passe',
+
   'money' => 'Points',
   'votes' => 'Votes',
   'rewards_waited' => 'Récompenses en attentes'

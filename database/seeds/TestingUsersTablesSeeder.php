@@ -21,6 +21,16 @@ class TestingUsersTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      // attach role
+      DB::table('role_user')->truncate();
+      DB::table('role_user')->insert([
+        'user_id' => 1,
+        'role_id' => 1
+      ]);
+      DB::table('role_user')->insert([
+        'user_id' => 2,
+        'role_id' => 1
+      ]);
       DB::table('users')->insert([
         'username' => 'Test2',
         'email' => 'test2@test.com',

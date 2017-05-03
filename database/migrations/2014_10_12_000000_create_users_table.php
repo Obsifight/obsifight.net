@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
       $table->string('username', 16)->unique();
       $table->string('email', 50)->unique();
       $table->string('password', 50);
-      $table->integer('role')->default(1);
       $table->integer('vote')->default(0);
       $table->float('money')->default(0);
       $table->ipAddress('ip');

@@ -20,6 +20,7 @@ class UserControllerTest extends TestCase
   {
     parent::setUp();
     \Artisan::call('db:seed', ['--class' => 'TestingUsersTablesSeeder']);
+    \Artisan::call('db:seed', ['--class' => 'PermissionsTablesSeeder']);
   }
 
   /**
@@ -242,6 +243,14 @@ class UserControllerTest extends TestCase
     $response = $this->call('POST', '/user/password', ['password' => 'pass', 'password_confirmation' => 'pass']);
     $response->assertStatus(302);
   }
+  public function testEditPasswordWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/password', ['password' => 'pass', 'password_confirmation' => 'pass']);
+    $response->assertStatus(403);
+  }
   public function testEditPasswordWithoutPassword()
   {
     $user = \App\User::find(1);
@@ -291,6 +300,14 @@ class UserControllerTest extends TestCase
   {
     $response = $this->call('POST', '/user/email', ['email' => 'new@email.com', 'reason' => 'why']);
     $response->assertStatus(302);
+  }
+  public function testRequestEditEmailWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/email', ['email' => 'new@email.com', 'reason' => 'why']);
+    $response->assertStatus(403);
   }
   public function testRequestEditEmailWithoutEmail()
   {
@@ -510,6 +527,14 @@ class UserControllerTest extends TestCase
   {
     $response = $this->call('GET', '/user/email/send');
     $response->assertStatus(302);
+  }
+  public function testSendConfirmMailWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/email/send');
+    $response->assertStatus(403);
   }
   public function testSendConfirmMailWithoutValidToken()
   {

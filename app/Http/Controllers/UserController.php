@@ -194,6 +194,7 @@ class UserController extends Controller
     $user->password = User::hash($request->input('password'), $request->input('username'));
     $user->ip = $request->ip();
     $user->save();
+    $user->roles()->attach(1); // attach default role
 
     // generate confirmation token
     $token = UsersToken::generate('EMAIL', $user->id);

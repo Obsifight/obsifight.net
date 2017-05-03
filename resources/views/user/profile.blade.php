@@ -47,7 +47,7 @@
             <i class="lock left aligned icon"></i>
             @lang('user.profile.menu.security')
             @if (!$twoFactorEnabled || !$findObsiGuardIPs)
-              <i class="warning sign icon" style="color:#FE9A76"></i>
+              <i class="warning sign icon" style="color:#{{ $twoFactorEnabled ? 'FE9A76' : 'B03060' }}"></i>
             @endif
           </a>
           <a class="item toggle-menu" data-toggle="spendings">

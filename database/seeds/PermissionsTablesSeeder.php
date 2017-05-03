@@ -20,6 +20,13 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('roles')->insert([
+        'name' => 'restricted',
+        'display_name' => 'Compte restreint',
+        'description' => 'Le joueur pert certaines permissions',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // add permissions
       DB::table('permissions')->truncate();

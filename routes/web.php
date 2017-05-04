@@ -49,3 +49,4 @@ Route::post('/user/password/reset/{token}', 'UserController@resetPassword')->whe
 Route::post('/user/password', 'UserController@editPassword')->middleware('auth')->middleware('permission:user-edit-password');
 
 Route::post('/user/email', 'UserController@requestEditEmail')->middleware('auth')->middleware('permission:user-request-edit-email');
+Route::post('/user/username', 'UserController@editUsername')->middleware('auth')->middleware('permission:user-edit-username');

@@ -37,8 +37,8 @@ class CreateUsersTable extends Migration
     // TwoFactorAuth
     Schema::create('users_two_factor_auth_secrets', function (Blueprint $table) {
       $table->increments('id');
-      $table->integer('user_id');
-      //$table->foreign('user_id')->references('id')->on('users');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
       $table->string('secret', 20);
       $table->boolean('enabled');
     });
@@ -46,8 +46,8 @@ class CreateUsersTable extends Migration
     // Log
     Schema::create('users_connection_logs', function (Blueprint $table) {
       $table->increments('id');
-      $table->integer('user_id');
-      //$table->foreign('user_id')->references('id')->on('users');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
       $table->ipAddress('ip');
       $table->timestamps();
     });
@@ -56,8 +56,8 @@ class CreateUsersTable extends Migration
     Schema::create('users_tokens', function (Blueprint $table) {
       $table->increments('id');
       $table->string('type', 10);
-      $table->integer('user_id');
-      //$table->foreign('user_id')->references('id')->on('users');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
       $table->uuid('token');
       $table->ipAddress('used_ip')->nullable()->default(null);
       $table->timestamps();
@@ -66,8 +66,8 @@ class CreateUsersTable extends Migration
     // ObsiGuard
     Schema::create('users_obsiguard_ips', function (Blueprint $table) {
       $table->increments('id');
-      $table->integer('user_id');
-      //$table->foreign('user_id')->references('id')->on('users');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
       $table->ipAddress('ip');
       $table->timestamps();
     });
@@ -75,11 +75,32 @@ class CreateUsersTable extends Migration
     // Email ask
     Schema::create('users_email_edit_requests', function (Blueprint $table) {
       $table->increments('id');
-      $table->integer('user_id');
-      //$table->foreign('user_id')->references('id')->on('users');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
       $table->string('email', 50);
       $table->text('reason');
       $table->ipAddress('ip');
+      $table->timestamps();
+    });
+
+    // username edit history
+    Schema::create('users_edit_username_histories', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->string('old_username', 16);
+      $table->string('new_username', 16);
+      $table->ipAddress('ip');
+      $table->timestamps();
+    });
+
+    // username edit ability
+    Schema::create('users_edit_username_abilities', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->integer('history_id')->unsigned()->nullable();
+      $table->foreign('history_id')->references('id')->on('users_edit_username_histories');
       $table->timestamps();
     });
   }
@@ -97,5 +118,7 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_tokens');
     Schema::dropIfExists('users_obsiguard_ips');
     Schema::dropIfExists('users_email_edit_requests');
+    Schema::dropIfExists('users_edit_username_histories');
+    Schema::dropIfExists('users_edit_username_abilities');
   }
 }

@@ -110,11 +110,20 @@ class TestingUsersTablesSeeder extends Seeder
         'updated_at' => date('Y-m-d H:i:s', strtotime('-26 hours'))
       ]);
       // email request
+      DB::table('users_email_edit_requests')->truncate();
       DB::table('users_email_edit_requests')->insert([
         'user_id' => 2,
         'email' => 'test10@test.com',
         'reason' => 'why',
         'ip' => '127.0.0.1',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      // username ability
+      DB::table('users_edit_username_abilities')->truncate();
+      DB::table('users_edit_username_abilities')->insert([
+        'user_id' => 1,
+        'history_id' => NULL,
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);

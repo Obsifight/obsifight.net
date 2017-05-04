@@ -396,4 +396,78 @@ class UserController extends Controller
       'success' => __('user.email.edit.request.success')
     ]);
   }
+
+  public function editUsername(Request $request)
+  {
+    // Check if purchased it
+    $findAbility = \App\UsersEditUsernameAbility::where('user_id', Auth::user()->id)->where('history_id', NULL)->first();
+    if (count($findAbility) <= 0)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.edit.username.error.purchase')
+      ]);
+    // Check if already edited 2 times
+    $findEdits = \App\UsersEditUsernameHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+    if (count($findEdits) >= 2)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.edit.username.error.two_times')
+      ]);
+    // Check if edited last 2 weeks
+    if (isset($findEdits[0]) && time() < $findEdits[0]->created_at->addWeeks(3)->timestamp)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.edit.username.error.two_weeks')
+      ]);
+    // Check form
+    if (!$request->has('username') || !$request->has('password'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    // check password
+    if (User::hash($request->input('password'), Auth::user()->username) !== Auth::user()->password)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.edit.username.error.password')
+      ]);
+
+    // check username
+    if (!preg_match('`^([a-zA-Z0-9_]{2,16})$`', $request->input('username')))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.username')
+      ]);
+    // check if used
+    $findUserWithUsername = User::where('username', $request->input('username'))->first();
+    if (!empty($findUserWithUsername))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.signup.error.username.taken')
+      ]);
+
+    // edit database
+    $user = User::find(Auth::user()->id);
+    $user->username = $request->input('username');
+    $user->password = User::hash($request->input('password'), $request->input('username'));
+    $user->save();
+
+    // add log
+    $log = new \App\UsersEditUsernameHistory();
+    $log->user_id = Auth::user()->id;
+    $log->old_username = Auth::user()->username;
+    $log->new_username = $request->input('username');
+    $log->ip = $request->ip();
+    $log->save();
+
+    // remove ability
+    $findAbility->history_id = $log->id;
+    $findAbility->save();
+
+    // success message
+    return response()->json([
+      'status' => true,
+      'success' => __('user.profile.edit.username.success')
+    ]);
+  }
 }

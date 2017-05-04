@@ -51,6 +51,13 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-edit-username',
+        'display_name' => 'Éditer le pseudo',
+        'description' => 'Éditer son pseudo depuis le profil',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // link permissiosn
       DB::table('permission_role')->truncate();
@@ -65,6 +72,22 @@ class PermissionsTablesSeeder extends Seeder
       DB::table('permission_role')->insert([
         'permission_id' => 3,
         'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 4,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 1,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 2,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 3,
+        'role_id' => 2
       ]);
     }
 }

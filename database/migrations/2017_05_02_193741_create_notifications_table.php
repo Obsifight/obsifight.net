@@ -15,8 +15,8 @@ class CreateNotificationsTable extends Migration
     {
       Schema::create('notifications', function (Blueprint $table) {
         $table->increments('id');
-        $table->integer('user_id');
-        //$table->foreign('user_id')->references('id')->on('users');
+        $table->integer('user_id')->unsigned();
+        $table->foreign('user_id')->references('id')->on('users');
         $table->string('type', 7); // SUCCESS / ERROR / WARNING / INFO
         $table->string('key'); // lang key
         $table->text('vars'); // vars for lang

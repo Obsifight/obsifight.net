@@ -14,6 +14,16 @@
 
     <div class="ui divider"></div>
 
+    @role('restricted')
+      <div class="ui red message">
+        <i class="close icon"></i>
+        <div class="header">
+          @lang('user.role.restricted')
+        </div>
+        @lang('user.role.restricted.description')
+      </div>
+    @endrole
+
     @if(!$confirmedAccount && Auth::user()->can('user-user-send-confirmation-email'))
       <div class="ui warning message">
         <i class="close icon"></i>
@@ -71,9 +81,11 @@
                   <div class="twelve wide field">
                     <input type="text" value="{{ Auth::user()->username }}" disabled>
                   </div>
-                  <div class="four wide field">
-                    <button type="button" class="fluid ui primary button"><i class="edit icon"></i> @lang('user.profile.username.edit')</button>
-                  </div>
+                  @permission('user-edit-username')
+                    <div class="four wide field">
+                      <button type="button" class="fluid ui primary button"><i class="edit icon"></i> @lang('user.profile.username.edit')</button>
+                    </div>
+                  @endpermission
                 </div>
               </div>
               <div class="field">

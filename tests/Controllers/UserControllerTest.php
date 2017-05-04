@@ -370,6 +370,138 @@ class UserControllerTest extends TestCase
     $this->assertEquals('127.0.0.1', $request->ip);
   }
 
+  /**
+   * Test edit username
+   *
+   * @return void
+   */
+  public function testEditUsernameNotLogged()
+  {
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit']);
+    $response->assertStatus(302);
+  }
+  public function testEditUsernameWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit']);
+    $response->assertStatus(403);
+  }
+  public function testEditUsernameWithoutPurchaseIt()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.edit.username.error.purchase'))), $response->getContent());
+  }
+  public function testEditUsernameAlreadyEditedLastTwoWeeks()
+  {
+    // add to db
+    $log = new \App\UsersEditUsernameHistory();
+    $log->user_id = 1;
+    $log->old_username = 'Tester';
+    $log->new_username = 'Test';
+    $log->ip = '127.0.0.1';
+    $log->save();
+
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.edit.username.error.two_weeks'))), $response->getContent());
+  }
+  public function testEditUsernameAlreadyEditedTwoTimes()
+  {
+    // add to db
+    $log = new \App\UsersEditUsernameHistory();
+    $log->user_id = 1;
+    $log->old_username = 'Tester';
+    $log->new_username = 'Test';
+    $log->ip = '127.0.0.1';
+    $log->save();
+    $log = new \App\UsersEditUsernameHistory();
+    $log->user_id = 1;
+    $log->old_username = 'Test';
+    $log->new_username = 'Tester';
+    $log->ip = '127.0.0.1';
+    $log->save();
+
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.edit.username.error.two_times'))), $response->getContent());
+  }
+  public function testEditUsernameWithoutUsername()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testEditUsernameWithoutPassword()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testEditUsernameWithInvalidPassword()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit', 'password' => 'invalid']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.edit.username.error.password'))), $response->getContent());
+  }
+  public function testEditUsernameWithInvalidUsername()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => '@fsdijfs', 'password' => 'test']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.username'))), $response->getContent());
+  }
+  public function testEditUsernameWithAlreadyTakenUsername()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'Test2', 'password' => 'test']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.signup.error.username.taken'))), $response->getContent());
+  }
+  public function testEditUsername()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/username', ['username' => 'test_edit', 'password' => 'test']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.profile.edit.username.success'))), $response->getContent());
+    // check data
+    $user = \App\User::find(1);
+    $this->assertEquals('test_edit', $user->username);
+    // check password
+    $this->assertEquals(\App\User::hash('test', $user->username), $user->password);
+    // check log
+    $log = \App\UsersEditUsernameHistory::where('user_id' , 1)->where('old_username', 'Test')->where('new_username', 'test_edit')->where('ip', '127.0.0.1')->first();
+    $this->assertEquals(1, count($log));
+    // check ability
+    $ability = \App\UsersEditUsernameAbility::where('user_id' , 1)->first();
+    $this->assertEquals($log->id, $ability->history_id);
+  }
 
   /**
    * Test sign up

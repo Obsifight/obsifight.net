@@ -72,8 +72,17 @@ return [
   'profile.email.edit.send' => 'Soumettre ma demande',
   'profile.password.edit' => 'Éditer mon mot de passe',
   'profile.password.edit.placeholder' => 'Entrez un nouveau de mot de passe',
+  'profile.edit.username.error.purchase' => "Vous devez acheter l'article <em>Changement de pseudo</em> pour pouvoir le changer !",
+  'profile.edit.username.error.two_weeks' => 'Vous devez attendre 2 semaines entre chaque changement de pseudo !',
+  'profile.edit.username.error.two_times' => 'Vous ne pouvez pas modifier votre pseudo plus de 2 fois !',
+  'profile.edit.username.error.password' => 'Le mot de passe de votre compte ne correspond pas !',
+  'profile.edit.username.success' => 'Votre pseudo a bien été modifié !',
 
   'money' => 'Points',
   'votes' => 'Votes',
-  'rewards_waited' => 'Récompenses en attentes'
+  'rewards_waited' => 'Récompenses en attentes',
+
+  // ROLES
+  'role.restricted' => 'Compte restreint',
+  'role.restricted.description' => "Votre compte est temporairement restreint. Vous avez perdu certaines permissions vous empêchant d'utiliser pleinement votre compte."
 ];

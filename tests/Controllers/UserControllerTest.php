@@ -504,6 +504,109 @@ class UserControllerTest extends TestCase
   }
 
   /**
+   * Test transfer money
+   *
+   * @return void
+   */
+  public function testTransferMoneyNotLogged()
+  {
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test2']);
+    $response->assertStatus(302);
+  }
+  public function testTransferMoneyWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test2']);
+    $response->assertStatus(403);
+  }
+  public function testTransferWithoutAmount()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testTransferMoneyWihoutTo()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testTransferMoneyInvalidAmount()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 'sdgsd', 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.amount'))), $response->getContent());
+  }
+  public function testTransferMoneyWithoutMoney()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.no_enough'))), $response->getContent());
+  }
+  public function testTransferMoneyToAnUnknownUser()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'invalid']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.unknown_user'))), $response->getContent());
+  }
+  public function testTransferMoneyToHimself()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.himself'))), $response->getContent());
+  }
+  public function testTransferMoneyWithoutEnoughMoney()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 1000, 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.no_enough'))), $response->getContent());
+  }
+  public function testTransferMoney()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.profile.transfer.money.success', ['money' => 10, 'username' => 'Test2']), 'money' => 0)), $response->getContent());
+    // check users money
+    $user = \App\User::find(1);
+    $this->assertEquals(0, $user->money);
+    $user = \App\User::find(2);
+    $this->assertEquals(10, $user->money);
+    // check history
+    $history = \App\UsersTransferMoneyHistory::get();
+    $this->assertEquals(1, count($history));
+    $this->assertEquals(1, $history[0]->user_id);
+    $this->assertEquals(2, $history[0]->to);
+    $this->assertEquals(10, $history[0]->amount);
+    $this->assertEquals('127.0.0.1', $history[0]->ip);
+  }
+
+  /**
    * Test sign up
    *
    * @return void

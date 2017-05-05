@@ -50,3 +50,4 @@ Route::post('/user/password', 'UserController@editPassword')->middleware('auth')
 
 Route::post('/user/email', 'UserController@requestEditEmail')->middleware('auth')->middleware('permission:user-request-edit-email');
 Route::post('/user/username', 'UserController@editUsername')->middleware('auth')->middleware('permission:user-edit-username');
+Route::put('/user/money', 'UserController@transferMoney')->middleware('auth')->middleware('permission:user-transfer-money');

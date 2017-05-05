@@ -242,6 +242,10 @@ class UserController extends Controller
 
   public function profile(Request $request)
   {
+    // VOTES
+    $votesCount = \App\Vote::where('user_id', Auth::user()->id)->where('created_at', '>', date('Y-m-00 00:00:00'))->count();
+    $rewardsWaitedCount = \App\Vote::where('user_id', Auth::user()->id)->where('reward_getted', false)->count();
+
     // EMAIL CONFIRMED
     $findEmailToken = UsersToken::where('user_id', Auth::user()->id)->where('type', 'EMAIL')->where('used_ip', null)->first();
     $confirmedAccount = (empty($findEmailToken));
@@ -257,7 +261,7 @@ class UserController extends Controller
     $notifications = \App\Notification::getUnseen(Auth::user()->id);
 
     // RENDER
-    return view('user.profile', compact('confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'notifications'));
+    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'notifications'));
   }
 
   public function forgotPassword(Request $request)
@@ -468,6 +472,68 @@ class UserController extends Controller
     return response()->json([
       'status' => true,
       'success' => __('user.profile.edit.username.success')
+    ]);
+  }
+
+  public function transferMoney(Request $request)
+  {
+    // Check form
+    if (!$request->has('amount') || !$request->has('to'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    if (Validator::make(['amount' => $request->input('amount')], ['amount' => 'required|numeric'])->fails())
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.amount')
+      ]);
+
+    // check username
+    if (Auth::user()->username == $request->input('to'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.himself')
+      ]);
+    $recipientUser = User::where('username', $request->input('to'))->first();
+    if (count($recipientUser) <= 0)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.unknown_user')
+      ]);
+
+    // check amount
+    if (Auth::user()->money <= 0)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.no_enough')
+      ]);
+    $currentUser = User::find(Auth::user()->id);
+    if (($currentUser->money - floatval($request->input('amount'))) < 0)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.no_enough')
+      ]);
+
+    // edit users
+    $currentUser->money = ($currentUser->money - floatval($request->input('amount')));
+    $currentUser->save();
+    $recipientUser->money = ($recipientUser->money + floatval($request->input('amount')));
+    $recipientUser->save();
+
+    // add to history
+    $log = new \App\UsersTransferMoneyHistory();
+    $log->user_id = $currentUser->id;
+    $log->amount = $request->input('amount');
+    $log->to = $recipientUser->id;
+    $log->ip = $request->ip();
+    $log->save();
+
+    // success message
+    return response()->json([
+      'status' => true,
+      'success' => __('user.profile.transfer.money.success', ['money' => $request->input('amount'), 'username' => $recipientUser->username]),
+      'money' => $currentUser->money
     ]);
   }
 }

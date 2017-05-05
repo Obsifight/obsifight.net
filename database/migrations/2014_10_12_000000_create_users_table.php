@@ -17,7 +17,6 @@ class CreateUsersTable extends Migration
       $table->string('username', 16)->unique();
       $table->string('email', 50)->unique();
       $table->string('password', 50);
-      $table->integer('vote')->default(0);
       $table->float('money')->default(0);
       $table->ipAddress('ip');
       $table->boolean('skin')->default(0);
@@ -103,6 +102,18 @@ class CreateUsersTable extends Migration
       $table->foreign('history_id')->references('id')->on('users_edit_username_histories');
       $table->timestamps();
     });
+
+    // transfers
+    Schema::create('users_transfer_money_histories', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->integer('amount');
+      $table->integer('to')->unsigned();
+      $table->foreign('to')->references('id')->on('users');
+      $table->ipAddress('ip');
+      $table->timestamps();
+    });
   }
   /**
    * Reverse the migrations.
@@ -120,5 +131,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_email_edit_requests');
     Schema::dropIfExists('users_edit_username_histories');
     Schema::dropIfExists('users_edit_username_abilities');
+    Schema::dropIfExists('users_transfer_money_histories');
   }
 }

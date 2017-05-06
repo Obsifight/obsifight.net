@@ -489,6 +489,27 @@ class UserController extends Controller
         'error' => __('user.profile.transfer.money.error.amount')
       ]);
 
+    // check times limit
+    $transfersToday = \App\UsersTransferMoneyHistory::where('user_id', Auth::user()->id)->where('created_at', 'LIKE', date('Y-m-d').'%')->get();
+    if (count($transfersToday) >= 3)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.limit.times')
+      ]);
+
+    // check amount limit
+    $sumToday = 0;
+    if (count($transfersToday) > 0) {
+      foreach ($transfersToday as $transfer) {
+        $sumToday += $transfer->amount;
+      }
+      if ($sumToday + floatval($request->input('amount')) > 2250)
+        return response()->json([
+          'status' => false,
+          'error' => __('user.profile.transfer.money.error.limit.day')
+        ]);
+    }
+
     // check username
     if (Auth::user()->username == $request->input('to'))
       return response()->json([
@@ -515,6 +536,15 @@ class UserController extends Controller
         'error' => __('user.profile.transfer.money.error.no_enough')
       ]);
 
+    // check if ban
+    $api = resolve('\ApiObsifight');
+    $result = $api->get('/user/' . Auth::user()->username . '/sanctions/banned');
+    if ($result->status && $result->success && $result->body && is_object($result->body) && $result->body->banned)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.limit.ban')
+      ]);
+
     // edit users
     $currentUser->money = ($currentUser->money - floatval($request->input('amount')));
     $currentUser->save();
@@ -534,6 +564,71 @@ class UserController extends Controller
       'status' => true,
       'success' => __('user.profile.transfer.money.success', ['money' => $request->input('amount'), 'username' => $recipientUser->username]),
       'money' => $currentUser->money
+    ]);
+  }
+
+  public function uploadSkin(Request $request)
+  {
+    // check vote
+    $votesCount = \App\Vote::where('user_id', Auth::user()->id)->where('created_at', '>', date('Y-m-00 00:00:00'))->count();
+    if ($votesCount < 3)
+      return abort(403);
+
+    // check request
+    if (!$request->hasFile('image'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.upload.error.no_file')
+      ]);
+    if (Validator::make($request->all(), ['image' => 'required|max:' . env('SKINS_UPLOAD_MAX_SIXE') . '|mimes:png|dimensions:max_width=' . env('SKINS_UPLOAD_MAX_WIDTH') . ',max_height=' . env('SKINS_UPLOAD_MAX_HEIGHT')])->fails())
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.upload.error.file.type')
+      ]);
+
+    // upload
+    $path = $request->file('image')->storeAs(
+      env('SKINS_UPLOAD_FTP_PATH'), str_replace('{PLAYER}', Auth::user()->username, env('SKINS_UPLOAD_FTP_FILENAME')), env('SKINS_UPLOAD_CONFIG')
+    );
+
+    // success
+    return response()->json([
+      'status' => true,
+      'success' => __('user.profile.upload.success')
+    ]);
+  }
+
+  public function uploadCape(Request $request)
+  {
+    // can
+    if (!Auth::user()->cape)
+      return abort(403);
+    // check vote
+    $votesCount = \App\Vote::where('user_id', Auth::user()->id)->where('created_at', '>', date('Y-m-00 00:00:00'))->count();
+    if ($votesCount < 3)
+      return abort(403);
+
+    // check request
+    if (!$request->hasFile('image'))
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.upload.error.no_file')
+      ]);
+    if (Validator::make($request->all(), ['image' => 'required|max:' . env('SKINS_UPLOAD_MAX_SIXE') . '|mimes:png|dimensions:max_width=' . env('SKINS_UPLOAD_MAX_WIDTH') . ',max_height=' . env('SKINS_UPLOAD_MAX_HEIGHT')])->fails())
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.upload.error.file.type')
+      ]);
+
+    // upload
+    $path = $request->file('image')->storeAs(
+      env('CAPES_UPLOAD_FTP_PATH'), str_replace('{PLAYER}', Auth::user()->username, env('CAPES_UPLOAD_FTP_FILENAME')), env('SKINS_UPLOAD_CONFIG')
+    );
+
+    // success
+    return response()->json([
+      'status' => true,
+      'success' => __('user.profile.upload.success')
     ]);
   }
 }

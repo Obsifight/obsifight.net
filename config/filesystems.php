@@ -55,6 +55,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'skins-ftp' => [
+          'driver'   => 'ftp',
+          'host'     => env('SKINS_UPLOAD_FTP_HOST'),
+          'username' => env('SKINS_UPLOAD_FTP_USER'),
+          'password' => env('SKINS_UPLOAD_FTP_PASSWORD'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),

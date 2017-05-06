@@ -584,6 +584,64 @@ class UserControllerTest extends TestCase
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.no_enough'))), $response->getContent());
   }
+  public function testTransferMoneyWithBan()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    if (!class_exists('ApiObsifight'))
+      require base_path('vendor/Eywek/API/ApiObsifight.class.php');
+    $api = $this->getMockBuilder(\ApiObsifight::class)
+                ->setMethods(['get'])
+                ->setConstructorArgs([env('API_OBSIFIGHT_USER'), env('API_OBSIFIGHT_PASS')])
+                ->getMock();
+    $api->expects($this->once())
+        ->method('get')
+        ->willReturn((object)['status' => true, 'success' => true, 'body' => (object)['banned' => true]]);
+    $this->app->instance('\ApiObsifight', $api);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.limit.ban'))), $response->getContent());
+  }
+  public function testTransferMoneyMoreThanThreeTimesADay()
+  {
+    // add to history
+    for ($i=0; $i < 3; $i++) {
+      $log = new \App\UsersTransferMoneyHistory();
+      $log->user_id = 1;
+      $log->amount = 1;
+      $log->to = 2;
+      $log->ip = '127.0.0.1';
+      $log->save();
+    }
+
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.limit.times'))), $response->getContent());
+  }
+  public function testTransferMoneyMoreThanLimitByDay()
+  {
+    // add to history
+    for ($i=0; $i < 2; $i++) {
+      $log = new \App\UsersTransferMoneyHistory();
+      $log->user_id = 1;
+      $log->amount = 1125;
+      $log->to = 2;
+      $log->ip = '127.0.0.1';
+      $log->save();
+    }
+
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => 10, 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.limit.day'))), $response->getContent());
+  }
   public function testTransferMoney()
   {
     $user = \App\User::find(1);
@@ -751,6 +809,175 @@ class UserControllerTest extends TestCase
     // check if token is used
     $token = \App\UsersToken::where('token', '85ce3890-2c2c-11e7-ad60-a330f1f9660b')->first();
     $this->assertEquals('127.0.0.1', $token->used_ip);
+  }
+
+  /**
+   * Test upload skin
+   *
+   * @return void
+  */
+  public function testUploadSkinNotLogged()
+  {
+    $response = $this->call('POST', '/user/skin', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/skin.png', 'skin.png', filesize(base_path('public/img/test') . '/skin.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(302);
+  }
+  public function testUploadSkinWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/skin', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/skin.png', 'skin.png', filesize(base_path('public/img/test') . '/skin.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(403);
+  }
+  public function testUploadSkinWithoutMoreThanThreeVotes()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/skin', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/skin.png', 'skin.png', filesize(base_path('public/img/test') . '/skin.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(403);
+  }
+  public function testUploadSkinWithoutFile()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/skin', [], [], []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.no_file'))), $response->getContent());
+  }
+  public function testUploadSkinWithAnInvalidFileType()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/skin', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/css') . '/app.css', 'skin.png', filesize(base_path('public/css') . '/app.css'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.file.type'))), $response->getContent());
+  }
+  public function testUploadSkinWithATooLargeFile()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/skin', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img') . '/parallax-1.png', 'skin.png', filesize(base_path('public/img') . '/parallax-1.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.file.type'))), $response->getContent());
+  }
+  public function testUploadSkin()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/skin', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/skin.png', 'skin.png', filesize(base_path('public/img/test') . '/skin.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.profile.upload.success'))), $response->getContent());
+    // file
+    $uploaded = storage_path('app/public').DIRECTORY_SEPARATOR.env('SKINS_UPLOAD_FTP_PATH').DIRECTORY_SEPARATOR.str_replace('{PLAYER}', 'Test', env('SKINS_UPLOAD_FTP_FILENAME'));
+    $this->assertFileExists($uploaded);
+    @unlink($uploaded);
+  }
+
+  /**
+   * Test upload cape
+   *
+   * @return void
+  */
+  public function testUploadCapeNotLogged()
+  {
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/cape.png', 'cape.png', filesize(base_path('public/img/test') . '/cape.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(302);
+  }
+  public function testUploadCapeWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/cape.png', 'cape.png', filesize(base_path('public/img/test') . '/cape.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(403);
+  }
+  public function testUploadCapeWithoutMoreThanThreeVotes()
+  {
+    $user = \App\User::find(2);
+    $user->cape = 1;
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/cape.png', 'cape.png', filesize(base_path('public/img/test') . '/cape.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(403);
+  }
+  public function testUploadCapeWithoutPurchaseIt()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/cape.png', 'cape.png', filesize(base_path('public/img/test') . '/cape.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(403);
+  }
+  public function testUploadCapeWithoutFile()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.no_file'))), $response->getContent());
+  }
+  public function testUploadCapeWithAnInvalidFileType()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/css') . '/app.css', 'cape.png', filesize(base_path('public/css') . '/app.css'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.file.type'))), $response->getContent());
+  }
+  public function testUploadCapeWithATooLargeFile()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img') . '/parallax-1.png', 'cape.png', filesize(base_path('public/img') . '/parallax-1.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.file.type'))), $response->getContent());
+  }
+  public function testUploadCape()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/cape', [], [], [
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img/test') . '/cape.png', 'cape.png', filesize(base_path('public/img/test') . '/cape.png'), 'image/png', null, true)
+    ]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.profile.upload.success'))), $response->getContent());
+    // file
+    $uploaded = storage_path('app/public').DIRECTORY_SEPARATOR.env('CAPES_UPLOAD_FTP_PATH').DIRECTORY_SEPARATOR.str_replace('{PLAYER}', 'Test', env('CAPES_UPLOAD_FTP_FILENAME'));
+    $this->assertFileExists($uploaded);
+    @unlink($uploaded);
   }
 
   /**

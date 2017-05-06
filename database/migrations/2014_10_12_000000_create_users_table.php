@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
       $table->string('password', 50);
       $table->float('money')->default(0);
       $table->ipAddress('ip');
-      $table->boolean('skin')->default(0);
       $table->boolean('cape')->default(0);
       $table->rememberToken();
       $table->timestamps();

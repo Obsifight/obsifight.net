@@ -51,3 +51,5 @@ Route::post('/user/password', 'UserController@editPassword')->middleware('auth')
 Route::post('/user/email', 'UserController@requestEditEmail')->middleware('auth')->middleware('permission:user-request-edit-email');
 Route::post('/user/username', 'UserController@editUsername')->middleware('auth')->middleware('permission:user-edit-username');
 Route::put('/user/money', 'UserController@transferMoney')->middleware('auth')->middleware('permission:user-transfer-money');
+Route::post('/user/skin', 'UserController@uploadSkin')->middleware('auth')->middleware('permission:user-upload-skin');
+Route::post('/user/cape', 'UserController@uploadCape')->middleware('auth')->middleware('permission:user-upload-cape');

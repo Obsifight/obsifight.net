@@ -18,6 +18,7 @@ class TestingUsersTablesSeeder extends Seeder
         'email' => 'test@test.com',
         'password' => 'dd202cf35d550d12a536a277c8ada507159c7a05', // test
         'money' => 10,
+        'cape' => 1,
         'ip' => '127.0.0.1',
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
@@ -128,5 +129,18 @@ class TestingUsersTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      // vote
+      DB::table('votes')->truncate();
+      for ($i=0; $i < 3; $i++) {
+        DB::table('votes')->insert([
+          'user_id' => 1,
+          'out' => 1,
+          'reward_id' => 1,
+          'reward_getted' => true,
+          'money_earned' => 0,
+          'created_at' => date('Y-m-d H:i:s'),
+          'updated_at' => date('Y-m-d H:i:s')
+        ]);
+      }
     }
 }

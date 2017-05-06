@@ -178,7 +178,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Waavi\ReCaptcha\ReCaptchaServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class
+        Zizaco\Entrust\EntrustServiceProvider::class,
+
+        App\Providers\ObsifightApiServiceProvider::class,
     ],
 
     /*

@@ -87,10 +87,17 @@ return [
   'profile.transfer.money.error.unknown_user' => 'Aucun utilisateur ne correspond à ce pseudo.',
   'profile.transfer.money.error.himself' => 'Vous ne pouvez pas effectuer un transfert de points à vous-même.',
   'profile.transfer.money.error.amount' => 'Le montant est invalide.',
+  'profile.transfer.money.error.limit.ban' => 'Vous êtes bannis, vous ne pouvez pas transférer vos points.',
+  'profile.transfer.money.error.limit.times' => "Vous avez déjà transféré des points plus de 3 fois aujourd'hui.",
+  'profile.transfer.money.error.limit.day' => "Vous avez déjà dépassé la limite des 2 250 points par transfert quotidien.",
   'profile.transfer.money.success' => 'Vous avez bien envoyé :money points à :username !',
   'profile.transfer.money.field.to' => 'Pseudo du joueur',
   'profile.transfer.money.field.amount' => 'Montant du transfert',
   'profile.transfer.money.send' => 'Envoyer les points',
+
+  'profile.upload.error.no_file' => "Vous n'avez pas sélectionné de fichier.",
+  'profile.upload.error.file.type' => 'Le type de fichier que vous avez envoyé est invalide.',
+  'profile.upload.success' => 'Le fichier a bien été envoyé sur nos serveurs !',
 
   'money' => 'Points',
   'votes' => 'Votes',

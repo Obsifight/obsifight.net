@@ -93,6 +93,34 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-enable-obsiguard',
+        'display_name' => 'Activer ObsiGuard',
+        'description' => 'Activer ObsiGuard',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-disable-obsiguard',
+        'display_name' => 'Désactiver ObsiGuard',
+        'description' => 'Désactiver ObsiGuard',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-add-ip-obsiguard',
+        'display_name' => 'Ajouter une IP sur ObsiGuard',
+        'description' => 'Ajouter une IP sur ObsiGuard',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-remove-ip-obsiguard',
+        'display_name' => 'Supprimer une IP sur ObsiGuard',
+        'description' => 'Supprimer une IP sur ObsiGuard',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // link permissiosn
       DB::table('permission_role')->truncate();
@@ -133,6 +161,22 @@ class PermissionsTablesSeeder extends Seeder
         'role_id' => 1
       ]);
       DB::table('permission_role')->insert([
+        'permission_id' => 10,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 11,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 12,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 13,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
         'permission_id' => 1,
         'role_id' => 2
       ]);
@@ -150,6 +194,22 @@ class PermissionsTablesSeeder extends Seeder
       ]);
       DB::table('permission_role')->insert([
         'permission_id' => 9,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 10,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 11,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 12,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 13,
         'role_id' => 2
       ]);
     }

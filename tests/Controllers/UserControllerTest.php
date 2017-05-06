@@ -1179,5 +1179,4 @@ class UserControllerTest extends TestCase
     $response->assertStatus(302);
     $response->assertSessionHas('flash.success', __('user.profile.two_factor_auth.disable.success'));
   }
-
 }

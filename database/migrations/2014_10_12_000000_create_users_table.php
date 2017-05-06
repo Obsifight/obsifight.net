@@ -58,6 +58,7 @@ class CreateUsersTable extends Migration
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users');
       $table->uuid('token');
+      $table->string('data', 10)->nullable()->default(null);
       $table->ipAddress('used_ip')->nullable()->default(null);
       $table->timestamps();
     });

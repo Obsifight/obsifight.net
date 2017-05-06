@@ -13,11 +13,12 @@ class UsersToken extends Model
     return $this->belongsTo('App\User');
   }
 
-  static public function generate($type, $userId) {
+  static public function generate($type, $userId, $data = null) {
     $token = new UsersToken();
     $token->user_id = $userId;
     $token->token = \Uuid::generate();
     $token->type = $type;
+    $token->data = $data;
     if ($token->save())
       return $token->token;
     else

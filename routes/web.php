@@ -56,3 +56,9 @@ Route::post('/user/cape', 'UserController@uploadCape')->middleware('auth')->midd
 Route::get('/user/two-factor-auth/enable', 'UserController@enableTwoFactorAuth')->middleware('auth')->middleware('permission:user-enable-two-factor-auth');
 Route::post('/user/two-factor-auth/enable', 'UserController@validEnableTwoFactorAuth')->middleware('auth')->middleware('permission:user-enable-two-factor-auth');
 Route::get('/user/two-factor-auth/disable', 'UserController@disableTwoFactorAuth')->middleware('auth')->middleware('permission:user-disable-two-factor-auth');
+
+Route::get('/user/obsiguard/enable', 'ObsiguardController@enable')->middleware('auth')->middleware('permission:user-enable-obsiguard');
+Route::post('/user/obsiguard/security/valid', 'ObsiguardController@validSecurityCode')->middleware('auth');
+Route::get('/user/obsiguard/disable', 'ObsiguardController@disable')->middleware('auth')->middleware('permission:user-disable-obsiguard')->middleware('obsiguard');
+Route::post('/user/obsiguard/ip', 'ObsiguardController@addIP')->middleware('auth')->middleware('permission:user-add-ip-obsiguard')->middleware('obsiguard');
+Route::delete('/user/obsiguard/ip/{id}', 'ObsiguardController@removeIP')->middleware('auth')->middleware('permission:user-remove-ip-obsiguard')->middleware('obsiguard')->where('id', '([0-9])+');

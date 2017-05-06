@@ -55,12 +55,18 @@
               @lang('user.profile.menu.appearence')
             </a>
           @endability
-          <a class="item toggle-menu" data-toggle="security">
-            <i class="lock left aligned icon"></i>
-            @lang('user.profile.menu.security')
-            @if (!$twoFactorEnabled || !$findObsiGuardIPs)
-              <i class="warning sign icon" style="color:#{{ $twoFactorEnabled ? 'FE9A76' : 'B03060' }}"></i>
-            @endif
+          @ability('', 'user-enable-two-factor-auth,user-disable-two-factor-auth,user-enable-obsiguard,user-disable-obsiguard,user-add-ip-obsiguard,user-remove-ip-obsiguard')
+            <a class="item toggle-menu" data-toggle="security">
+              <i class="lock left aligned icon"></i>
+              @lang('user.profile.menu.security')
+              @if (!$twoFactorEnabled || !$findObsiGuardIPs)
+                <i class="warning sign icon" style="color:#{{ $twoFactorEnabled ? 'FE9A76' : 'B03060' }}"></i>
+              @endif
+            </a>
+          @endability
+          <a class="item toggle-menu" data-toggle="login-logs">
+            <i class="sign in left aligned icon"></i>
+            @lang('user.profile.menu.login.logs')
           </a>
           <a class="item toggle-menu" data-toggle="spendings">
             <i class="shopping basket left aligned icon"></i>
@@ -294,6 +300,71 @@
                 @endif
               </div>
             </div>
+
+            <div class="ui divider"></div>
+
+            @if (!$findObsiGuardIPs)
+              <div class="ui info icon message">
+                <i class="protect icon"></i>
+                <div class="content">
+                  <div class="header">
+                    @lang('user.obsiguard.title.enable')
+                  </div>
+                  <p>@lang('user.obsiguard.subtitle', ['link' => 'http://forum.obsifight.net/threads/utiliser-obsiguard.17946/'])</p>
+                  <button id="enableObsiguard" class="ui primary button" style="position:absolute;right:10px;top:10px;">@lang('user.obsiguard.enable')</button>
+                </div>
+              </div>
+            @else
+              <h3 class="ui center aligned icon header">
+                <i class="circular protect icon"></i>
+                @lang('user.obsiguard')
+              </h3>
+
+              <h4 class="ui dividing header">@lang('user.obsiguard.list')</h4>
+
+              <table class="ui striped table">
+                <thead>
+                  <tr>
+                    <th>@lang('user.obsiguard.list.ip')</th>
+                    <th>@lang('user.obsiguard.list.action')</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($findObsiGuardIPs as $ip)
+                    <tr data-obsiguard-id="{{ $ip->id }}">
+                      <td>{{ $ip->ip }}</td>
+                      <td>
+                        <button class="ui red button" data-obsiguard-action="remove" name="button">@lang('user.obsiguard.list.action.remove')</button>
+                      </td>
+                    </tr>
+                  @endforeach
+                  <tr>
+                    <td class="ui form">
+                      <div class="field">
+                        <input type="text" data-obsiguard-action="add" name="ip">
+                      </div>
+                    </td>
+                    <td>
+                      <button class="ui green button" data-obsiguard-action="add" name="button">@lang('user.obsiguard.list.action.add')</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p>@lang('user.obsiguard.ip', ['ip' => request()->ip()])</p>
+
+              <div class="ui info message">
+                <div class="content">
+                  <div class="header ui form">
+                    <div class="ui checkbox">
+                      <input type="checkbox" tabindex="0" class="hidden">
+                      <label style="color:#0E566C;">@lang('user.obsiguard.ip.dynamic.title')</label>
+                    </div>
+                  </div>
+                  <p>@lang('user.obsiguard.ip.dynamic.subtitle')</p>
+                </div>
+              </div>
+            @endif
           </div>
 
           <div data-menu="spendings" style="display:none;">

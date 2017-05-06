@@ -275,7 +275,26 @@
 
           </div>
 
-          <div data-menu="security" style="display:none;"></div>
+          <div data-menu="security" style="display:none;">
+            <div class="ui info icon message">
+              <i class="protect icon"></i>
+              <div class="content">
+                <div class="header">
+                  @if (!$twoFactorEnabled)
+                    @lang('user.two_factor_auth.title.enable')
+                  @else
+                    @lang('user.two_factor_auth.title.disable')
+                  @endif
+                </div>
+                <p>@lang('user.two_factor_auth.subtitle', ['link' => 'http://forum.obsifight.net/threads/la-double-authentification.20892/'])</p>
+                @if (!$twoFactorEnabled)
+                  <a href="{{ url('/user/two-factor-auth/enable') }}" class="ui primary button" style="position:absolute;right:10px;top:10px;">@lang('user.two_factor_auth.enable')</a>
+                @else
+                  <a href="{{ url('/user/two-factor-auth/disable') }}" class="ui primary button" style="position:absolute;right:10px;top:10px;">@lang('user.two_factor_auth.disable')</a>
+                @endif
+              </div>
+            </div>
+          </div>
 
           <div data-menu="spendings" style="display:none;">
             <h3 class="ui dividing header">

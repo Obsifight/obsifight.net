@@ -37,19 +37,19 @@ body {
 /* ====
   MESSAGES
 ======= */
-.ui.warning.message a {
+.ui.warning.message a:not(.button) {
   color: #794B02;
   text-decoration: underline;
 }
-.ui.success.message a {
+.ui.success.message a:not(.button) {
   color: #1A531B;
   text-decoration: underline;
 }
-.ui.info.message a {
+.ui.info.message a:not(.button) {
   color: #0E566C;
   text-decoration: underline;
 }
-.ui.error.message a {
+.ui.error.message a:not(.button) {
   color: #912D2B;
   text-decoration: underline;
 }

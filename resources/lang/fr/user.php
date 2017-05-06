@@ -115,7 +115,14 @@ return [
 
   'profile.spendings.title' => 'Vos dernières dépenses',
 
-  'two_factor_auth.enable' => 'Activer la double authentification', 
+  'two_factor_auth.title.enable' => 'Voulez-vous <u>activer</u> la double authentification ?',
+  'two_factor_auth.title.disable' => 'Voulez-vous vraiment <u>désactiver</u> la double authentification ?',
+  'two_factor_auth.enable' => 'Activer',
+  'two_factor_auth.disable' => 'Désactiver',
+  'two_factor_auth.subtitle' => 'Cette fonctionnalité vous permet plus de sécurité sur votre compte site. <a href=":link">En savoir plus</a>',
+  'two_factor_auth.field.secret' => 'Secret: <em>:secret</em>',
+  'two_factor_auth.field.code' => 'Code',
+  'two_factor_auth.enable.title' => 'Activer la double authentification',
   'profile.two_factor_auth.enable.error.already' => 'La double authentification est déjà activée.',
   'profile.two_factor_auth.enable.error.code' => 'Le code que vous avez entré est invalide.',
   'profile.two_factor_auth.enable.success' => 'La double authentification a bien été activée !',

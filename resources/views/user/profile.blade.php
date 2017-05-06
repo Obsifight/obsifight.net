@@ -49,10 +49,12 @@
             <i class="user left aligned icon"></i>
             @lang('user.profile.menu.infos')
           </a>
-          <a class="item toggle-menu" data-toggle="appearence">
-            <i class="theme left aligned icon"></i>
-            @lang('user.profile.menu.appearence')
-          </a>
+          @ability('', 'user-upload-skin,user-upload-cape')
+            <a class="item toggle-menu" data-toggle="appearence">
+              <i class="theme left aligned icon"></i>
+              @lang('user.profile.menu.appearence')
+            </a>
+          @endability
           <a class="item toggle-menu" data-toggle="security">
             <i class="lock left aligned icon"></i>
             @lang('user.profile.menu.security')
@@ -159,6 +161,120 @@
 
             <br><br>
           </div>
+
+          <div data-menu="appearence" style="display:none;">
+
+            @permission('user-upload-skin')
+              <h3 class="ui dividing header">
+                @lang('user.profile.appearence.skin')
+              </h3>
+
+              @if ($votesCount < 3)
+                <div class="ui error message">
+                  <div class="header">
+                    @lang('form.error.title')
+                  </div>
+                  @lang('user.profile.appearence.skin.error.vote')
+                </div>
+              @else
+                <div class="ui card" style="width:500px;">
+                  <div class="content">
+                    <h4 class="ui sub header">@lang('user.profile.appearence.specifics')</h4>
+                    <div class="ui small feed">
+                      <div class="ui list">
+                        <a class="item">
+                          <i class="resize horizontal icon"></i>
+                          <div class="content">
+                            <div class="header">@lang('user.profile.appearence.specifics.width')</div>
+                            <div class="description">@lang('user.profile.appearence.specifics.width.subtitle', ['max_width' => env('SKINS_UPLOAD_MAX_WIDTH'), 'max_height' => env('SKINS_UPLOAD_MAX_HEIGHT')])</div>
+                          </div>
+                        </a>
+                        <a class="item">
+                          <i class="compress icon"></i>
+                          <div class="content">
+                            <div class="header">@lang('user.profile.appearence.specifics.size')</div>
+                            <div class="description">@lang('user.profile.appearence.specifics.size.subtitle', ['max_size' => round(env('SKINS_UPLOAD_MAX_SIXE') / 1000000)])</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="extra content text-center">
+                    <form action="{{ url('/user/skin') }}" method="post" data-ajax data-ajax-upload-image>
+                      <div style="display:inline-block">
+                        <label for="skin" class="ui labeled icon button">
+                          <i class="file image outline icon"></i>
+                          <span class="filename">@lang('user.profile.appearence.skin.choose')</span>
+                        </label>
+                        <input type="file" name="image" accept="image/x-png,image/png" id="skin" style="display:none">
+                      </div>
+                      <button type="submit" class="ui primary button">@lang('user.profile.appearence.skin.send')</button>
+                    </form>
+                  </div>
+                </div>
+              @endif
+            @endpermission
+
+            @permission('user-upload-cape')
+              <h3 class="ui dividing header">
+                @lang('user.profile.appearence.cape')
+              </h3>
+
+              @if ($votesCount < 3)
+                <div class="ui error message">
+                  <div class="header">
+                    @lang('form.error.title')
+                  </div>
+                  @lang('user.profile.appearence.cape.error.vote')
+                </div>
+              @elseif (Auth::user()->cape === 0)
+                <div class="ui error message">
+                  <div class="header">
+                    @lang('form.error.title')
+                  </div>
+                  @lang('user.profile.appearence.cape.error.purchase')
+                </div>
+              @else
+                <div class="ui card" style="width:500px;">
+                  <div class="content">
+                    <h4 class="ui sub header">@lang('user.profile.appearence.specifics')</h4>
+                    <div class="ui small feed">
+                      <div class="ui list">
+                        <a class="item">
+                          <i class="resize horizontal icon"></i>
+                          <div class="content">
+                            <div class="header">@lang('user.profile.appearence.specifics.width')</div>
+                            <div class="description">@lang('user.profile.appearence.specifics.width.subtitle', ['max_width' => env('SKINS_UPLOAD_MAX_WIDTH'), 'max_height' => env('SKINS_UPLOAD_MAX_HEIGHT')])</div>
+                          </div>
+                        </a>
+                        <a class="item">
+                          <i class="compress icon"></i>
+                          <div class="content">
+                            <div class="header">@lang('user.profile.appearence.specifics.size')</div>
+                            <div class="description">@lang('user.profile.appearence.specifics.size.subtitle', ['max_size' => round(env('SKINS_UPLOAD_MAX_SIXE') / 1000000)])</div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="extra content text-center">
+                    <form action="{{ url('/user/cape') }}" method="post" data-ajax data-ajax-upload-image>
+                      <div style="display:inline-block">
+                        <label for="cape" class="ui labeled icon button">
+                          <i class="file image outline icon"></i>
+                          <span class="filename">@lang('user.profile.appearence.cape.choose')</span>
+                        </label>
+                        <input type="file" name="image" accept="image/x-png,image/png" id="cape" style="display:none">
+                      </div>
+                      <button type="submit" class="ui primary button">@lang('user.profile.appearence.cape.send')</button>
+                    </form>
+                  </div>
+                </div>
+              @endif
+            @endpermission
+
+          </div>
+
         </div>
       </div>
     </div>
@@ -295,6 +411,21 @@
         setTimeout(function () {
           menu.fadeIn(100)
         }, 100)
+      })
+    })
+    $(document).ready(function() {
+      $('input[type="file"]').on('change', function () {
+        var input = $(this)
+        var label = input.parent().find('label')
+        var filePath = input.val()
+
+        if (filePath) {
+          var startIndex = (filePath.indexOf('\\') >= 0 ? filePath.lastIndexOf('\\') : filePath.lastIndexOf('/'))
+          var filename = filePath.substring(startIndex)
+          if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0)
+            filename = filename.substring(1)
+          label.find('span.filename').html(filename)
+        }
       })
     })
   </script>

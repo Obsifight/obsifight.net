@@ -16,19 +16,27 @@ function initAjaxForms() {
     form.addClass('dimmable')
     form.prepend('<div class="ui active inverted dimmer"><div class="ui text loader">' + localization.loading + '</div></div>')
 
-    // Get data
-    var data = objectifyForm(form.serializeArray())
+    if (form.attr('data-ajax-upload-image') !== undefined) {
+      var data = (window.FormData) ? new FormData(form[0]) : null;
+      var dataToSend = data
+    } else {
+      // Get data
+      var data = objectifyForm(form.serializeArray())
 
-    // ReCaptcha
-    if (typeof grecaptcha !== "undefined" && typeof grecaptcha.getResponse() !== "undefined")
-      data['g-recaptcha-response'] = grecaptcha.getResponse()
+      // ReCaptcha
+      if (typeof grecaptcha !== "undefined" && typeof grecaptcha.getResponse() !== "undefined")
+        data['g-recaptcha-response'] = grecaptcha.getResponse()
+      // json
+      var dataToSend = JSON.stringify(data)
+    }
 
     // Submit data
     $.ajax({
       url: form.attr('action'),
       method: form.attr('method'),
-      data: JSON.stringify(data),
-      contentType: 'application/json',
+      data: dataToSend,
+      contentType: (form.attr('data-ajax-upload-image') !== undefined) ? false : 'application/json',
+      processData: false,
       dataType: 'json',
       success: function (response) {
         if (response.status) {

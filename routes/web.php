@@ -53,3 +53,6 @@ Route::post('/user/username', 'UserController@editUsername')->middleware('auth')
 Route::put('/user/money', 'UserController@transferMoney')->middleware('auth')->middleware('permission:user-transfer-money');
 Route::post('/user/skin', 'UserController@uploadSkin')->middleware('auth')->middleware('permission:user-upload-skin');
 Route::post('/user/cape', 'UserController@uploadCape')->middleware('auth')->middleware('permission:user-upload-cape');
+Route::get('/user/two-factor-auth/enable', 'UserController@enableTwoFactorAuth')->middleware('auth')->middleware('permission:user-enable-two-factor-auth');
+Route::post('/user/two-factor-auth/enable', 'UserController@validEnableTwoFactorAuth')->middleware('auth')->middleware('permission:user-enable-two-factor-auth');
+Route::get('/user/two-factor-auth/disable', 'UserController@disableTwoFactorAuth')->middleware('auth')->middleware('permission:user-disable-two-factor-auth');

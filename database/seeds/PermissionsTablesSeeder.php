@@ -79,6 +79,20 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-enable-two-factor-auth',
+        'display_name' => 'Activer la double authentification',
+        'description' => 'Activer la double authentification',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-disable-two-factor-auth',
+        'display_name' => 'Désactiver la double authentification',
+        'description' => 'Désactiver la double authentification',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // link permissiosn
       DB::table('permission_role')->truncate();
@@ -111,6 +125,14 @@ class PermissionsTablesSeeder extends Seeder
         'role_id' => 1
       ]);
       DB::table('permission_role')->insert([
+        'permission_id' => 8,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 9,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
         'permission_id' => 1,
         'role_id' => 2
       ]);
@@ -120,6 +142,14 @@ class PermissionsTablesSeeder extends Seeder
       ]);
       DB::table('permission_role')->insert([
         'permission_id' => 3,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 8,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 9,
         'role_id' => 2
       ]);
     }

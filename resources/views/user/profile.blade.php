@@ -275,6 +275,25 @@
 
           </div>
 
+          <div data-menu="security" style="display:none;"></div>
+
+          <div data-menu="spendings" style="display:none;">
+            <h3 class="ui dividing header">
+              @lang('user.profile.spendings.title')
+            </h3>
+
+            <table class="ui striped table">
+              <tbody>
+                @for ($i = 0; $i < 8; $i++)
+                  <tr>
+                    <td><i class="exchange icon"></i> Vous avez transféré <strong>5 points</strong> à <strong>Test</strong> &nbsp;&nbsp;<small><em style="color:#777;">Il y a 7 heures</em></small></td>
+                  </tr>
+                @endfor
+              </tbody>
+            </table>
+          </div>
+
+          <div data-menu="socials" style="display:none;"></div>
         </div>
       </div>
     </div>
@@ -311,7 +330,7 @@
     <div class="ui modal" id="editUsername">
       <i class="close icon"></i>
       <div class="header">
-        @lang('user.profile.edit.username')
+        @lang('user.profile.username.edit')
       </div>
       <div class="content">
         <div class="ui warning message">

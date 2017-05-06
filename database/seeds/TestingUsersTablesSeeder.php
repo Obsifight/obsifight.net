@@ -60,12 +60,12 @@ class TestingUsersTablesSeeder extends Seeder
       // TwoFactorAuth
       DB::table('users_two_factor_auth_secrets')->truncate();
       DB::table('users_two_factor_auth_secrets')->insert([
-        'secret' => str_random(20),
+        'secret' => 'DYWPLTWNQMFVTCEM',
         'enabled' => 1,
         'user_id' => 2
       ]);
       DB::table('users_two_factor_auth_secrets')->insert([
-        'secret' => str_random(20),
+        'secret' => 'DYWPLTWNQMFVTCEM',
         'enabled' => 0,
         'user_id' => 3
       ]);

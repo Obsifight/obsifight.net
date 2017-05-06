@@ -631,4 +631,83 @@ class UserController extends Controller
       'success' => __('user.profile.upload.success')
     ]);
   }
+
+  public function enableTwoFactorAuth(Request $request)
+  {
+    // Check if already enabled
+    $secret = \App\UsersTwoFactorAuthSecret::where('user_id', Auth::user()->id)->where('enabled', true)->first();
+    if (count($secret) > 0)
+      return redirect('/user')->with('flash.error', __('user.profile.two_factor_auth.enable.error.already'));
+
+    // Generate secret
+    if (!class_exists('PHPGangsta_GoogleAuthenticator'))
+      require base_path('vendor/PHPGangsta/GoogleAuthenticator.php');
+    $ga = new \PHPGangsta_GoogleAuthenticator();
+
+    $secret = $ga->createSecret();
+    $qrCodeUrl = $ga->getQRCodeGoogleUrl(Auth::user()->username, $secret, env('APP_NAME'));
+
+    // render
+    $request->session()->put('user.twoFactorAuth.secret', $secret);
+    return view('user.two_factor_auth', compact('secret', 'qrCodeUrl'));
+  }
+
+  public function validEnableTwoFactorAuth(Request $request)
+  {
+    // Check session
+    if (!$request->session()->has('user.twoFactorAuth.secret'))
+      return abort(404);
+    $secretKey = $request->session()->get('user.twoFactorAuth.secret');
+    // Check form
+    if (!$request->has('code'))
+      return response()->json([
+        'status' => false,
+        'error' => __('form.error.fields')
+      ]);
+    // Check if already enabled
+    $secret = \App\UsersTwoFactorAuthSecret::where('user_id', Auth::user()->id)->first();
+    if (count($secret) > 0 && $secret->enabled)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.two_factor_auth.enable.error.already')
+      ]);
+    // check code
+    if (!class_exists('PHPGangsta_GoogleAuthenticator'))
+      require base_path('vendor/PHPGangsta/GoogleAuthenticator.php');
+    $ga = new \PHPGangsta_GoogleAuthenticator();
+    if (!$ga->verifyCode($secretKey, $request->input('code'), 2))   // 2 = 2*30sec clock tolerance)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.two_factor_auth.enable.error.code')
+      ]);
+    // remove session
+    $request->session()->forget('user.twoFactorAuth.secret');
+
+    // save secret
+    if (count($secret) <= 0)
+      $secret = new \App\UsersTwoFactorAuthSecret();
+    $secret->user_id = Auth::user()->id;
+    $secret->enabled = true;
+    $secret->secret = $secretKey;
+    $secret->save();
+
+    // success
+    $request->session()->put('flash.success', __('user.profile.two_factor_auth.enable.success'));
+    return response()->json([
+      'status' => true,
+      'success' => __('user.profile.two_factor_auth.enable.success'),
+      'redirect' => url('/user')
+    ]);
+  }
+
+  public function disableTwoFactorAuth(Request $request)
+  {
+    $secret = \App\UsersTwoFactorAuthSecret::where('user_id', Auth::user()->id)->first();
+    if (count($secret) > 0) {
+      $secret->enabled = false;
+      $secret->save();
+    }
+    return redirect('/user')->with('flash.success', __('user.profile.two_factor_auth.disable.success'));
+  }
+
 }

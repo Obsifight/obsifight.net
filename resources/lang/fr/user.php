@@ -113,6 +113,14 @@ return [
   'profile.upload.error.file.type' => 'Le type de fichier que vous avez envoyé est invalide.',
   'profile.upload.success' => 'Le fichier a bien été envoyé sur nos serveurs !',
 
+  'profile.spendings.title' => 'Vos dernières dépenses',
+
+  'two_factor_auth.enable' => 'Activer la double authentification', 
+  'profile.two_factor_auth.enable.error.already' => 'La double authentification est déjà activée.',
+  'profile.two_factor_auth.enable.error.code' => 'Le code que vous avez entré est invalide.',
+  'profile.two_factor_auth.enable.success' => 'La double authentification a bien été activée !',
+  'profile.two_factor_auth.disable.success' => 'La double authentification a bien été désactivée !',
+
   'money' => 'Points',
   'votes' => 'Votes',
   'rewards_waited' => 'Récompenses en attentes',

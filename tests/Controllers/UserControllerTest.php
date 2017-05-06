@@ -1019,4 +1019,165 @@ class UserControllerTest extends TestCase
       return $mail->user->id === 1;
     });
   }
+
+  /**
+   * Test two factor auth
+   *
+   * @return void
+   */
+  public function testEnableTwoFactorAuthUnlogged()
+  {
+    $response = $this->call('GET', '/user/two-factor-auth/enable');
+    $response->assertStatus(302);
+  }
+  public function testEnableTwoFactorAuthWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/two-factor-auth/enable');
+    $response->assertStatus(403);
+  }
+  public function testEnableTwoFactorAuthWhenAlreadyEnabled()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/two-factor-auth/enable');
+    $response->assertStatus(302);
+    $response->assertSessionHas('flash.error', __('user.profile.two_factor_auth.enable.error.already'));
+  }
+  public function testEnableTwoFactorAuth()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/two-factor-auth/enable');
+    $response->assertStatus(200);
+    $response->assertSessionHas('user.twoFactorAuth.secret');
+  }
+
+  public function testValidEnableTwoFactorAuthUnlogged()
+  {
+    $response = $this->call('POST', '/user/two-factor-auth/enable');
+    $response->assertStatus(302);
+  }
+  public function testValidEnableTwoFactorAuthWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable');
+    $response->assertStatus(403);
+  }
+  public function testValidEnableTwoFactorAuthWithoutEnableItBefore()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable');
+    $response->assertStatus(404);
+  }
+  public function testValidEnableTwoFactorAuthWhenAlreadyEnabled()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+    $this->withSession(['user.twoFactorAuth.secret' => 'DYWPLTWNQMFVTCEM']);
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable', ['code' => 'code']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.two_factor_auth.enable.error.already'))), $response->getContent());
+  }
+  public function testValidEnableTwoFactorAuthWithoutCode()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+    $this->withSession(['user.twoFactorAuth.secret' => 'DYWPLTWNQMFVTCEM']);
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable', []);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('form.error.fields'))), $response->getContent());
+  }
+  public function testValidEnableTwoFactorAuthWithInvalidCode()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+    $this->withSession(['user.twoFactorAuth.secret' => 'DYWPLTWNQMFVTCEM']);
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable', ['code' => 'invalid']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.two_factor_auth.enable.error.code'))), $response->getContent());
+  }
+  public function testValidEnableTwoFactorAuthWhenDisabled()
+  {
+    $s = \App\UsersTwoFactorAuthSecret::where('user_id', 2)->first();
+    $s->enabled = false;
+    $s->save();
+
+    $user = \App\User::find(2);
+    $this->be($user);
+    $this->withSession(['user.twoFactorAuth.secret' => 'DYWPLTWNQMFVTCEA']);
+
+    if (!class_exists('PHPGangsta_GoogleAuthenticator'))
+      require base_path('vendor/PHPGangsta/GoogleAuthenticator.php');
+    $ga = new \PHPGangsta_GoogleAuthenticator();
+    $oneCode = $ga->getCode('DYWPLTWNQMFVTCEA');
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable', ['code' => $oneCode]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.profile.two_factor_auth.enable.success'), 'redirect' => url('/user'))), $response->getContent());
+    $response->assertSessionHas('flash.success', __('user.profile.two_factor_auth.enable.success'));
+    $response->assertSessionMissing('user.twoFactorAuth.secret');
+    // check secret
+    $secret = \App\UsersTwoFactorAuthSecret::where('user_id', 2)->get();
+    $this->assertEquals(1, count($secret));
+    $this->assertEquals(true, $secret[0]->enabled);
+    $this->assertEquals('DYWPLTWNQMFVTCEA', $secret[0]->secret);
+  }
+  public function testValidEnableTwoFactorAuth()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+    $this->withSession(['user.twoFactorAuth.secret' => 'DYWPLTWNQMFVTCEM']);
+
+    if (!class_exists('PHPGangsta_GoogleAuthenticator'))
+      require base_path('vendor/PHPGangsta/GoogleAuthenticator.php');
+    $ga = new \PHPGangsta_GoogleAuthenticator();
+    $oneCode = $ga->getCode('DYWPLTWNQMFVTCEM');
+
+    $response = $this->call('POST', '/user/two-factor-auth/enable', ['code' => $oneCode]);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.profile.two_factor_auth.enable.success'), 'redirect' => url('/user'))), $response->getContent());
+    $response->assertSessionHas('flash.success', __('user.profile.two_factor_auth.enable.success'));
+    $response->assertSessionMissing('user.twoFactorAuth.secret');
+    // check secret
+    $secret = \App\UsersTwoFactorAuthSecret::where('user_id', 1)->get();
+    $this->assertEquals(1, count($secret));
+    $this->assertEquals(true, $secret[0]->enabled);
+    $this->assertEquals('DYWPLTWNQMFVTCEM', $secret[0]->secret);
+  }
+
+  public function testDisableTwoFactorAuthUnlogged()
+  {
+    $response = $this->call('GET', '/user/two-factor-auth/disable');
+    $response->assertStatus(302);
+  }
+  public function testDisableTwoFactorAuthWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/two-factor-auth/disable');
+    $response->assertStatus(403);
+  }
+  public function testDisableTwoFactorAuth()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/two-factor-auth/disable');
+    $response->assertStatus(302);
+    $response->assertSessionHas('flash.success', __('user.profile.two_factor_auth.disable.success'));
+  }
+
 }

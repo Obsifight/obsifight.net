@@ -49,6 +49,9 @@ class ObsiguardControllerTest extends TestCase
     $token = \App\UsersToken::where('user_id', 2)->where('used_ip', '127.0.0.1')->first();
     $this->assertEquals(1, count($token));
     $response->assertSessionHas('user.obsiguard.security.code', $token->token);
+    // check log
+    $log = \App\UsersObsiguardLog::where('user_id', 2)->where('type', 'ENABLE')->where('ip', '127.0.0.1')->where('data', NULL)->get();
+    $this->assertEquals(1, count($log));
   }
 
   public function testValidSecurityCodeUnlogged()
@@ -132,6 +135,9 @@ class ObsiguardControllerTest extends TestCase
 
     $ip = \App\UsersObsiguardIP::where('user_id', 1)->get();
     $this->assertEquals(0, count($ip));
+    // check log
+    $log = \App\UsersObsiguardLog::where('user_id', 1)->where('type', 'DISABLE')->where('ip', '127.0.0.1')->where('data', NULL)->get();
+    $this->assertEquals(1, count($log));
   }
 
   public function testAddIPUnlogged()
@@ -197,6 +203,9 @@ class ObsiguardControllerTest extends TestCase
     $ip = \App\UsersObsiguardIP::where('user_id', 1)->get();
     $this->assertEquals(3, count($ip));
     $this->assertEquals('127.0.0.3', $ip[2]->ip);
+    // check log
+    $log = \App\UsersObsiguardLog::where('user_id', 1)->where('type', 'ADD')->where('ip', '127.0.0.1')->where('data', '127.0.0.3')->get();
+    $this->assertEquals(1, count($log));
   }
 
   public function testRemoveIPUnlogged()
@@ -252,6 +261,9 @@ class ObsiguardControllerTest extends TestCase
     $this->assertEquals(2, count($ip));
     $this->assertEquals('127.0.0.1', $ip[0]->ip);
     $this->assertEquals('127.0.0.2', $ip[1]->ip);
+    // check log
+    $log = \App\UsersObsiguardLog::where('user_id', 1)->where('type', 'ADD')->where('ip', '127.0.0.1')->get();
+    $this->assertEquals(0, count($log));
   }
   public function testRemoveIP()
   {
@@ -266,5 +278,8 @@ class ObsiguardControllerTest extends TestCase
     $ip = \App\UsersObsiguardIP::where('user_id', 1)->get();
     $this->assertEquals(1, count($ip));
     $this->assertEquals('127.0.0.2', $ip[0]->ip);
+    // check log
+    $log = \App\UsersObsiguardLog::where('user_id', 1)->where('type', 'REMOVE')->where('ip', '127.0.0.1')->where('data', '127.0.0.1')->get();
+    $this->assertEquals(1, count($log));
   }
 }

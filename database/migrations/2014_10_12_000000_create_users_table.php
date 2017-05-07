@@ -71,6 +71,15 @@ class CreateUsersTable extends Migration
       $table->ipAddress('ip');
       $table->timestamps();
     });
+    Schema::create('users_obsiguard_logs', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->string('type', 10); // ADD / REMOVE / DISABLE / ENABLE
+      $table->ipAddress('data')->nullable()->default(null);
+      $table->ipAddress('ip');
+      $table->timestamps();
+    });
 
     // Email ask
     Schema::create('users_email_edit_requests', function (Blueprint $table) {
@@ -129,6 +138,7 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_connection_logs');
     Schema::dropIfExists('users_tokens');
     Schema::dropIfExists('users_obsiguard_ips');
+    Schema::dropIfExists('users_obsiguard_logs');
     Schema::dropIfExists('users_email_edit_requests');
     Schema::dropIfExists('users_edit_username_histories');
     Schema::dropIfExists('users_edit_username_abilities');

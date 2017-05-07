@@ -30,6 +30,13 @@ class ObsiguardController extends Controller
     $token->used_ip = $request->ip();
     $token->save();
 
+    // add log
+    $log = new \App\UsersObsiguardLog();
+    $log->type = 'ENABLE';
+    $log->user_id = Auth::user()->id;
+    $log->ip = $request->ip();
+    $log->save();
+
     $request->session()->put('user.obsiguard.security.code', $token->token);
     return response()->json([
       'status' => true,
@@ -44,6 +51,13 @@ class ObsiguardController extends Controller
   public function disable(Request $request)
   {
     \App\UsersObsiguardIP::where('user_id', Auth::user()->id)->delete();
+
+    // add log
+    $log = new \App\UsersObsiguardLog();
+    $log->type = 'DISABLE';
+    $log->user_id = Auth::user()->id;
+    $log->ip = $request->ip();
+    $log->save();
 
     return response()->json([
       'status' => true,
@@ -71,6 +85,14 @@ class ObsiguardController extends Controller
     $ip->ip = $request->input('ip');
     $ip->save();
 
+    // add log
+    $log = new \App\UsersObsiguardLog();
+    $log->type = 'ADD';
+    $log->user_id = Auth::user()->id;
+    $log->ip = $request->ip();
+    $log->data = $ip->ip;
+    $log->save();
+
     // success
     return response()->json([
       'status' => true,
@@ -81,8 +103,21 @@ class ObsiguardController extends Controller
 
   public function removeIP(Request $request)
   {
+    // find
+    $ip = \App\UsersObsiguardIP::where('user_id', Auth::user()->id)->where('id', $request->id)->first();
     // remove
-    \App\UsersObsiguardIP::where('user_id', Auth::user()->id)->where('id', $request->id)->delete();
+    $remove = \App\UsersObsiguardIP::where('user_id', Auth::user()->id)->where('id', $request->id)->delete();
+
+    if (count($ip) === 1) {
+      // add log
+      $log = new \App\UsersObsiguardLog();
+      $log->type = 'REMOVE';
+      $log->user_id = Auth::user()->id;
+      $log->ip = $request->ip();
+      $log->data = $ip->ip;
+      $log->save();
+    }
+
     // success
     return response()->json([
       'status' => true,

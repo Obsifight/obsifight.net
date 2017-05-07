@@ -23,11 +23,20 @@ class ObsiguardController extends Controller
     $ip->ip = $request->ip();
     $ip->save();
 
+    // generate token
+    $code = str_random(5);
+    $token = \App\UsersToken::generate('OBSIGUARD', Auth::user()->id, $code);
+    $token = \App\UsersToken::where('user_id', Auth::user()->id)->where('token', $token)->first();
+    $token->used_ip = $request->ip();
+    $token->save();
+
+    $request->session()->put('user.obsiguard.security.code', $token->token);
     return response()->json([
       'status' => true,
       'success' => __('user.obsiguard.enable.success'),
       'data' => [
-        'ip' => $ip->ip
+        'ip' => $ip->ip,
+        'id' => $ip->id
       ]
     ]);
   }
@@ -65,7 +74,8 @@ class ObsiguardController extends Controller
     // success
     return response()->json([
       'status' => true,
-      'success' => __('user.obsiguard.add.success')
+      'success' => __('user.obsiguard.add.success'),
+      'data' => ['id' => $ip->id, 'ip' => $ip->ip]
     ]);
   }
 

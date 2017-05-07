@@ -133,6 +133,7 @@ return [
   'obsiguard.title.enable' => 'Voulez-vous <u>activer</u> ObsiGuard ?',
   'obsiguard.subtitle' => 'Cette fonctionnalité vous permet plus de sécurité sur votre compte launcher et en jeu. <a href=":link">En savoir plus</a>',
   'obsiguard.enable' => 'Activer',
+  'obsiguard.disable' => 'Désactiver',
   'obsiguard.list' => 'Vos adresses IP autorisées',
   'obsiguard.list.ip' => 'Adresse IP',
   'obsiguard.list.action' => 'Action',
@@ -149,6 +150,10 @@ return [
   'obsiguard.security.error' => 'Le code que vous avez fourni est invalide.',
   'obsiguard.add.error' => "L'adresse IP est invalide.",
   'obsiguard.add.success' => "L'adresse IP a bien été ajoutée",
+  'obsiguard.security.title' => 'Vérification de votre identité',
+  'obsiguard.security.subtitle' => 'Un email vous a été envoyé avec un code de confirmation',
+  'obsiguard.security.code' => 'Code de vérification',
+  'obsiguard.security.valid' => 'Valider le code',
 
   'money' => 'Points',
   'votes' => 'Votes',

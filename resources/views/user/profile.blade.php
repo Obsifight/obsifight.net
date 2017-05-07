@@ -303,7 +303,7 @@
 
             <div class="ui divider"></div>
 
-            @if (!$findObsiGuardIPs)
+            <div id="obsiguardDisabled" style="display:{{ count($findObsiGuardIPs) <= 0 ? 'block' : 'none' }};">
               <div class="ui info icon message">
                 <i class="protect icon"></i>
                 <div class="content">
@@ -311,13 +311,15 @@
                     @lang('user.obsiguard.title.enable')
                   </div>
                   <p>@lang('user.obsiguard.subtitle', ['link' => 'http://forum.obsifight.net/threads/utiliser-obsiguard.17946/'])</p>
-                  <button id="enableObsiguard" class="ui primary button" style="position:absolute;right:10px;top:10px;">@lang('user.obsiguard.enable')</button>
+                  <button data-obsiguard-action="enable" class="ui primary button" style="position:absolute;right:10px;top:10px;">@lang('user.obsiguard.enable')</button>
                 </div>
               </div>
-            @else
+            </div>
+            <div id="obsiguardEnabled" style="display:{{ count($findObsiGuardIPs) <= 0 ? 'none' : 'block' }};">
               <h3 class="ui center aligned icon header">
                 <i class="circular protect icon"></i>
                 @lang('user.obsiguard')
+                <small><em><a href="#" data-obsiguard-action="disable" style="color:#dd4b39;">@lang('user.obsiguard.disable')</a></em></small>
               </h3>
 
               <h4 class="ui dividing header">@lang('user.obsiguard.list')</h4>
@@ -329,7 +331,7 @@
                     <th>@lang('user.obsiguard.list.action')</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="obsiguard-ips">
                   @foreach ($findObsiGuardIPs as $ip)
                     <tr data-obsiguard-id="{{ $ip->id }}">
                       <td>{{ $ip->ip }}</td>
@@ -338,7 +340,7 @@
                       </td>
                     </tr>
                   @endforeach
-                  <tr>
+                  <tr id="addObsiguardIP">
                     <td class="ui form">
                       <div class="field">
                         <input type="text" data-obsiguard-action="add" name="ip">
@@ -364,7 +366,7 @@
                   <p>@lang('user.obsiguard.ip.dynamic.subtitle')</p>
                 </div>
               </div>
-            @endif
+            </div>
           </div>
 
           <div data-menu="spendings" style="display:none;">
@@ -475,6 +477,28 @@
       </div>
     </div>
   @endpermission
+  @ability('', 'user-disable-obsiguard,user-add-ip-obsiguard,user-remove-ip-obsiguard')
+    <div class="ui modal" id="obsiguardSecurity">
+      <i class="close icon"></i>
+      <div class="header">
+        @lang('user.obsiguard.security.title')
+      </div>
+      <div class="content">
+        <form action="{{ url('/user/obsiguard/security/valid') }}" method="post" data-ajax data-ajax-custom-callback="afterValidObsiguardSecurity">
+        <div class="ui form">
+          <h4 class="ui dividing header">@lang('user.obsiguard.security.subtitle')</h4>
+          <div class="field">
+            <label>@lang('user.obsiguard.security.code')</label>
+            <input type="text" name="code">
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="submit" class="ui green button">@lang('user.obsiguard.security.valid')</button>
+        </form>
+      </div>
+    </div>
+  @endability
 @endsection
 @section('style')
   <style media="screen">
@@ -537,5 +561,134 @@
         }
       })
     })
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('button[data-obsiguard-action="add"]').on('click', function (e) {
+        e.preventDefault()
+        var btn = $(this)
+        var tr = btn.parent().parent()
+        var input = tr.find('input[data-obsiguard-action="add"]')
+
+        btn.addClass('loading')
+        window.btn = btn
+
+        obsiguardAdd(input.val())
+      })
+      $('[data-obsiguard-action="disable"]').on('click', function (e) {
+        e.preventDefault()
+        var btn = $(this)
+        var tr = btn.parent().parent()
+
+        btn.addClass('loading')
+        window.btn = btn
+
+        obsiguardDisable()
+      })
+      $('[data-obsiguard-action="enable"]').on('click', function (e) {
+        e.preventDefault()
+        var btn = $(this)
+
+        $.get('{{ url('/user/obsiguard/enable') }}', function (data) {
+          $('#obsiguardDisabled').slideUp(150)
+          $('#obsiguardEnabled').slideDown(150)
+          $('tr[data-obsiguard-id]').remove()
+          var html = '<tr data-obsiguard-id="' + data.data.id + '">'
+            html += '<td>' + data.data.ip + '</td>'
+            html += '<td>'
+              html += '<button class="ui red button" data-obsiguard-action="remove" name="button">@lang('user.obsiguard.list.action.remove')</button>'
+            html += '</td>'
+          html += '</tr>'
+          $(html).insertBefore($('#addObsiguardIP'))
+          toastr.success(data.success)
+          initObsiguardDeleteEvents()
+        })
+      })
+      initObsiguardDeleteEvents()
+    })
+    function initObsiguardDeleteEvents() {
+      $('[data-obsiguard-action="remove"]').unbind('click')
+      $('[data-obsiguard-action="remove"]').on('click', function (e) {
+        e.preventDefault()
+        var btn = $(this)
+        var tr = btn.parent().parent()
+        var id = tr.attr('data-obsiguard-id')
+
+        btn.addClass('loading')
+        window.btn = btn
+
+        obsiguardDelete(id)
+      })
+    }
+    function obsiguardDisable() {
+      $.get('{{ url('/user/obsiguard/disable') }}', function (data) {
+        obsiguardSecurity('disable', undefined, data, function (data) {
+          if (data.status) {
+            $('#obsiguardEnabled').slideUp(150)
+            $('#obsiguardDisabled').slideDown(150)
+            toastr.success(data.success)
+          } else {
+            toastr.error(data.error)
+          }
+          window.btn.removeClass('loading')
+        })
+      })
+    }
+    function obsiguardAdd(ip) {
+      $.post('{{ url('/user/obsiguard/ip') }}', {ip: ip}, function (data) {
+        obsiguardSecurity('add', ip, data, function (data) {
+          if (data.status) {
+            var html = '<tr data-obsiguard-id="' + data.data.id + '">'
+              html += '<td>' + data.data.ip + '</td>'
+              html += '<td>'
+                html += '<button class="ui red button" data-obsiguard-action="remove" name="button">@lang('user.obsiguard.list.action.remove')</button>'
+              html += '</td>'
+            html += '</tr>'
+            $(html).insertBefore($('#addObsiguardIP'))
+            toastr.success(data.success)
+            initObsiguardDeleteEvents()
+            $('input[data-obsiguard-action="add"]').val('')
+          } else {
+            toastr.error(data.error)
+          }
+          window.btn.removeClass('loading')
+        })
+      })
+    }
+    function obsiguardDelete(id) {
+      $.ajax({
+        url: '{{ url('/user/obsiguard/ip', ['id' => 'ID']) }}'.replace('ID', id),
+        type: 'DELETE',
+        success: function (data) {
+          obsiguardSecurity('delete', id, data, function (data) {
+            if (data.status) {
+              $('tr[data-obsiguard-id="' + id + '"]').remove()
+            } else {
+              toastr.error(data.error)
+            }
+            window.btn.removeClass('loading')
+          })
+        }
+      })
+    }
+    function obsiguardSecurity(action, data, res, next) {
+      if (!res.status) return next(res)
+      if (res.obsiguard === undefined || res.obsiguard === true) return next(res)
+      // Modal
+      $('#obsiguardSecurity').modal({blurring: true}).modal('show')
+      window.obsiguard = {
+        action: action,
+        data: data
+      }
+    }
+    function afterValidObsiguardSecurity(req, res) {
+      $('#obsiguardSecurity').modal('hide')
+      if (window.obsiguard.action === 'add')
+        obsiguardAdd(window.obsiguard.data)
+      else if (window.obsiguard.action === 'delete')
+        obsiguardDelete(window.obsiguard.data)
+      else if (window.obsiguard.action === 'disable')
+        obsiguardDisable(window.obsiguard.data)
+    }
   </script>
 @endsection

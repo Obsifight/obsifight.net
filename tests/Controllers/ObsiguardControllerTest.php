@@ -41,11 +41,14 @@ class ObsiguardControllerTest extends TestCase
 
     $response = $this->call('GET', '/user/obsiguard/enable');
     $response->assertStatus(200);
-    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.obsiguard.enable.success'), 'data' => ['ip' => '127.0.0.1'])), $response->getContent());
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.obsiguard.enable.success'), 'data' => ['ip' => '127.0.0.1', 'id' => 3])), $response->getContent());
     // check db
     $ip = \App\UsersObsiguardIp::where('user_id', 2)->first();
     $this->assertEquals(1, count($ip));
     $this->assertEquals('127.0.0.1', $ip->ip);
+    $token = \App\UsersToken::where('user_id', 2)->where('used_ip', '127.0.0.1')->first();
+    $this->assertEquals(1, count($token));
+    $response->assertSessionHas('user.obsiguard.security.code', $token->token);
   }
 
   public function testValidSecurityCodeUnlogged()
@@ -189,7 +192,7 @@ class ObsiguardControllerTest extends TestCase
 
     $response = $this->call('POST', '/user/obsiguard/ip', ['ip' => '127.0.0.3']);
     $response->assertStatus(200);
-    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.obsiguard.add.success'))), $response->getContent());
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.obsiguard.add.success'), 'data' => ['id' => 3, 'ip' => '127.0.0.3'])), $response->getContent());
 
     $ip = \App\UsersObsiguardIP::where('user_id', 1)->get();
     $this->assertEquals(3, count($ip));

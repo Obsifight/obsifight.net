@@ -153,4 +153,17 @@ class ObsiguardController extends Controller
     ]);
   }
 
+  public function enableDynamicIP(Request $request)
+  {
+    $user = User::find(Auth::user()->id);
+    $user->obsiguard_dynamic = true;
+    $user->save();
+  }
+
+  public function disableDynamicIP(Request $request)
+  {
+    $user = User::find(Auth::user()->id);
+    $user->obsiguard_dynamic = false;
+    $user->save();
+  }
 }

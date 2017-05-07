@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
       $table->float('money')->default(0);
       $table->ipAddress('ip');
       $table->boolean('cape')->default(0);
+      $table->boolean('obsiguard_dynamic')->default(0);
       $table->rememberToken();
       $table->timestamps();
     });

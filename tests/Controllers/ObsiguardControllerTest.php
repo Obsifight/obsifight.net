@@ -282,4 +282,54 @@ class ObsiguardControllerTest extends TestCase
     $log = \App\UsersObsiguardLog::where('user_id', 1)->where('type', 'REMOVE')->where('ip', '127.0.0.1')->where('data', '127.0.0.1')->get();
     $this->assertEquals(1, count($log));
   }
+
+  public function testEnableDynamicIPUnlogged()
+  {
+    $response = $this->call('GET', '/user/obsiguard/ip/dynamic/enable');
+    $response->assertStatus(302);
+  }
+  public function testEnableDynamicIPWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/obsiguard/ip/dynamic/enable');
+    $response->assertStatus(403);
+  }
+  public function testEnableDynamicIP()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/obsiguard/ip/dynamic/enable');
+    $response->assertStatus(200);
+    $user = \App\User::find(1);
+    $this->assertEquals(1, $user->obsiguard_dynamic);
+  }
+
+  public function testDisableDynamicIPUnlogged()
+  {
+    $response = $this->call('GET', '/user/obsiguard/ip/dynamic/disable');
+    $response->assertStatus(302);
+  }
+  public function testDisableDynamicIPWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/obsiguard/ip/dynamic/disable');
+    $response->assertStatus(403);
+  }
+  public function testDisableDynamicIP()
+  {
+    $user = \App\User::find(1);
+    $user->obsiguard_dynamic = true;
+    $user->save();
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/obsiguard/ip/dynamic/disable');
+    $response->assertStatus(200);
+    $user = \App\User::find(1);
+    $this->assertEquals(0, $user->obsiguard_dynamic);
+  }
 }

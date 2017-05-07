@@ -121,6 +121,20 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-enable-dynamic-ip-obsiguard',
+        'display_name' => 'Activer le système d\'IP dynamique sur ObsiGuard',
+        'description' => 'Activer le système d\'IP dynamique sur ObsiGuard',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-disable-dynamic-ip-obsiguard',
+        'display_name' => 'Désactiver le système d\'IP dynamique sur ObsiGuard',
+        'description' => 'Désactiver le système d\'IP dynamique sur ObsiGuard',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // link permissiosn
       DB::table('permission_role')->truncate();
@@ -177,6 +191,14 @@ class PermissionsTablesSeeder extends Seeder
         'role_id' => 1
       ]);
       DB::table('permission_role')->insert([
+        'permission_id' => 14,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 15,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
         'permission_id' => 1,
         'role_id' => 2
       ]);
@@ -210,6 +232,14 @@ class PermissionsTablesSeeder extends Seeder
       ]);
       DB::table('permission_role')->insert([
         'permission_id' => 13,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 14,
+        'role_id' => 2
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 15,
         'role_id' => 2
       ]);
     }

@@ -359,7 +359,7 @@
                 <div class="content">
                   <div class="header ui form">
                     <div class="ui checkbox">
-                      <input type="checkbox" tabindex="0" class="hidden">
+                      <input type="checkbox" data-obsiguard-action="switchDynamicIP" tabindex="0" class="hidden" {{ $obsiguardDynamicIP ? 'checked' : '' }}>
                       <label style="color:#0E566C;">@lang('user.obsiguard.ip.dynamic.title')</label>
                     </div>
                   </div>
@@ -603,6 +603,14 @@
           toastr.success(data.success)
           initObsiguardDeleteEvents()
         })
+      })
+      $('[data-obsiguard-action="switchDynamicIP"]').on('change', function () {
+        var input = $(this)
+        if (!input.prop('checked'))
+          var url = '{{ url('/user/obsiguard/ip/dynamic/disable') }}'
+        else
+          var url = '{{ url('/user/obsiguard/ip/dynamic/enable') }}'
+        $.get(url)
       })
       initObsiguardDeleteEvents()
     })

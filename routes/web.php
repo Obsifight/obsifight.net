@@ -62,3 +62,5 @@ Route::post('/user/obsiguard/security/valid', 'ObsiguardController@validSecurity
 Route::get('/user/obsiguard/disable', 'ObsiguardController@disable')->middleware('auth')->middleware('permission:user-disable-obsiguard')->middleware('obsiguard');
 Route::post('/user/obsiguard/ip', 'ObsiguardController@addIP')->middleware('auth')->middleware('permission:user-add-ip-obsiguard')->middleware('obsiguard');
 Route::delete('/user/obsiguard/ip/{id}', 'ObsiguardController@removeIP')->middleware('auth')->middleware('permission:user-remove-ip-obsiguard')->middleware('obsiguard')->where('id', '([0-9])+');
+Route::get('/user/obsiguard/ip/dynamic/enable', 'ObsiguardController@enableDynamicIP')->middleware('auth')->middleware('permission:user-enable-dynamic-ip-obsiguard');
+Route::get('/user/obsiguard/ip/dynamic/disable', 'ObsiguardController@disableDynamicIP')->middleware('auth')->middleware('permission:user-disable-dynamic-ip-obsiguard');

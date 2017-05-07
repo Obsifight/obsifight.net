@@ -256,12 +256,13 @@ class UserController extends Controller
 
     // OBSIGUARD
     $findObsiGuardIPs = \App\UsersObsiguardIp::where('user_id', Auth::user()->id)->get();
+    $obsiguardDynamicIP = Auth::user()->obsiguard_dynamic;
 
     // NOTIFICATION
     $notifications = \App\Notification::getUnseen(Auth::user()->id);
 
     // RENDER
-    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'notifications'));
+    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications'));
   }
 
   public function forgotPassword(Request $request)

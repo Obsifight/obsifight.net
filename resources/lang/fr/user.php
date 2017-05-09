@@ -116,6 +116,14 @@ return [
 
   'profile.spendings.title' => 'Vos dernières dépenses',
 
+  'profile.login.logs.website' => 'Vos dernières connexions au site',
+  'profile.login.logs.launcher' => 'Vos dernières connexions au launcher',
+  'profile.login.logs.ip' => 'Adresse IP',
+  'profile.login.logs.date' => 'Date de la connexion',
+
+  'profile.spendings.transfer' => 'Vous avez transféré <strong>:amount points</strong> à <strong>:username</strong>',
+  'profile.spendings.item' => "Vous avez acheté l'article <strong>:item_name</strong> à <strong>:price points</strong>",
+
   'two_factor_auth.title.enable' => 'Voulez-vous <u>activer</u> la double authentification ?',
   'two_factor_auth.title.disable' => 'Voulez-vous vraiment <u>désactiver</u> la double authentification ?',
   'two_factor_auth.enable' => 'Activer',

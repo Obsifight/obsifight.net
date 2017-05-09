@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VoteReward extends Model
+class ShopItem extends Model
 {
+    //
 }

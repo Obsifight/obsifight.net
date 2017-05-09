@@ -261,8 +261,32 @@ class UserController extends Controller
     // NOTIFICATION
     $notifications = \App\Notification::getUnseen(Auth::user()->id);
 
+    // WEBSITE LOGIN LOGS
+    $websiteLoginLogs = \App\UsersConnectionLog::getWebsiteLogs(Auth::user());
+
+    // LAUNCHER LAUNCHER LOGS
+    $launcherLoginLogs = \App\UsersConnectionLog::getLauncherLogs(Auth::user());
+
+    // SPENDINGS LOGS
+    $itemsPurchaseLogs = \App\ShopItemsPurchaseHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->limit(8)->with('item')->get();
+    $moneyTransferLogs = \App\UsersTransferMoneyHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->limit(8)->with('receiver')->get();
+    $spendings = array_merge(
+      array_map(function ($data) {
+        $data['type'] = 'item';
+        return $data;
+      }, $itemsPurchaseLogs->toArray()),
+      array_map(function ($data) {
+        $data['type'] = 'money';
+        return $data;
+      }, $moneyTransferLogs->toArray())
+    );
+    // sort
+    usort($spendings, function ($a, $b) {
+      return strtotime($b['created_at']) - strtotime($a['created_at']);
+    });
+
     // RENDER
-    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications'));
+    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications', 'websiteLoginLogs', 'launcherLoginLogs', 'spendings'));
   }
 
   public function forgotPassword(Request $request)
@@ -535,6 +559,11 @@ class UserController extends Controller
       return response()->json([
         'status' => false,
         'error' => __('user.profile.transfer.money.error.no_enough')
+      ]);
+    if (floatval($request->input('amount')) <= 0)
+      return response()->json([
+        'status' => false,
+        'error' => __('user.profile.transfer.money.error.negative')
       ]);
 
     // check if ban

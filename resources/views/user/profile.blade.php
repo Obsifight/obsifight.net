@@ -369,6 +369,50 @@
             </div>
           </div>
 
+          <div data-menu="login-logs" style="display:none;">
+            <h3 class="ui dividing header">
+              @lang('user.profile.login.logs.website')
+            </h3>
+
+            <table class="ui striped table">
+              <thead>
+                <tr>
+                  <th>@lang('user.profile.login.logs.ip')</th>
+                  <th>@lang('user.profile.login.logs.date')</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($websiteLoginLogs as $log)
+                  <tr>
+                    <td>{{ $log->ip }}</td>
+                    <td>{{ $log->created_at->diffForHumans() }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+
+            <h3 class="ui dividing header">
+              @lang('user.profile.login.logs.launcher')
+            </h3>
+
+            <table class="ui striped table">
+              <thead>
+                <tr>
+                  <th>@lang('user.profile.login.logs.ip')</th>
+                  <th>@lang('user.profile.login.logs.date')</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($launcherLoginLogs as $log)
+                  <tr>
+                    <td>{{ $log->ip }}</td>
+                    <td>{{ \Carbon\Carbon::parse($log->date)->diffForHumans() }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+
           <div data-menu="spendings" style="display:none;">
             <h3 class="ui dividing header">
               @lang('user.profile.spendings.title')
@@ -376,11 +420,18 @@
 
             <table class="ui striped table">
               <tbody>
-                @for ($i = 0; $i < 8; $i++)
+                @foreach ($spendings as $spending)
                   <tr>
-                    <td><i class="exchange icon"></i> Vous avez transféré <strong>5 points</strong> à <strong>Test</strong> &nbsp;&nbsp;<small><em style="color:#777;">Il y a 7 heures</em></small></td>
+                    <td>
+                      @if ($spending['type'] === 'money')
+                        <i class="exchange icon"></i> @lang('user.profile.spendings.transfer', ['amount' => $spending['amount'], 'username' => $spending['receiver']['username']])
+                      @else
+                        <i class="shopping basket icon"></i> @lang('user.profile.spendings.item', ['price' => $spending['item']['price'], 'item_name' => $spending['item']['name']])
+                      @endif
+                      &nbsp;&nbsp;<small><em style="color:#777;">{{ \Carbon\Carbon::parse($spending['created_at'])->diffForHumans() }}</em></small>
+                    </td>
                   </tr>
-                @endfor
+                @endforeach
               </tbody>
             </table>
           </div>

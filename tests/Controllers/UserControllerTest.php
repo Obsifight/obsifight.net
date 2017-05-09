@@ -584,6 +584,15 @@ class UserControllerTest extends TestCase
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.no_enough'))), $response->getContent());
   }
+  public function testTransferMoneyWithNegativeMoney()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('PUT', '/user/money', ['amount' => '-10', 'to' => 'Test2']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.transfer.money.error.negative'))), $response->getContent());
+  }
   public function testTransferMoneyWithBan()
   {
     $user = \App\User::find(1);

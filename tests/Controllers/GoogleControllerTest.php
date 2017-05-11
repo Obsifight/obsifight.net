@@ -1,13 +1,6 @@
 <?php
 namespace Tests\Feature;
 
-/*class Youtube {
-  public $channels;
-  public function __construct()
-  {
-    $this->channels = new YoutubeChannels();
-  }
-}*/
 class YoutubeChannels {
   public function __construct($subs, $id)
   {

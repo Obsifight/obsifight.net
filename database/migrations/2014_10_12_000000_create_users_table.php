@@ -135,7 +135,22 @@ class CreateUsersTable extends Migration
       $table->ipAddress('link_ip');
       $table->timestamps();
     });
+    Schema::create('users_youtube_channel_videos', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('channel_id')->unsigned();
+      $table->foreign('channel_id')->references('id')->on('users_youtube_channels');
+      $table->string('video_id');
+      $table->string('title');
+      $table->text('description');
+      $table->integer('views_count')->unsigned();
+      $table->integer('likes_count')->unsigned();
+      $table->string('thumbnail_link');
+      $table->datetime('publication_date');
+      $table->boolean('eligible')->default(false);
+      $table->timestamps();
+    });
   }
+
   /**
    * Reverse the migrations.
    *
@@ -155,5 +170,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_edit_username_abilities');
     Schema::dropIfExists('users_transfer_money_histories');
     Schema::dropIfExists('users_youtube_channels');
+    Schema::dropIfExists('users_youtube_channel_videos');
   }
 }

@@ -14,10 +14,7 @@ class GoogleController extends Controller
   public function auth(Request $request)
   {
     // INIT GOOGLE CLIENT
-    /*$Google_Client = resolve('\Google_Client');
-    $client = new $Google_Client();*/
     $client = resolve('\Google_Client');
-    //$client = new \Google_Client();
     $client->setClientId(env('GOOGLE_CLIENT_ID'));
     $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
     $client->setScopes('https://www.googleapis.com/auth/youtube.readonly');

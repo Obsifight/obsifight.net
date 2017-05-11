@@ -135,6 +135,13 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('permissions')->insert([
+        'name' => 'user-link-google-account',
+        'display_name' => 'Lier YouTube',
+        'description' => 'Lier son compte Google au compte site',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // link permissiosn
       DB::table('permission_role')->truncate();
@@ -196,6 +203,10 @@ class PermissionsTablesSeeder extends Seeder
       ]);
       DB::table('permission_role')->insert([
         'permission_id' => 15,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 16,
         'role_id' => 1
       ]);
       DB::table('permission_role')->insert([

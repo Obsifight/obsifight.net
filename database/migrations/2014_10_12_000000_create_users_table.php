@@ -125,6 +125,16 @@ class CreateUsersTable extends Migration
       $table->ipAddress('ip');
       $table->timestamps();
     });
+
+    // youtube
+    Schema::create('users_youtube_channels', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->string('channel_id');
+      $table->ipAddress('link_ip');
+      $table->timestamps();
+    });
   }
   /**
    * Reverse the migrations.
@@ -144,5 +154,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_edit_username_histories');
     Schema::dropIfExists('users_edit_username_abilities');
     Schema::dropIfExists('users_transfer_money_histories');
+    Schema::dropIfExists('users_youtube_channels');
   }
 }

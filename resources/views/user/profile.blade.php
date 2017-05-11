@@ -436,7 +436,51 @@
             </table>
           </div>
 
-          <div data-menu="socials" style="display:none;"></div>
+          <div data-menu="socials" style="display:none;">
+
+            <h3 class="ui dividing header">
+              @lang('user.profile.socials.youtube')
+            </h3>
+
+            <div class="text-center">
+              <a href="{{ url('/user/socials/google/link') }}" class="ui youtube button">
+                <i class="youtube icon"></i>
+                @lang('user.profile.socials.youtube.link')
+              </a>
+            </div>
+
+            <div class="ui info message">
+              <div class="header">
+                @lang('user.profile.socials.link.why')
+              </div>
+              <ul class="list">
+                <li>@lang('user.profile.socials.youtube.list.0')</li>
+                <li>@lang('user.profile.socials.youtube.list.1')</li>
+              </ul>
+            </div>
+
+            <h3 class="ui dividing header">
+              @lang('user.profile.socials.twitter')
+            </h3>
+
+            <div class="text-center">
+              <button class="ui twitter button">
+                <i class="twitter icon"></i>
+                @lang('user.profile.socials.twitter.link')
+              </button>
+            </div>
+
+            <div class="ui info message">
+              <div class="header">
+                @lang('user.profile.socials.link.why')
+              </div>
+              <ul class="list">
+                <li>@lang('user.profile.socials.twitter.list.0')</li>
+                <li>@lang('user.profile.socials.twitter.list.1')</li>
+              </ul>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>

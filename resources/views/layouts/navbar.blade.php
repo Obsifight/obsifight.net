@@ -1,4 +1,13 @@
 <div class="ui menu navbar">
+  <div class="logo">
+    <img src="{{ url('/img/logo-min.png') }}" width="60" alt="Logo">
+  </div>
+
+  <a onClick="$('.ui.menu.navbar.sidebar').sidebar('toggle')" class="item mobile-menu">
+    <i class="sidebar icon"></i>
+    Menu
+  </a>
+
   <a href="{{ url('/') }}" class="item"><i class="home icon"></i> @lang('global.navbar.home')</a>
   <a href="{{ url('/join') }}" class="item"><i class="share icon"></i> @lang('global.navbar.join')</a>
 

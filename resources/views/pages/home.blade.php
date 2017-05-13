@@ -4,7 +4,7 @@
 
 @section('content')
   <div class="ui container page-content">
-    <img class="ui left floated image" src="{{ url('/img/logo.png') }}">
+    <img class="ui left floated image" src="{{ url('/img/logo-min.png') }}" width="130">
     <h2>@lang('home.description.title')</h2>
 
     @lang('home.description')
@@ -47,16 +47,18 @@
     </div>
   </div>
   <div class="parallax-block">
-    <div class="ui container">
+    <div class="ui container text-center ">
       <div class="ui huge header text-center">
-        @lang('home.trailer.title')
-        <div class="sub-header">
+        @lang('home.trailer.title', ['version' => env('APP_VERSION_COUNT')])
+        <div class="sub-header mobile-hide" style="color:#fff;">
           @lang('home.trailer.subtitle')
         </div>
       </div>
 
-      <div class="text-center">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/42ELBJ4E_wE?autoplay=0&amp;loop=1&amp;autohide=1&amp;controls=0&amp;theme=light" frameborder="0" allowfullscreen=""></iframe>
+      <div class="video-wrapper">
+        <div class="video-container">
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/lueGoo2InBo?autoplay=0&amp;loop=1&amp;autohide=1&amp;controls=0&amp;theme=light" frameborder="0" allowfullscreen=""></iframe>
+        </div>
       </div>
     </div>
   </div>

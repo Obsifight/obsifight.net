@@ -58,14 +58,12 @@ body {
   HEADER
 ======= */
 .site-header {
-  background: url('../img/head.png');
+  background: url('../img/background-min.png');
   background-attachment: fixed;
   background-position: center center;
   background-repeat: no-repeat;
 
-  padding: 10px;
-  padding-top: 1px;
-  height: 300px;
+  height: 350px;
 
   border-bottom: 3px solid #A94545;
 }
@@ -90,11 +88,46 @@ body {
   NAV
 ======= */
 .ui.menu.navbar {
-  margin: 10px;
-  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 0;
 }
 .ui.menu.navbar .logo {
-  padding: 0;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+.ui.menu.navbar .item {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.ui.menu.navbar .item:before {
+  background: transparent;
+}
+
+.pusher {
+  z-index: 0!important;
+}
+.ui.menu.navbar.sidebar {
+  overflow: visible!important;
+}
+.ui.menu.navbar.sidebar .logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.ui.menu.navbar.sidebar a.ui.button {
+  width: 100%
+}
+.ui.menu.navbar .mobile-menu {
+  display: none;
+}
+
+@media only screen and (max-width: 1160px) {
+  .pusher .ui.menu.navbar .item {
+    display: none;
+  }
+  .pusher .ui.menu.navbar .mobile-menu {
+    display: block!important;
+    float: right;
+  }
 }
 
 /* ====

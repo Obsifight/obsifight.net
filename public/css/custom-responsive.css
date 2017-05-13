@@ -1,0 +1,84 @@
+/*
+FROM https://github.com/Semantic-Org/Semantic-UI/issues/1114#issuecomment-152156736 & http://stackoverflow.com/a/28992719
+*/
+
+/* Mobile */
+
+.mobile-visible {
+  display: none;
+}
+@media only screen and (max-width: 767px) {
+    .mobile-hide{
+        display: none !important;
+    }
+    .mobile-visible {
+      display: block !important;
+    }
+}
+
+/* Tablet */
+
+.tablet-visible {
+  display: none;
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .tablet-hide{
+        display: none !important;
+    }
+    .tablet-visible {
+      display: block !important;
+    }
+}
+
+/* Small Monitor */
+
+.small-visible {
+  display: none;
+}
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .small-hide{
+        display: none !important;
+    }
+    .small-visible{
+        display: block !important;
+    }
+}
+
+
+/* Large Monitor */
+
+.large-visible {
+  display: none;
+}
+@media only screen and (min-width: 1200px) {
+    .large-hide{
+        display: none !important;
+    }
+    .large-visible{
+        display: block !important;
+    }
+}
+
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+}
+.video-wrapper {
+	width: 600px;
+	max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.video-container iframe,
+.video-container object,
+.video-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

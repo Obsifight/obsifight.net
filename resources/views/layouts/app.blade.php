@@ -9,6 +9,7 @@
       <title>@yield('title') - ObsiFight</title>
 
       <link rel="stylesheet" href="{{ url('/css/semantic.min.css') }}">
+      <link rel="stylesheet" href="{{ url('/css/custom-responsive.css') }}">
       <link rel="stylesheet" href="{{ url('/css/app.css') }}">
       @yield('style')
 
@@ -16,6 +17,7 @@
       <script type="text/javascript" src="{{ url('/js/jquery-3.2.1.min.js') }}"></script>
     </head>
     <body>
+      <div class="pusher">
         @include('layouts.header')
 
         <div class="container">
@@ -23,6 +25,7 @@
         </div>
 
         @include('layouts.footer')
+      </div>
         <script type="text/javascript" src="{{ url('/js/semantic.min.js') }}"></script>
         <script type="text/javascript">
           var localization = {

@@ -13,6 +13,9 @@
 Route::get('/', function () {
   return view('pages.home');
 });
+Route::get('/faq', function () {
+  return view('pages.faq', ['questions' => \App\Question::get()]);
+});
 
 /*
 ===========

@@ -43,8 +43,8 @@
     @endif
 
     <div class="ui grid two column">
-      <div class="ui four wide column">
-        <div class="ui vertical menu">
+      <div class="ui sixteen wide mobile sixteen wide tablet four wide computer column">
+        <div class="ui vertical fluid menu">
           <a class="item toggle-menu active" data-toggle="infos">
             <i class="user left aligned icon"></i>
             @lang('user.profile.menu.infos')
@@ -78,7 +78,7 @@
           </a>
         </div>
       </div>
-      <div class="ui twelve wide column">
+      <div class="ui sixteen wide mobile sixteen wide tablet twelve wide computer column">
         <div class="menu-content">
           <div data-menu="infos">
             <div class="ui form">

@@ -67,7 +67,9 @@ class GetYoutubeVideos extends Command
 
         // save
         if (!empty($videosList))
-          \App\UsersYoutubeChannelVideo::create($videosList);
+          foreach ($videosList as $video) {
+            \App\UsersYoutubeChannelVideo::updateOrCreate(['id' => $video['id']], $video);
+          }
       }
     }
 
@@ -109,7 +111,7 @@ class GetYoutubeVideos extends Command
           // formatting
           $data = [
             'id' => ($findVideoInDatabase && !empty($findVideoInDatabase)) ? $findVideoInDatabase->id : null,
-            'channel_id' => $channel->id,
+            'channel_id' => $channel->channel_id,
             'video_id' => $item->contentDetails->videoId,
             'title' => $publicData->localized->title,
             'description' => $publicData->localized->description,

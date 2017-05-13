@@ -5,7 +5,7 @@
   <div class="ui container page-content">
     <div class="ui info message">
       @lang('user.profile.socials.youtube.videos.refresh.infos')
-      <button type="button" class="ui primary button" data-placement="left center" data-toggle="popup" data-content="{{ __('user.profile.socials.youtube.videos.remuneration.infos', ['date' => date('d/m/Y', strtotime('-7 days'))]) }}" data-placement="top" style="margin-top:-8px;float:right">@lang('user.profile.socials.youtube.videos.remuneration.infos.btn')</button>
+      <button type="button" class="ui primary button mobile-hide" data-placement="left center" data-toggle="popup" data-content="{{ __('user.profile.socials.youtube.videos.remuneration.infos', ['date' => date('d/m/Y', strtotime('-7 days'))]) }}" data-placement="top" style="margin-top:-8px;float:right">@lang('user.profile.socials.youtube.videos.remuneration.infos.btn')</button>
     </div>
 
     @if (count($videos) === 0)
@@ -18,10 +18,10 @@
       <div class="ui divider"></div>
       <div class="row">
         <div class="ui grid">
-          <div class="five wide column">
+          <div class="mobile-hide five wide tablet five wide computer column">
             <a target="_blank" href="https://youtube.com/watch?v={{ $video->video_id }}"><img src="{{ $video->thumbnail_link }}" class="ui image rounded right aligned"></a>
           </div>
-          <div class="eleven wide column">
+          <div class="sixteen wide mobile eleven wide tablet eleven wide computer column">
             <p>
               <strong style="font-size:23px;">{{ $video->title }}</strong>
               @if ($video->eligible && !$video->payed)
@@ -78,4 +78,12 @@
       })
     })
   </script>
+@endsection
+@section('style')
+  <style media="screen">
+    .statistic .label,
+    .statistic .value {
+      color: #656565!important;
+    }
+  </style>
 @endsection

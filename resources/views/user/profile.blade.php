@@ -438,51 +438,62 @@
 
           <div data-menu="socials" style="display:none;">
 
-            <h3 class="ui dividing header">
-              @lang('user.profile.socials.youtube')
-            </h3>
+            @ability('', 'user-link-google-account,user-youtube-view-own-videos,user-youtube-get-remuneration')
+              <h3 class="ui dividing header">
+                @lang('user.profile.socials.youtube')
+              </h3>
 
-            <div class="text-center">
-              <a href="{{ ($youtube) ? url('/user/socials/youtube/videos') : url('/user/socials/google/link') }}" class="ui youtube button">
-                <i class="youtube icon"></i>
-                @if ($youtube)
-                  @lang('user.profile.socials.youtube.videos.see')
+              <div class="text-center">
+                <a href="{{ (count($youtube) > 0) ? url('/user/socials/youtube/videos') : url('/user/socials/google/link') }}" class="ui youtube button">
+                  <i class="youtube icon"></i>
+                  @if (count($youtube) > 0)
+                    @lang('user.profile.socials.youtube.videos.see')
+                  @else
+                    @lang('user.profile.socials.youtube.link')
+                  @endif
+                </a>
+              </div>
+
+              <div class="ui info message">
+                <div class="header">
+                  @lang('user.profile.socials.link.why')
+                </div>
+                <ul class="list">
+                  <li>@lang('user.profile.socials.youtube.list.0')</li>
+                  <li>@lang('user.profile.socials.youtube.list.1')</li>
+                </ul>
+              </div>
+            @endability
+
+            @permission('user-link-twitter-account')
+              <h3 class="ui dividing header">
+                @lang('user.profile.socials.twitter')
+              </h3>
+
+              <div class="text-center">
+                @if (count($twitter) > 0)
+                  <button class="ui twitter button">
+                    <i class="twitter icon"></i>
+                    {{ '@' . $twitter->screen_name }}
+                  </button>
                 @else
-                  @lang('user.profile.socials.youtube.link')
+                  <a href="{{ url('/user/socials/twitter/link') }}" class="ui twitter button">
+                    <i class="twitter icon"></i>
+                    @lang('user.profile.socials.twitter.link')
+                  </a>
                 @endif
-              </a>
-            </div>
-
-            <div class="ui info message">
-              <div class="header">
-                @lang('user.profile.socials.link.why')
               </div>
-              <ul class="list">
-                <li>@lang('user.profile.socials.youtube.list.0')</li>
-                <li>@lang('user.profile.socials.youtube.list.1')</li>
-              </ul>
-            </div>
 
-            <h3 class="ui dividing header">
-              @lang('user.profile.socials.twitter')
-            </h3>
-
-            <div class="text-center">
-              <button class="ui twitter button">
-                <i class="twitter icon"></i>
-                @lang('user.profile.socials.twitter.link')
-              </button>
-            </div>
-
-            <div class="ui info message">
-              <div class="header">
-                @lang('user.profile.socials.link.why')
+              <div class="ui info message">
+                <div class="header">
+                  @lang('user.profile.socials.link.why')
+                </div>
+                <ul class="list">
+                  <li>@lang('user.profile.socials.twitter.list.0')</li>
+                  <li>@lang('user.profile.socials.twitter.list.1')</li>
+                </ul>
               </div>
-              <ul class="list">
-                <li>@lang('user.profile.socials.twitter.list.0')</li>
-                <li>@lang('user.profile.socials.twitter.list.1')</li>
-              </ul>
-            </div>
+            @endpermission
 
           </div>
         </div>

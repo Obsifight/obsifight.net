@@ -160,6 +160,18 @@ class CreateUsersTable extends Migration
       $table->ipAddress('ip');
       $table->timestamps();
     });
+
+    // twitter
+    Schema::create('users_twitter_accounts', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->integer('twitter_id')->unsigned();
+      $table->string('screen_name', 50);
+      $table->string('access_token');
+      $table->string('access_secret');
+      $table->timestamps();
+    });
   }
 
   /**
@@ -183,5 +195,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_youtube_channels');
     Schema::dropIfExists('users_youtube_channel_videos');
     Schema::dropIfExists('users_youtube_channel_video_remuneration_histories');
+    Schema::dropIfExists('users_twitter_accounts');
   }
 }

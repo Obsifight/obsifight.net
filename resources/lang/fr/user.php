@@ -155,6 +155,8 @@ return [
   'profile.socials.youtube.remuneration.alert.title.already' => 'Vous avez déjà été rémunéré pour cette vidéo.',
   'profile.socials.youtube.remuneration.success' => 'Vous avez bien été rémunéré de :remuneration points pour cette vidéo !',
 
+  'profile.socials.twitter.link.success' => 'Vous avez bien lié votre compte Twitter "@:screen_name" !',
+
   'two_factor_auth.title.enable' => 'Voulez-vous <u>activer</u> la double authentification ?',
   'two_factor_auth.title.disable' => 'Voulez-vous vraiment <u>désactiver</u> la double authentification ?',
   'two_factor_auth.enable' => 'Activer',

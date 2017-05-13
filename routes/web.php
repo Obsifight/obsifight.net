@@ -68,3 +68,7 @@ Route::get('/user/obsiguard/ip/dynamic/disable', 'ObsiguardController@disableDyn
 Route::get('/user/socials/google/link', 'GoogleController@auth')->middleware('auth')->middleware('permission:user-link-google-account');
 Route::get('/user/socials/youtube/videos', 'GoogleController@viewYoutubeVideos')->middleware('auth')->middleware('permission:user-youtube-view-own-videos');
 Route::get('/user/socials/youtube/videos/{id}/remuneration', 'GoogleController@getYoutubeVideoRemuneration')->middleware('auth')->middleware('permission:user-youtube-get-remuneration')->where('id', '([0-9])+');
+
+Route::get('/user/socials/twitter/link', 'TwitterController@auth')->middleware('auth')->middleware('permission:user-link-twitter-account');
+Route::get('/user/socials/twitter/link/success', 'TwitterController@success')->middleware('auth')->middleware('permission:user-link-twitter-account');
+Route::post('/user/socials/twitter/link/callback', 'TwitterController@callback');

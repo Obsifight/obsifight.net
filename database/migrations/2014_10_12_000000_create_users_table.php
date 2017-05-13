@@ -147,6 +147,17 @@ class CreateUsersTable extends Migration
       $table->string('thumbnail_link');
       $table->datetime('publication_date');
       $table->boolean('eligible')->default(false);
+      $table->boolean('payed')->default(false);
+      $table->timestamps();
+    });
+    Schema::create('users_youtube_channel_video_remuneration_histories', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->integer('video_id')->unsigned();
+      $table->foreign('video_id')->references('id')->on('users_youtube_channel_videos');
+      $table->float('remuneration');
+      $table->ipAddress('ip');
       $table->timestamps();
     });
   }
@@ -171,5 +182,6 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_transfer_money_histories');
     Schema::dropIfExists('users_youtube_channels');
     Schema::dropIfExists('users_youtube_channel_videos');
+    Schema::dropIfExists('users_youtube_channel_video_remuneration_histories');
   }
 }

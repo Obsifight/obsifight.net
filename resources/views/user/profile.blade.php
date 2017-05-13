@@ -443,9 +443,13 @@
             </h3>
 
             <div class="text-center">
-              <a href="{{ url('/user/socials/google/link') }}" class="ui youtube button">
+              <a href="{{ ($youtube) ? url('/user/socials/youtube/videos') : url('/user/socials/google/link') }}" class="ui youtube button">
                 <i class="youtube icon"></i>
-                @lang('user.profile.socials.youtube.link')
+                @if ($youtube)
+                  @lang('user.profile.socials.youtube.videos.see')
+                @else
+                  @lang('user.profile.socials.youtube.link')
+                @endif
               </a>
             </div>
 

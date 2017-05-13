@@ -267,6 +267,9 @@ class UserController extends Controller
     // LAUNCHER LAUNCHER LOGS
     $launcherLoginLogs = \App\UsersConnectionLog::getLauncherLogs(Auth::user());
 
+    // SOCIALS
+    $youtube = \App\UsersYoutubeChannel::where('user_id', Auth::user()->id)->first();
+
     // SPENDINGS LOGS
     $itemsPurchaseLogs = \App\ShopItemsPurchaseHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->limit(8)->with('item')->get();
     $moneyTransferLogs = \App\UsersTransferMoneyHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->limit(8)->with('receiver')->get();
@@ -286,7 +289,7 @@ class UserController extends Controller
     });
 
     // RENDER
-    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications', 'websiteLoginLogs', 'launcherLoginLogs', 'spendings'));
+    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications', 'websiteLoginLogs', 'launcherLoginLogs', 'youtube', 'spendings'));
   }
 
   public function forgotPassword(Request $request)

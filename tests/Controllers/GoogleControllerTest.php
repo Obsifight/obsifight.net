@@ -67,14 +67,30 @@ class GoogleControllerTest extends TestCase
     parent::setUp();
     \Artisan::call('db:seed', ['--class' => 'TestingGoogleTablesSeeder']);
     \Artisan::call('db:seed', ['--class' => 'PermissionsTablesSeeder']);
+
+    \DB::table('users_youtube_channel_videos')->truncate();
+    \DB::table('users_youtube_channel_videos')->insert([
+      'channel_id' => 1,
+      'video_id' => 'video-id',
+      'title' => 'Mon super titre',
+      'description' => 'Ma superbe description',
+      'views_count' => 100,
+      'likes_count' => 30,
+      'thumbnail_link' => 'https://i.ytimg.com/vi/TvXH5q1-Q5c/mqdefault.jpg',
+      'publication_date' => '2017-01-14 12:38:01',
+      'eligible' => 0,
+      'payed' => 0,
+      'created_at' => date('Y-m-d H:i:s'),
+      'updated_at' => date('Y-m-d H:i:s')
+    ]);
   }
 
+  // AUTH
   public function testAuthUnlogged()
   {
     $response = $this->call('GET', '/user/socials/google/link');
     $response->assertStatus(302);
   }
-
   public function testAuthWithoutPermission()
   {
     $user = \App\User::find(3);
@@ -83,7 +99,6 @@ class GoogleControllerTest extends TestCase
     $response = $this->call('GET', '/user/socials/google/link');
     $response->assertStatus(403);
   }
-
   public function testAuthWithoutCode()
   {
     // mock google
@@ -102,7 +117,6 @@ class GoogleControllerTest extends TestCase
     $response->assertStatus(302);
     $this->assertContains('https://accounts.google.com/o/oauth2/auth', $response->headers->get('location'));
   }
-
   public function testAuthWithAnInvalidCode()
   {
     // mock google
@@ -124,7 +138,6 @@ class GoogleControllerTest extends TestCase
     $response->assertStatus(302);
     $this->assertContains('https://accounts.google.com/o/oauth2/auth', $response->headers->get('location'));
   }
-
   public function testAuthWithInvalidAccessToken()
   {
     // mock google
@@ -149,7 +162,6 @@ class GoogleControllerTest extends TestCase
     $response->assertStatus(302);
     $this->assertContains('https://accounts.google.com/o/oauth2/auth', $response->headers->get('location'));
   }
-
   public function testAuthWithChannelUnderSevenHundredFiftySubs()
   {
     // mock google
@@ -181,7 +193,6 @@ class GoogleControllerTest extends TestCase
     $this->assertContains('/user', $response->headers->get('location'));
     $response->assertSessionHas('flash.error', __('user.profile.socials.youtube.link.error.subs'));
   }
-
   public function testAuthWithChannelAlreadyLinked()
   {
     // mock google
@@ -213,7 +224,6 @@ class GoogleControllerTest extends TestCase
     $this->assertContains('/user', $response->headers->get('location'));
     $response->assertSessionHas('flash.error', __('user.profile.socials.youtube.link.error.already'));
   }
-
   public function testAuth()
   {
     // mock google
@@ -249,4 +259,93 @@ class GoogleControllerTest extends TestCase
     $this->assertEquals(1, $channel);
   }
 
+  // GET REMUNERATION
+  public function testGetRemunerationUnlogged()
+  {
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(302);
+  }
+  public function testGetRemunerationWithoutPermission()
+  {
+    $user = \App\User::find(3);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(403);
+  }
+  public function testGetRemunerationWithoutYoutubeChannel()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(404);
+  }
+  public function testGetRemunerationWithUnknownVideo()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/10/remuneration');
+    $response->assertStatus(404);
+  }
+  public function testGetRemunerationWithVideoFromAnotherChannel()
+  {
+    $video = \App\UsersYoutubeChannelVideo::find(1);
+    $video->channel_id = 2;
+    $video->save();
+
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(404);
+  }
+  public function testGetRemunerationWithVideoAlreadyPayed()
+  {
+    $video = \App\UsersYoutubeChannelVideo::find(1);
+    $video->payed = 1;
+    $video->save();
+
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(404);
+  }
+  public function testGetRemunerationWithVideoNotEligible()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(404);
+  }
+  public function testGetRemuneration()
+  {
+    $video = \App\UsersYoutubeChannelVideo::find(1);
+    $video->eligible = 1;
+    $video->save();
+    $remuneration = $video->remuneration;
+
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/user/socials/youtube/videos/1/remuneration');
+    $response->assertStatus(302);
+    $this->assertContains('/user/socials/youtube/videos', $response->headers->get('location'));
+    $response->assertSessionHas('flash.success', __('user.profile.socials.youtube.remuneration.success', ['remuneration' => $remuneration]));
+    // check if money of user is updated
+    $user = \App\User::find(2);
+    $this->assertEquals((0 + floatval($remuneration)), $user->money);
+    // check if video is updated
+    $video = \App\UsersYoutubeChannelVideo::find(1);
+    $this->assertEquals(1, $video->payed);
+    // check history
+    $history = \App\UsersYoutubeChannelVideoRemunerationHistory::find(1);
+    $this->assertEquals(2, $history->user_id);
+    $this->assertEquals(1, $history->video_id);
+    $this->assertEquals($remuneration, $history->remuneration);
+    $this->assertEquals('127.0.0.1', $history->ip);
+  }
 }

@@ -16,6 +16,9 @@ Route::get('/', function () {
 Route::get('/faq', function () {
   return view('pages.faq', ['questions' => \App\Question::get()]);
 });
+Route::get('/join', function () {
+  return view('pages.join');
+});
 
 /*
 ===========

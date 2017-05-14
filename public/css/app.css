@@ -34,6 +34,10 @@ body {
   float: left;
 }
 
+ul li a:hover {
+  cursor: pointer;
+}
+
 /* ====
   MESSAGES
 ======= */
@@ -174,6 +178,72 @@ body {
 
   color: #fff;
 }
+
+.colored-block {
+  background: #ec9422;
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+.colored-block p {
+  color: #efefef;
+  font-size: 16px;
+}
+.colored-block .header {
+  color: #fff;
+}
+.colored-block .header .sub.header {
+  color: #e2e2e2;
+}
+.colored-block .segment .header {
+  color: #fff;
+}
+
+.white-block {
+  background: #e2e2e2;
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+.white-block .header {
+  color: #ec9422;
+}
+.white-block p {
+  font-size: 16px;
+}
+
+.black-block {
+  background: #222427;
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+.black-block .header {
+  color: #fff;
+}
+.black-block .header .sub.header {
+  color: #e2e2e2;
+}
+.black-block p {
+  color: #efefef;
+  font-size: 16px;
+}
+.black-block ul li {
+  color: #efefef;
+  font-size: 16px;
+}
+.ui.bulleted.list .list>a.item:before, .ui.bulleted.list>a.item:before, .black-block ul.ui.list li:before {
+    color: #efefef;
+}
+/*.black-block ul {
+  list-style: none;
+}
+.black-block ul li {
+  padding-left: 1em;
+  text-indent: -.7em;
+}
+
+.black-block ul li::before {
+  content: "• ";
+  color: #efefef;
+}*/
 
 /* ====
   FOOTER

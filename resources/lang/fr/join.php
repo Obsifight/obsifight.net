@@ -34,11 +34,11 @@ return [
   'step.five.title' => 'Informations',
   'step.five.subtitle' => 'Détails techniques',
   'step.five.content' => "<li>ObsiFight est un serveur PvP gratuit, sans whitelist ni candidature.</li>
-  <li>ObsiFight n'accepte que les inscriptions sur son site (et non pas les officielles).</li>
-  <li>Ce serveur possède un système d'économie en Points Boutique (monnaie du site), et un autre en Dollars (monnaie en jeu).</li>
-  <li>Ce serveur possède un système de Factions.</li>
-  <li>La TNT est activée, fait des dégâts et explose sur la map principale. La TNT au Xénotium est similaire, mais plus puissante.</li>
-  <li>Le pistonnage est possible dans les claims ennemis.</li>
-  <li>Les explosions autres que celles de la TNT n'affectent pas le décor.</li>
-  <li>Ce serveur possède des <a href=\":cgu_link\">Conditions Générales d'Utilisation</a>.</li>"
+    <li>ObsiFight n'accepte que les inscriptions sur son site (et non pas les officielles).</li>
+    <li>Ce serveur possède un système d'économie en Points Boutique (monnaie du site), et un autre en Dollars (monnaie en jeu).</li>
+    <li>Ce serveur possède un système de Factions.</li>
+    <li>La TNT est activée, fait des dégâts et explose sur la map principale. La TNT au Xénotium est similaire, mais plus puissante.</li>
+    <li>Le pistonnage est possible dans les claims ennemis.</li>
+    <li>Les explosions autres que celles de la TNT n'affectent pas le décor.</li>
+    <li>Ce serveur possède des <a href=\":cgu_link\">Conditions Générales d'Utilisation</a>.</li>"
 ];

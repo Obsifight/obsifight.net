@@ -78,3 +78,12 @@ Route::get('/user/socials/youtube/videos/{id}/remuneration', 'GoogleController@g
 Route::get('/user/socials/twitter/link', 'TwitterController@auth')->middleware('auth')->middleware('permission:user-link-twitter-account');
 Route::get('/user/socials/twitter/link/success', 'TwitterController@success')->middleware('auth')->middleware('permission:user-link-twitter-account');
 Route::post('/user/socials/twitter/link/callback', 'TwitterController@callback');
+
+/*
+===========
+  VOTE
+===========
+*/
+Route::get('/vote', 'VoteController@index');
+Route::post('/vote/step/one', 'VoteController@stepOne');
+Route::post('/vote/step/three', 'VoteController@stepThree')->middleware('vote-auth');

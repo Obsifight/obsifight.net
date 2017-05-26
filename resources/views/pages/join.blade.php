@@ -52,12 +52,12 @@
       <h2 class="ui header">
         <img src="{{ url('/img/logo-min.png') }}" class="ui circular image">
         <div class="content">
-          @lang('joinstep.three.title')
-          <div class="sub header">@lang('joinstep.three.subtitle')</div>
+          @lang('join.step.three.title')
+          <div class="sub header">@lang('join.step.three.subtitle')</div>
         </div>
       </h2>
       <p>
-        @lang('joinstep.three.content')
+        @lang('join.step.three.content')
       </p>
     </div>
   </div>

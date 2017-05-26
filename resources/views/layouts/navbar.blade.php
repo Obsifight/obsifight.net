@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <a href="#" class="item"><i class="external icon"></i> @lang('global.navbar.vote')</a>
+  <a href="{{ url('/vote') }}" class="item"><i class="external icon"></i> @lang('global.navbar.vote')</a>
 
   <div class="ui dropdown item">
     <i class="help icon"></i> @lang('global.navbar.help')

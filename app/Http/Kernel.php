@@ -60,6 +60,7 @@ class Kernel extends HttpKernel
         'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
-        'obsiguard' => \App\Http\Middleware\Obsiguard::class
+        'obsiguard' => \App\Http\Middleware\Obsiguard::class,
+        'vote-auth' => \App\Http\Middleware\VoteAuth::class
     ];
 }

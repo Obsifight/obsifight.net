@@ -3,6 +3,7 @@ return [
 
   'or' => 'ou',
   'warning' => 'Attention',
+  'info' => 'Information',
 
   // METAS
   'meta.description' => 'ObsiFight est un serveur minecraft orienté PvP-Faction. Fort de son expérience et de son écoute des joueurs celui-ci est omniprésent et fait au mieux pour satistaire les joueurs.',

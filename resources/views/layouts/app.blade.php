@@ -46,16 +46,16 @@
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script type="text/javascript">
           @if (session('flash.success'))
-            toastr.success("{{ session('flash.success') }}")
+            toastr.success("{!! addslashes(session('flash.success')) !!}")
           @endif
           @if (session('flash.error'))
-            toastr.error("{{ session('flash.error') }}")
+            toastr.error("{!! addslashes(session('flash.error')) !!}")
           @endif
           @if (session('flash.warning'))
-            toastr.warning("{{ session('flash.warning') }}")
+            toastr.warning("{!! addslashes(session('flash.warning')) !!}")
           @endif
           @if (session('flash.info'))
-            toastr.info("{{ session('flash.info') }}")
+            toastr.info("{!! addslashes(session('flash.info')) !!}")
           @endif
         </script>
         <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>

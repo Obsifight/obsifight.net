@@ -79,6 +79,8 @@ Route::get('/user/socials/twitter/link', 'TwitterController@auth')->middleware('
 Route::get('/user/socials/twitter/link/success', 'TwitterController@success')->middleware('auth')->middleware('permission:user-link-twitter-account');
 Route::post('/user/socials/twitter/link/callback', 'TwitterController@callback');
 
+Route::get('/user/server/logged', 'UserController@isLogged');
+
 /*
 ===========
   VOTE
@@ -87,3 +89,5 @@ Route::post('/user/socials/twitter/link/callback', 'TwitterController@callback')
 Route::get('/vote', 'VoteController@index');
 Route::post('/vote/step/one', 'VoteController@stepOne');
 Route::post('/vote/step/three', 'VoteController@stepThree')->middleware('vote-auth');
+Route::post('/vote/step/four', 'VoteController@stepFour')->middleware('vote-auth');
+Route::get('/vote/reward/get/waited', 'VoteController@getRewardWaited')->middleware('auth');

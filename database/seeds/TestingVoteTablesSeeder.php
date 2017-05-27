@@ -49,5 +49,26 @@ class TestingVoteTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+
+      DB::table('votes')->truncate();
+      DB::table('votes')->insert([
+        'user_id' => 2,
+        'out' => 10,
+        'reward_id' => 1,
+        'reward_getted' => 0,
+        'money_earned' => 0,
+        'created_at' => date('Y-m-d H:i:s', strtotime('- '.(env('VOTE_TIME')+1).' minutes')),
+        'updated_at' => date('Y-m-d H:i:s', strtotime('- '.(env('VOTE_TIME')+1).' minutes'))
+      ]);
+      DB::table('vote_rewards')->truncate();
+      for ($i=1; $i < 5; $i++) {
+        DB::table('vote_rewards')->insert([
+          'name' => "Reward#$i",
+          'probability' => 25,
+          'commands' => '',
+          'created_at' => date('Y-m-d H:i:s'),
+          'updated_at' => date('Y-m-d H:i:s')
+        ]);
+      }
     }
 }

@@ -15,6 +15,9 @@ class CreateVoteTables extends Migration
     {
       Schema::create('vote_rewards', function (Blueprint $table) {
         $table->increments('id');
+        $table->string('name', 40);
+        $table->integer('probability')->unsigned();
+        $table->text('commands');
         $table->timestamps();
       });
 

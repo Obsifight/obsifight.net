@@ -184,7 +184,7 @@ class VoteController extends Controller
     // TODO: give kit
     // remove kit
     $kit->delete();
-    $notification = \App\Notification::where('user_id', 2)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('seen', 0)->where('auto_seen', 0)->update(['seen' => 1]);
+    $notification = \App\Notification::where('user_id', Auth::user()->id)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('seen', 0)->where('auto_seen', 0)->update(['seen' => 1]);
     // redirect
     return redirect('/user')->with('flash.success', __('vote.reset.kit.get.success'));
   }

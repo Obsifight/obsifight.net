@@ -1,7 +1,7 @@
 <?php
 
 define('LARAVEL_START', microtime(true));
-if (env('APP_ENV') == 'testing')
+if (function_exists('env') && env('APP_ENV') == 'testing')
   ini_set('memory_limit', '2G');
 /*
 |--------------------------------------------------------------------------

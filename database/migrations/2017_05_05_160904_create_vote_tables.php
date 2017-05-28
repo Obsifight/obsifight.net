@@ -32,6 +32,22 @@ class CreateVoteTables extends Migration
         $table->float('money_earned');
         $table->timestamps();
       });
+
+      Schema::create('vote_kits', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('name', 40);
+        $table->text('content');
+        $table->timestamps();
+      });
+
+      Schema::create('vote_user_kits', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id')->unsigned();
+        $table->foreign('user_id')->references('id')->on('users');
+        $table->integer('kit_id')->unsigned();
+        $table->foreign('kit_id')->references('id')->on('vote_kits');
+        $table->timestamps();
+      });
     }
 
     /**
@@ -43,5 +59,7 @@ class CreateVoteTables extends Migration
     {
       Schema::dropIfExists('vote_rewards');
       Schema::dropIfExists('votes');
+      Schema::dropIfExists('vote_kits');
+      Schema::dropIfExists('vote_user_kits');
     }
 }

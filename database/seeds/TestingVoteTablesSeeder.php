@@ -60,6 +60,15 @@ class TestingVoteTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s', strtotime('- '.(env('VOTE_TIME')+1).' minutes')),
         'updated_at' => date('Y-m-d H:i:s', strtotime('- '.(env('VOTE_TIME')+1).' minutes'))
       ]);
+      DB::table('votes')->insert([
+        'user_id' => 3,
+        'out' => 10,
+        'reward_id' => 1,
+        'reward_getted' => 0,
+        'money_earned' => 0,
+        'created_at' => date('Y-m-13 12:00:00', strtotime('- 1 month')),
+        'updated_at' => date('Y-m-13 12:00:00', strtotime('- 1 month'))
+      ]);
       DB::table('vote_rewards')->truncate();
       for ($i=1; $i < 5; $i++) {
         DB::table('vote_rewards')->insert([
@@ -70,5 +79,24 @@ class TestingVoteTablesSeeder extends Seeder
           'updated_at' => date('Y-m-d H:i:s')
         ]);
       }
+
+      DB::table('notifications')->truncate();
+      DB::table('notifications')->insert([
+        'user_id' => 2,
+        'type' => 'info',
+        'key' => 'vote.reset.kit.get',
+        'vars' => '{"url":"http:\/\/localhost\/vote\/reward\/kit\/get","position":1}',
+        'seen' => 0,
+        'auto_seen' => 0,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('vote_user_kits')->truncate();
+      DB::table('vote_user_kits')->insert([
+        'user_id' => 2,
+        'kit_id' => 1,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
 define('LARAVEL_START', microtime(true));
-
+if (env('APP_ENV') == 'testing')
+  ini_set('memory_limit', '2G');
 /*
 |--------------------------------------------------------------------------
 | Register The Composer Auto Loader

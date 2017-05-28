@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-      Commands\GetYoutubeVideos::class
+      Commands\GetYoutubeVideos::class,
+      Commands\VoteReset::class
     ];
 
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
       $schedule->command('youtube:videos')->cron('0 */5 * * *');
+      $schedule->command('vote:reset')->monthlyOn(1, '00:00');
     }
 
     /**

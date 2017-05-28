@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 
 use App\User;
 use App\Vote;
+use \Cache;
 use Illuminate\Support\Facades\Auth;
 
 class VoteController extends Controller
@@ -19,7 +20,13 @@ class VoteController extends Controller
 
   public function index(Request $request)
   {
-    return view('vote/index');
+    // Ranking
+    $kits = \App\VoteKit::get();
+    $ranking = Vote::where('created_at', '>=', date('Y-m-01 00:00:00'))->where('created_at', '<=', date('Y-m-01 00:00:00', strtotime('+1 month')))->groupBy('user_id')->select('user_id')->selectRaw('COUNT(*) AS votes_count')->orderBy('votes_count', 'DESC')->limit(count($kits))->get();
+    // Rewards
+    $rewards = \App\VoteReward::get();
+    // View
+    return view('vote/index', compact('ranking', 'kits', 'rewards'));
   }
 
   public function stepOne(Request $request)
@@ -135,7 +142,7 @@ class VoteController extends Controller
     ]);
   }
 
-  public function getRewardWaited()
+  public function getRewardWaited(Request $request)
   {
     // Find vote
     $vote = Vote::where('user_id', Auth::user()->id)->where('reward_getted', 0)->firstOrFail();
@@ -148,5 +155,37 @@ class VoteController extends Controller
 
     // Success & redirect
     return redirect('/user')->with('flash.success', __('vote.rewards.get.success', ['reward' => $vote->reward->name]));
+  }
+
+  public function getRPGParadizePosition(Request $request)
+  {
+    // cache
+    if (Cache::has('vote.position'))
+      return response()->json(['status' => true, 'position' => Cache::get('vote.position')]);
+    // get
+    $client = resolve('\GuzzleHttp\Client');
+    $result = $client->get(env('VOTE_OUT_URL'));
+    if ($result->getStatusCode() === 200) { // OK
+      $content = (string) $result->getBody();
+      $position = substr($content, strpos($content, 'Position ')); // Cut before 'Position : '
+      $position = substr($position, strlen('Position ')); // Remove this sentence
+      $position = substr($position, 0, strpos($position, '</b>')); // Cut after out number
+      $position = intval($position);
+      // store
+      Cache::put('vote.position', $position, 120); // 2 hours
+      return response()->json(['status' => true, 'position' => $position]);
+    }
+    return response()->json(['status' => false]);
+  }
+
+  public function getRewardKit(Request $request)
+  {
+    $kit = \App\VoteUserKit::where('user_id', Auth::user()->id)->firstOrFail();
+    // TODO: give kit
+    // remove kit
+    $kit->delete();
+    $notification = \App\Notification::where('user_id', 2)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('seen', 0)->where('auto_seen', 0)->update(['seen' => 1]);
+    // redirect
+    return redirect('/user')->with('flash.success', __('vote.reset.kit.get.success'));
   }
 }

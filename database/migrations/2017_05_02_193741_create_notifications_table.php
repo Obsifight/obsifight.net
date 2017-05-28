@@ -20,7 +20,8 @@ class CreateNotificationsTable extends Migration
         $table->string('type', 7); // SUCCESS / ERROR / WARNING / INFO
         $table->string('key'); // lang key
         $table->text('vars'); // vars for lang
-        $table->boolean('seen');
+        $table->boolean('seen')->default(0);
+        $table->boolean('auto_seen')->default(1);
         $table->timestamps();
       });
     }

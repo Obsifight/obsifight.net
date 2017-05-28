@@ -19,7 +19,7 @@ class Notification extends Model
   {
     $query = self::where('user_id', $userId)->where('seen', false);
     $notifications = $query->get();
-    $query->update(['seen' => 1]); // set as seen
+    $query->where('auto_seen', 0)->update(['seen' => 1]); // set as seen
     return array_map('self::translate', $notifications->toArray());
   }
 

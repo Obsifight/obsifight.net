@@ -2,13 +2,18 @@
 namespace Tests\Feature;
 
 class GuzzleResponse {
+  public function __construct($code = 200, $body = '<br /><b>Position 14</b><br><br>Clic Sortant : 10</td></tr>')
+  {
+    $this->code = $code;
+    $this->body = $body;
+  }
   public function getStatusCode()
   {
-    return 200;
+    return $this->code;
   }
   public function getBody()
   {
-    return '<br /><b>Position 14</b><br><br>Clic Sortant : 10</td></tr>';
+    return $this->body;
   }
 }
 
@@ -84,6 +89,14 @@ class VoteControllerTest extends TestCase
   }
   public function testStepThreeWithoutValidOut()
   {
+    $guzzleClient = $this->getMockBuilder(\GuzzleHttp\Client::class)
+                         ->setMethods(['get'])
+                         ->getMock();
+    $guzzleClient->expects($this->once())
+        ->method('get')
+        ->willReturn(new GuzzleResponse());
+    $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
+
     $response = $this->withSession(['vote.user.id' => 1])->call('POST', '/vote/step/three', ['out' => 'invalid']);
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('vote.step.three.error.out'))), $response->getContent());
@@ -182,5 +195,62 @@ class VoteControllerTest extends TestCase
     // get vote
     $vote = \App\Vote::where('user_id', 2)->where('reward_id', 1)->where('reward_getted', 1)->where('id', 1)->count();
     $this->assertEquals(1, $vote);
+  }
+
+  public function testGetRPGParadizePositionWithInvalidStatusCode()
+  {
+    $guzzleClient = $this->getMockBuilder(\GuzzleHttp\Client::class)
+                         ->setMethods(['get'])
+                         ->getMock();
+    $guzzleClient->expects($this->once())
+        ->method('get')
+        ->willReturn(new GuzzleResponse());
+    $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
+
+    $response = $this->call('GET', '/vote/position');
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => true, 'position' => 14)), $response->getContent());
+  }
+  public function testGetRPGParadizePosition()
+  {
+    $guzzleClient = $this->getMockBuilder(\GuzzleHttp\Client::class)
+                         ->setMethods(['get'])
+                         ->getMock();
+    $guzzleClient->expects($this->once())
+                 ->method('get')
+                 ->willReturn(new GuzzleResponse(400));
+    $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
+
+    $response = $this->call('GET', '/vote/position');
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false)), $response->getContent());
+  }
+
+  public function testGetRewardKitUnlogged()
+  {
+    $response = $this->call('GET', '/vote/reward/get/waited');
+    $response->assertStatus(302);
+  }
+  public function testGetRewardKitWithoutKit()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $response = $this->call('GET', '/vote/reward/kit/get');
+    $response->assertStatus(404);
+  }
+  public function testGetRewardKit()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    $response = $this->call('GET', '/vote/reward/kit/get');
+    $response->assertStatus(302);
+    $this->assertContains('/user', $response->headers->get('location'));
+    $response->assertSessionHas('flash.success', __('vote.reset.kit.get.success'));
+    // TODO: test command to server
+    // remove kit
+    $this->assertEquals(0, \App\VoteUserKit::where('user_id', 2)->where('kit_id', 1)->count());
+    $this->assertEquals(1, \App\Notification::where('user_id', 2)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('vars', '{"url":"http:\/\/localhost\/vote\/reward\/kit\/get","position":1}')->where('seen', 1)->where('auto_seen', 0)->count());
   }
 }

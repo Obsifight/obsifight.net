@@ -87,7 +87,9 @@ Route::get('/user/server/logged', 'UserController@isLogged');
 ===========
 */
 Route::get('/vote', 'VoteController@index');
+Route::get('/vote/position', 'VoteController@getRPGParadizePosition');
 Route::post('/vote/step/one', 'VoteController@stepOne');
 Route::post('/vote/step/three', 'VoteController@stepThree')->middleware('vote-auth');
 Route::post('/vote/step/four', 'VoteController@stepFour')->middleware('vote-auth');
 Route::get('/vote/reward/get/waited', 'VoteController@getRewardWaited')->middleware('auth');
+Route::get('/vote/reward/kit/get', 'VoteController@getRewardKit')->middleware('auth');

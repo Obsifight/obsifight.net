@@ -4,4 +4,6 @@ return [
   'count.online' => 'Connectés',
   'count.visits' => 'Visites',
   'count.online.max' => 'Joueurs maximums',
+
+  'title' => 'Statistiques'
 ];

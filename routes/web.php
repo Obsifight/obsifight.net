@@ -93,3 +93,12 @@ Route::post('/vote/step/three', 'VoteController@stepThree')->middleware('vote-au
 Route::post('/vote/step/four', 'VoteController@stepFour')->middleware('vote-auth');
 Route::get('/vote/reward/get/waited', 'VoteController@getRewardWaited')->middleware('auth');
 Route::get('/vote/reward/kit/get', 'VoteController@getRewardKit')->middleware('auth');
+
+/*
+===========
+  STATS
+===========
+*/
+Route::get('/stats', 'StatsController@index');
+Route::get('/stats/{username}', 'StatsController@user');
+Route::get('/stats/faction/{name}', 'StatsController@faction');

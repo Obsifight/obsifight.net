@@ -181,6 +181,9 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
 
         App\Providers\ObsifightApiServiceProvider::class,
+
+        Barryvdh\Debugbar\ServiceProvider::class,
+        'GrahamCampbell\Markdown\MarkdownServiceProvider'
     ],
 
     /*
@@ -231,7 +234,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'ReCaptcha' => Waavi\ReCaptcha\Facades\ReCaptcha::class,
         'Uuid' => Webpatser\Uuid\Uuid::class,
-        'Entrust'   => Zizaco\Entrust\EntrustFacade::class
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'Markdown' => 'GrahamCampbell\Markdown\Facades\Markdown'
     ],
 
 ];

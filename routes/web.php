@@ -102,3 +102,17 @@ Route::get('/vote/reward/kit/get', 'VoteController@getRewardKit')->middleware('a
 Route::get('/stats', 'StatsController@index');
 Route::get('/stats/{username}', 'StatsController@user');
 Route::get('/stats/faction/{name}', 'StatsController@faction');
+
+/*
+===========
+  WIKI
+===========
+*/
+Route::get('/wiki', function () {
+  return view('wiki.index', ['categories' => \App\WikiCategory::get()]);
+});
+Route::get('/wiki/{article}', function (\App\WikiArticle $article) {
+  if (!$article->displayed && !Entrust::can('wiki-see-not-displayed-article'))
+    return abort(403);
+  return view('wiki.article', ['article' => $article]);
+});

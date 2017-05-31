@@ -180,7 +180,7 @@ return [
         Waavi\ReCaptcha\ReCaptchaServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
 
-        App\Providers\ObsifightApiServiceProvider::class,
+        App\Providers\ObsifightServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
         'GrahamCampbell\Markdown\MarkdownServiceProvider'

@@ -109,6 +109,7 @@ Route::get('/stats/faction/{name}', 'StatsController@faction');
 ===========
 */
 Route::get('/wiki', function () {
+  dd(resolve('\Server')->get()->isConnected('Eywek'));
   return view('wiki.index', ['categories' => \App\WikiCategory::get()]);
 });
 Route::get('/wiki/{article}', function (\App\WikiArticle $article) {

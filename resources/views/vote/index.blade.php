@@ -86,15 +86,14 @@
         </form>
       </div>
       <div data-step="4">
-        <form method="post" action="{{ url('/vote/step/four') }}" data-ajax data-ajax-custom-callback="afterStepFour">
-          <input type="hidden" name="type" value="after">
-          <button type="submit" onClick="$('input[name=\"type\"]').val('now')" data-reward-type="now" class="ui animated fade yellow massive button disabled">
+        <form method="post" action="{{ url('/vote/step/four') }}" data-ajax data-ajax-custom-callback="afterStepFour" data-ajax-custom-data="beforeStepFour">
+          <button type="submit" data-reward-type="now" class="ui animated fade yellow massive button disabled">
             <div class="visible content">@lang('vote.step.four.content.btn.now')</div>
             <div class="hidden content">
               @lang('vote.step.four.content.btn.now.hover') <i class="right arrow icon"></i>
             </div>
           </button>
-          <button type="submit" onClick="$('input[name=\"type\"]').val('after')" data-reward-type="after" class="ui animated fade yellow massive button">
+          <button type="submit" data-reward-type="after" class="ui animated fade yellow massive button">
             <div class="visible content">@lang('vote.step.four.content.btn.after')</div>
             <div class="hidden content">
               @lang('vote.step.four.content.btn.after.hover') <i class="right arrow icon"></i>
@@ -178,13 +177,20 @@
     function afterStepThree(req, res) {
       // Check if logged
       $.get('{{ url('/user/server/logged') }}', function (data) {
-        if (data.status && data.logged)
+        if (data.status && data.logged) {
           $('[data-reward-type="now"]').removeClass('disabled')
           $('[data-reward-type="after"]').addClass('disabled')
+        }
       })
       $('[data-step="3"]').slideUp(150, function () {
         $('[data-step="4"]').slideDown(150)
       })
+    }
+    function beforeStepFour(form, btn) {
+      if (btn.attr('data-reward-type') == 'now')
+        return {type: 'now'}
+      else
+        return {type: 'after'}
     }
     function afterStepFour(req, res) {
       $('[data-reward-type="now"]').addClass('disabled')

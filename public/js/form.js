@@ -19,6 +19,9 @@ function initAjaxForms() {
     if (form.attr('data-ajax-upload-image') !== undefined) {
       var data = (window.FormData) ? new FormData(form[0]) : null;
       var dataToSend = data
+    } else if (form.attr('data-ajax-custom-data') !== undefined) {
+      var data = window[form.attr('data-ajax-custom-data')](form, btn)
+      var dataToSend = JSON.stringify(data)
     } else {
       // Get data
       var data = objectifyForm(form.serializeArray())

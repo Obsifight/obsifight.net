@@ -34,6 +34,8 @@ return [
   'step.four.success.after' => 'Vous avez bien voté ! Vous avez reçu :money_earned points et la récompense "<em>:reward</em>" a été stockée sur votre profil !',
 
   'rewards.get.success' => 'Vous avez bien reçu la récompense "<em>:reward</em>" en jeu !',
+  'rewards.get.error.online' => 'Vous devez être connecté sur le serveur pour recevoir la récompense !',
+  'rewards.get.error.server' => 'Le serveur est hors-ligne pour le moment !',
 
   'step.error.unauthorized' => 'Vous devez être connecté pour procéder aux étapes suivantes.',
   'step.error.valid' => 'Vous devez avoir validé le vote avec de récupérer vos récompenses.',

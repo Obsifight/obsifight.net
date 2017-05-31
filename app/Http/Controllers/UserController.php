@@ -744,11 +744,11 @@ class UserController extends Controller
     return redirect('/user')->with('flash.success', __('user.profile.two_factor_auth.disable.success'));
   }
 
-  public function isLogged(Request $request) // TODO
+  public function isLogged(Request $request)
   {
     return response()->json([
       'status' => true,
-      'logged' => true
+      'logged' => resolve('\Server')->isConnected(Auth::user()->username)->get()['isConnected']
     ]);
   }
 

@@ -116,8 +116,14 @@ class VoteController extends Controller
 
     // try to give if type === now
     if ($request->input('type') === 'now') {
-      // TODO: command to server
-      // if fail, set $reward_getted = false, else set $reward_getted = true
+      $server = resolve('\Server');
+
+      $command = $server->isConnected($request->user->username)->get();
+      if ($command['isConnected']) {
+        $command = $server->sendCommand(str_replace('{PLAYER}', $request->user->username, $reward->commands))->get();
+        if ($command['sendCommand'])
+          $reward_getted = true;
+      }
     }
 
     // add money
@@ -147,7 +153,13 @@ class VoteController extends Controller
     // Find vote
     $vote = Vote::where('user_id', Auth::user()->id)->where('reward_getted', 0)->firstOrFail();
 
-    // TODO: Give
+    $server = resolve('\Server');
+    $command = $server->isConnected(Auth::user()->username)->get();
+    if (!$command['isConnected'])
+      return redirect('/user')->with('flash.error', __('vote.rewards.get.error.online'));
+    $command = $server->sendCommand(str_replace('{PLAYER}', Auth::user()->username, $vote->reward->commands))->get();
+    if (!$command['sendCommand'])
+      return redirect('/user')->with('flash.error', __('vote.rewards.get.error.server'));
 
     // Update vote
     $vote->reward_getted = 1;

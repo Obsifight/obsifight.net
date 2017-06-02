@@ -14,7 +14,7 @@
     <div class="ui four statistics">
       <div class="statistic">
         <div class="value">
-          74.7k
+          <span id="users_count">&nbsp;&nbsp;<div class="ui active inline medium loader"></div>&nbsp;&nbsp;</span>
         </div>
         <div class="label">
           @lang('stats.count.registered')
@@ -22,7 +22,7 @@
       </div>
       <div class="statistic">
         <div class="value">
-          300
+          <span id="server_count">&nbsp;&nbsp;<div class="ui active inline medium loader"></div>&nbsp;&nbsp;</span>
         </div>
         <div class="label">
           @lang('stats.count.online')
@@ -30,7 +30,7 @@
       </div>
       <div class="statistic">
         <div class="value">
-          693.7k
+          <span id="visits_count">&nbsp;&nbsp;<div class="ui active inline medium loader"></div>&nbsp;&nbsp;</span>
         </div>
         <div class="label">
           @lang('stats.count.visits')
@@ -38,7 +38,7 @@
       </div>
       <div class="statistic">
         <div class="value">
-          700
+          <span id="server_max">&nbsp;&nbsp;<div class="ui active inline medium loader"></div>&nbsp;&nbsp;</span>
         </div>
         <div class="label">
           @lang('stats.count.online.max')
@@ -62,4 +62,24 @@
       </div>
     </div>
   </div>
+@endsection
+@section('script')
+  <script type="text/javascript">
+    $.get('{{ url('/stats/users/count') }}', function (data) {
+      if (data.status)
+        $('#users_count').html(nFormatter(data.count, 1))
+    })
+    $.get('{{ url('/stats/server/count') }}', function (data) {
+      if (data.status)
+        $('#server_count').html(nFormatter(data.count, 1))
+    })
+    $.get('{{ url('/stats/server/max') }}', function (data) {
+      if (data.status)
+        $('#server_max').html(nFormatter(data.count, 1))
+    })
+    $.get('{{ url('/stats/visits/count') }}', function (data) {
+      if (data.status)
+        $('#visits_count').html(nFormatter(data.count, 1))
+    })
+  </script>
 @endsection

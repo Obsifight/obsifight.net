@@ -34,8 +34,10 @@ class ObsifightServiceProvider extends ServiceProvider
       /*
         == SERVER ==
       */
-      require base_path('vendor/Eywek/Server/MinewebServer.class.php');
-      require base_path('vendor/Eywek/Server/Exceptions.php');
+      if (!class_exists('Server')) {
+        require base_path('vendor/Eywek/Server/MinewebServer.class.php');
+        require base_path('vendor/Eywek/Server/Exceptions.php');
+      }
       $server = new \Methods(env('MINECRAFT_SERVER_SECRET_KEY'), env('MINECRAFT_SERVER_IP'), env('MINECRAFT_SERVER_PORT'));
       $this->app->instance('\Server', $server);
     }

@@ -41,5 +41,7 @@ return [
   'step.error.valid' => 'Vous devez avoir validé le vote avec de récupérer vos récompenses.',
 
   'reset.kit.get' => 'Vous avez été parmis les meilleurs voteurs le mois dernier <em>(position: :position)</em> ! Vous pouvez donc recevoir un kit pour vous récompenser en <a href=":url">cliquant ici</a>.',
-  'reset.kit.get.success' => 'Vous avez bien reçu votre kit voteur ! Merci et bon jeu !'
+  'reset.kit.get.success' => 'Vous avez bien reçu votre kit voteur ! Merci et bon jeu !',
+  'reset.kit.get.error.connected' => 'Vous devez être connecté sur le serveur pour recevoir le kit !',
+  'reset.kit.get.error.server' => 'Le serveur est hors-ligne pour le moment !'
 ];

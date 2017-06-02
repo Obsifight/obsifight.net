@@ -100,6 +100,15 @@ Route::get('/vote/reward/kit/get', 'VoteController@getRewardKit')->middleware('a
 ===========
 */
 Route::get('/stats', 'StatsController@index');
+Route::get('/stats/users/count', function (Request $request) {
+  return response()->json([
+    'status' => true,
+    'count' => \App\User::count()
+  ]);
+});
+Route::get('/stats/server/count', 'StatsController@serverCount');
+Route::get('/stats/server/max', 'StatsController@serverMax');
+Route::get('/stats/visits/count', 'StatsController@visitsCount');
 Route::get('/stats/{username}', 'StatsController@user');
 Route::get('/stats/faction/{name}', 'StatsController@faction');
 

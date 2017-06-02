@@ -193,7 +193,13 @@ class VoteController extends Controller
   public function getRewardKit(Request $request)
   {
     $kit = \App\VoteUserKit::where('user_id', Auth::user()->id)->firstOrFail();
-    // TODO: give kit
+    // give kit
+    $server = resolve('\Server');
+    if (!$server->isConnected(Auth::user()->username)->get()['isConnected'])
+      return redirect('/user')->with('flash.error', __('vote.reset.kit.get.error.connected'));
+    $command = "kit {$kit->name} " . Auth::user()->username;
+    if (!$server->sendCommand($command)->get()['sendCommand'])
+      return redirect('/user')->with('flash.error', __('vote.reset.kit.get.error.server'));
     // remove kit
     $kit->delete();
     $notification = \App\Notification::where('user_id', Auth::user()->id)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('seen', 0)->where('auto_seen', 0)->update(['seen' => 1]);

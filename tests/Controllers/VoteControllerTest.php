@@ -141,13 +141,99 @@ class VoteControllerTest extends TestCase
     $response->assertStatus(403);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('vote.step.error.valid'))), $response->getContent());
   }
-  public function testStepFourNowWithProblem()
+  public function testStepFourNowWithoutBeConnected()
   {
-    // TODO
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+    $server->expects($this->once())
+           ->method('get')
+           ->willReturn(['isConnected' => false]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->withSession(['vote' => ['out' => 10, 'user' => ['id' => 1], 'valid' => true]])->call('POST', '/vote/step/four', ['type' => 'now']);
+    $response->assertStatus(200);
+    // Check history
+    $vote = \App\Vote::where('user_id', 1)->where('out', 10)->where('reward_getted', 0)->first();
+    $this->assertEquals(1, count($vote));
+    // check money
+    $user = \App\User::find(1);
+    $this->assertEquals(10 + $vote->money_earned, $user->money);
+    // check message
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('vote.step.four.success.after', ['reward' => $vote->reward->name, 'money_earned' => round($vote->money_earned)]))), $response->getContent());
+    // check session
+    $response = $this->call('POST', '/vote/step/four', ['type' => 'after']);
+    $response->assertStatus(403);
+  }
+  public function testStepFourNowWithServerOff()
+  {
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'sendCommand', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+    $server->method('get')
+           ->willReturn(['isConnected' => true, 'sendCommand' => false]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $server->expects($this->once())
+           ->method('sendCommand')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->withSession(['vote' => ['out' => 10, 'user' => ['id' => 1], 'valid' => true]])->call('POST', '/vote/step/four', ['type' => 'now']);
+    $response->assertStatus(200);
+    // Check history
+    $vote = \App\Vote::where('user_id', 1)->where('out', 10)->where('reward_getted', 0)->first();
+    $this->assertEquals(1, count($vote));
+    // check money
+    $user = \App\User::find(1);
+    $this->assertEquals(10 + $vote->money_earned, $user->money);
+    // check message
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('vote.step.four.success.after', ['reward' => $vote->reward->name, 'money_earned' => round($vote->money_earned)]))), $response->getContent());
+    // check session
+    $response = $this->call('POST', '/vote/step/four', ['type' => 'after']);
+    $response->assertStatus(403);
   }
   public function testStepFourNow()
   {
-    // TODO
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'sendCommand', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+    $server->method('get')
+           ->willReturn(['isConnected' => true, 'sendCommand' => true]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $server->expects($this->once())
+           ->method('sendCommand')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->withSession(['vote' => ['out' => 10, 'user' => ['id' => 1], 'valid' => true]])->call('POST', '/vote/step/four', ['type' => 'now']);
+    $response->assertStatus(200);
+    // Check history
+    $vote = \App\Vote::where('user_id', 1)->where('out', 10)->where('reward_getted', 1)->first();
+    $this->assertEquals(1, count($vote));
+    // check money
+    $user = \App\User::find(1);
+    $this->assertEquals(10 + $vote->money_earned, $user->money);
+    // check message
+    $this->assertEquals(json_encode(array('status' => true, 'success' => __('vote.step.four.success.now', ['reward' => $vote->reward->name, 'money_earned' => round($vote->money_earned)]))), $response->getContent());
+    // check session
+    $response = $this->call('POST', '/vote/step/four', ['type' => 'after']);
+    $response->assertStatus(403);
   }
   public function testStepFourAfter()
   {
@@ -179,14 +265,88 @@ class VoteControllerTest extends TestCase
     $response = $this->call('GET', '/vote/reward/get/waited');
     $response->assertStatus(404);
   }
-  public function testGetRewardWaitedWithServerProblem()
+  public function testGetRewardWaitedWithoutBeConnected()
   {
-    // TODO
+    $user = \App\User::find(2);
+    $this->be($user);
+
+   if (!class_exists('Server'))
+      require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+    $server->expects($this->once())
+           ->method('get')
+           ->willReturn(['isConnected' => false]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->call('GET', '/vote/reward/get/waited');
+    $response->assertStatus(302);
+    $this->assertContains('/user', $response->headers->get('location'));
+    $response->assertSessionHas('flash.error', __('vote.rewards.get.error.online'));
+    // get vote
+    $vote = \App\Vote::where('user_id', 2)->where('reward_id', 1)->where('reward_getted', 0)->where('id', 1)->count();
+    $this->assertEquals(1, $vote);
+  }
+  public function testGetRewardWaitedWithServerOff()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'sendCommand', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+
+    $server->expects($this->at(1))
+           ->method('get')
+           ->willReturn(['isConnected' => true]);
+    $server->expects($this->at(2))
+           ->method('get')
+           ->willReturn(['sendCommand' => false]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $server->expects($this->once())
+           ->method('sendCommand')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->call('GET', '/vote/reward/get/waited');
+    $response->assertStatus(302);
+    $this->assertContains('/user', $response->headers->get('location'));
+    $response->assertSessionHas('flash.error', __('vote.rewards.get.error.server'));
+    // get vote
+    $vote = \App\Vote::where('user_id', 2)->where('reward_id', 1)->where('reward_getted', 0)->where('id', 1)->count();
+    $this->assertEquals(1, $vote);
   }
   public function testGetRewardWaited()
   {
     $user = \App\User::find(2);
     $this->be($user);
+
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'sendCommand', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+
+    $server->method('get')
+           ->willReturn(['isConnected' => true, 'sendCommand' => true]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $server->expects($this->once())
+           ->method('sendCommand')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
 
     $response = $this->call('GET', '/vote/reward/get/waited');
     $response->assertStatus(302);
@@ -239,16 +399,89 @@ class VoteControllerTest extends TestCase
     $response = $this->call('GET', '/vote/reward/kit/get');
     $response->assertStatus(404);
   }
+  public function testGetRewardKitWithoutBeConnected()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+    $server->expects($this->once())
+           ->method('get')
+           ->willReturn(['isConnected' => false]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->call('GET', '/vote/reward/kit/get');
+    $response->assertStatus(302);
+    $this->assertContains('/user', $response->headers->get('location'));
+    $response->assertSessionHas('flash.error', __('vote.reset.kit.get.error.connected'));
+    // remove kit
+    $this->assertEquals(1, \App\VoteUserKit::where('user_id', 2)->where('kit_id', 1)->count());
+    $this->assertEquals(0, \App\Notification::where('user_id', 2)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('vars', '{"url":"http:\/\/localhost\/vote\/reward\/kit\/get","position":1}')->where('seen', 1)->where('auto_seen', 0)->count());
+  }
+  public function testGetRewardKitWithServerOff()
+  {
+    $user = \App\User::find(2);
+    $this->be($user);
+
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'sendCommand', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+
+    $server->method('get')
+           ->willReturn(['isConnected' => true, 'sendCommand' => false]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $server->expects($this->once())
+           ->method('sendCommand')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
+    $response = $this->call('GET', '/vote/reward/kit/get');
+    $response->assertStatus(302);
+    $this->assertContains('/user', $response->headers->get('location'));
+    $response->assertSessionHas('flash.error', __('vote.reset.kit.get.error.server'));
+    // remove kit
+    $this->assertEquals(1, \App\VoteUserKit::where('user_id', 2)->where('kit_id', 1)->count());
+    $this->assertEquals(0, \App\Notification::where('user_id', 2)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('vars', '{"url":"http:\/\/localhost\/vote\/reward\/kit\/get","position":1}')->where('seen', 1)->where('auto_seen', 0)->count());
+  }
   public function testGetRewardKit()
   {
     $user = \App\User::find(2);
     $this->be($user);
 
+    if (!class_exists('Server'))
+       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+    $server = $this->getMockBuilder(\Methods::class)
+                   ->setMethods(['isConnected', 'sendCommand', 'get'])
+                   ->disableOriginalConstructor()
+                   ->getMock();
+
+    $server->method('get')
+           ->willReturn(['isConnected' => true, 'sendCommand' => true]);
+    $server->expects($this->once())
+           ->method('isConnected')
+           ->willReturn($server);
+    $server->expects($this->once())
+           ->method('sendCommand')
+           ->willReturn($server);
+    $this->app->instance('\Server', $server);
+
     $response = $this->call('GET', '/vote/reward/kit/get');
     $response->assertStatus(302);
     $this->assertContains('/user', $response->headers->get('location'));
     $response->assertSessionHas('flash.success', __('vote.reset.kit.get.success'));
-    // TODO: test command to server
     // remove kit
     $this->assertEquals(0, \App\VoteUserKit::where('user_id', 2)->where('kit_id', 1)->count());
     $this->assertEquals(1, \App\Notification::where('user_id', 2)->where('type', 'info')->where('key', 'vote.reset.kit.get')->where('vars', '{"url":"http:\/\/localhost\/vote\/reward\/kit\/get","position":1}')->where('seen', 1)->where('auto_seen', 0)->count());

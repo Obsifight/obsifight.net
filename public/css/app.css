@@ -8,7 +8,7 @@
   GLOBAL
 ======= */
 ::selection {
-  background: #A94545;
+  background: #ec9422;
 }
 body {
   font-family: 'Lato', sans-serif;
@@ -69,7 +69,7 @@ ul li a:hover {
 
   height: 350px;
 
-  border-bottom: 3px solid #A94545;
+  border-bottom: 3px solid #ec9422;
 }
 
 .site-header h2.ui.header {
@@ -94,6 +94,8 @@ ul li a:hover {
 .ui.menu.navbar {
   margin-bottom: 10px;
   border-radius: 0;
+
+  /*background: #333;*/
 }
 .ui.menu.navbar .logo {
   margin-left: 20px;
@@ -102,6 +104,9 @@ ul li a:hover {
 .ui.menu.navbar .item {
   padding-top: 20px;
   padding-bottom: 20px;
+
+  /*color: #DDD;
+  text-transform: uppercase;*/
 }
 .ui.menu.navbar .item:before {
   background: transparent;

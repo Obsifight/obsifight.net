@@ -7,6 +7,13 @@
 
     <div class="ui stackable grid">
       <div class="ui four wide column">
+        <div class="ui search">
+          <div class="ui left icon input" style="width: 100%;">
+            <input class="prompt" type="text" placeholder="Chercher un joueur">
+            <i class="user icon"></i>
+          </div>
+        </div>
+
         <h3 class="ui center aligned icon header">
           <i class="circular users icon"></i>
         </h3>
@@ -219,6 +226,16 @@
     .page-content {
       padding-top: 30px;
     }
+
+    .ui.search .results .result .content {
+      margin-top: 2px!important;
+    }
+    .ui.search .results .result .image {
+      float: left;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
   </style>
 @endsection
 @section('script')
@@ -231,6 +248,18 @@
           variation: $(el).attr('data-variation')
         })
       })
+    })
+    $('.ui.search').search({
+      apiSettings: {
+        url: '{{ url('/stats/users/search') }}?q={query}'
+      },
+      fields: {
+        results: 'users',
+        title: 'username',
+        url: 'url',
+        image: 'img'
+      },
+      minCharacters : 3
     })
   </script>
 @endsection

@@ -106,6 +106,18 @@ Route::get('/stats/users/count', function (Request $request) {
     'count' => \App\User::count()
   ]);
 });
+Route::get('/stats/users/search', function (Request $request) {
+  return response()->json([
+    'status' => true,
+    'users' => array_map(function ($user) {
+      return [
+        'username' => $user['username'],
+        'img' => 'https://skins.obsifight.net/head/' . $user['username'] . '/32',
+        'url' => url('/stats/' . $user['username'])
+      ];
+    }, \App\User::where('username', 'LIKE', '%' . $_GET['q'] . '%')->get()->toArray())
+  ]);
+});
 Route::get('/stats/server/count', 'StatsController@serverCount');
 Route::get('/stats/server/max', 'StatsController@serverMax');
 Route::get('/stats/visits/count', 'StatsController@visitsCount');
@@ -125,3 +137,10 @@ Route::get('/wiki/{article}', function (\App\WikiArticle $article) {
     return abort(403);
   return view('wiki.article', ['article' => $article]);
 });
+
+/*
+===========
+  SHOP
+===========
+*/
+Route::get('/shop', 'ShopController@index');

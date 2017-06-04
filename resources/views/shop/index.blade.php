@@ -93,7 +93,7 @@
                       @elseif ($rank->advantages[$i]['value'] === false)
                         <i class="check circle icon" style="font-size:20px;color:#777"></i>
                       @else
-                        {{ $rank->advantages[$i]['value'] }}
+                        {!! $rank->advantages[$i]['value'] !!}
                       @endif
                       <span>{{ $rank->advantages[$i]['name'] }}</span>
                     </td>
@@ -103,7 +103,7 @@
               <tr class="center aligned">
                 @foreach ($ranks as $rank)
                   <td>
-                    <button class="ui yellow button">
+                    <button data-item="{{ json_encode($rank->toArray()) }}" class="ui yellow button rank-buy">
                       Acheter
                     </button>
                   </td>
@@ -169,6 +169,45 @@
     </div>
 
   </div>
+
+<div class="ui basic modal" id="rankInfosModal">
+  <div class="ui stackable grid">
+    <div class="ui four wide column" id="rankTableContent">
+    </div>
+    <div class="ui twelve wide column">
+      <div class="ui card" style="width:100%">
+        <div class="content">
+          <div class="header">
+          </div>
+          <div class="meta">
+            Grades
+          </div>
+          <div class="description">
+          </div>
+          <div class="ui divider"></div>
+          <div class="ui info message">
+            <div class="header">
+              Information
+            </div>
+            <p>Vous obtiendrez ce grade pendant une durée de 1 mois, au bout de cette durée, les avantages vous seront retirés automatiquement et vous devrait le racheter sur cette même page.</p>
+          </div>
+        </div>
+        <div class="extra content">
+          <div class="ui two buttons">
+            <div class="ui basic teal button">
+              <i class="add to cart icon"></i>
+              Ajouter au panier
+            </div>
+            <div class="ui basic green button">
+              <i class="shopping basket icon"></i>
+              Acheter cet article
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('script')
   <script type="text/javascript">
@@ -193,6 +232,47 @@
       $('.special.cards .image').dimmer({
         on: 'hover'
       })
+    })
+
+    $('.rank-buy').on('click', function () {
+      var btn = $(this)
+      var itemData = JSON.parse(btn.attr('data-item'))
+
+      // Add table
+      var table = ''
+      table += '<table class="ui celled table ranks" style="border:none;">'
+        table += '<thead>'
+          table += '<tr class="center aligned">'
+            table += '<th>'
+              table += itemData.item.name
+              table += '<span>' + itemData.item.price + ' points / mois</span>'
+            table += '</th>'
+          table += '</tr>'
+        table += '</thead>'
+        table += '<tbody>'
+          for (var i = 0; i < itemData.advantages.length; i++) {
+            table += '<tr class="center aligned">'
+              table += '<td>'
+                if (itemData.advantages[i].value === true)
+                  table += '<i class="check circle icon" style="font-size:20px;color:#14ab61"></i>'
+                else if (itemData.advantages[i].value === false)
+                  table += '<i class="check circle icon" style="font-size:20px;color:#777"></i>'
+                else
+                  table += itemData.advantages[i].value
+                table += '<span>' + itemData.advantages[i].name + '</span>'
+              table += '</td>'
+            table += '</tr>'
+          }
+        table += '</tbody>'
+      table += '</table>'
+      $('#rankTableContent').html(table)
+
+      // data
+      $('#rankInfosModal .ui.card .header').html(itemData.item.name)
+      $('#rankInfosModal .ui.card .description').html('<b>Informations additionnelles</b><br><br>' + itemData.item.description)
+
+      // Toggle modal
+      $('#rankInfosModal').modal({blurring: true}).modal('show')
     })
   </script>
 @endsection

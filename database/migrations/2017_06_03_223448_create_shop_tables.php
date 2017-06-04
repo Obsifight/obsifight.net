@@ -23,7 +23,7 @@ class CreateShopTables extends Migration
       Schema::create('shop_items', function (Blueprint $table) {
         $table->increments('id');
         $table->string('name', 150);
-        $table->text('content');
+        $table->text('description');
         $table->integer('category_id')->unsigned();
         $table->foreign('category_id')->references('id')->on('shop_categories');
         $table->float('price');

@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Destiny')
+@section('title', $faction->name)
 
 @section('content')
   <div class="ui container page-content">
     <h1 class="ui center aligned header">
       <!--<img src="https://skins.obsifight.net/head/Eywek/64" class="ui rounded staff image" alt="Eywek">-->
       <div class="content">
-        <a href="{{ url('/stats/Eywek') }}" class="ui blue image medium label">
-          Eywek
+        <a href="{{ url('/stats/' . $faction->leader->playername) }}" class="ui blue image medium label">
+          {{ $faction->leader->playername }}
           <div class="detail">Chef</div>
         </a>
-        Destiny
+        {{ $faction->name }}
         <div class="sub header" style="margin-top:5px;">Créée il y a 3 ans</div>
       </div>
     </h1>
@@ -28,7 +28,7 @@
         <div class="ui two small statistics">
           <div class="statistic">
             <div class="value">
-              <i class="list icon" style="color:#ffd700"></i> 1
+              <i class="list icon" style="color:#ffd700"></i> {{ $faction->currentfactiondata->position }}
             </div>
             <div class="label">
               Position au classement
@@ -36,7 +36,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              <i class="trophy icon" style="color:#ffd700"></i> 175
+              <i class="trophy icon" style="color:#ffd700"></i> {{ $faction->currentfactiondata->score }}
             </div>
             <div class="label">
               Score
@@ -46,7 +46,7 @@
         <div class="ui four small statistics">
           <div class="statistic">
             <div class="value">
-              6
+              {{ count($faction->members) }}
             </div>
             <div class="label">
               Joueurs
@@ -54,7 +54,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              20
+              {{ $faction->currentfactiondata->claimcount }}
             </div>
             <div class="label">
               Claims
@@ -62,7 +62,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              240
+              {{ $faction->currentfactiondata->kills }}
             </div>
             <div class="label">
               Tués
@@ -70,7 +70,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              120
+              {{ $faction->currentfactiondata->deaths }}
             </div>
             <div class="label">
               Morts
@@ -92,9 +92,9 @@
           <div class="sub header">Triés par grade</div>
         </h2><br>
 
-        @foreach (["Eywek","_Clem01_","Droweurss","Gallix2","Fairyme","KogMaw"] as $username)
-          <a href="{{ url('/stats/' . $username) }}">
-            <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded member image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
+        @foreach ($faction->members as $member)
+          <a href="{{ url('/stats/' . $member->playername) }}">
+            <img src="https://skins.obsifight.net/head/{{ $member->playername }}/64" class="ui rounded member image" alt="{{ $member->playername }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $member->playername }}">
           </a>
         @endforeach
       </div>
@@ -159,17 +159,17 @@
         </h2><br>
 
         <div id="crystal">
-          <h3><span>Crystal</span> - Destiny</h3>
+          <h3><span>Crystal</span> - {{ $faction->name }}</h3>
           <h4>
             <i class="long arrow up icon"></i>
             Régénération
             <i class="long arrow up icon"></i>
           </h4>
           <p>
-            <span class="min">137.353</span>
+            <span class="min">{{ $faction->currentfactiondata->crystal->healthcrystal }}</span>
             /
-            <span class="max">200</span>
-            <span class="regen">2.75 <i class="caret up icon"></i></span>
+            <span class="max">{{ $faction->currentfactiondata->crystal->healthmaxcrystal }}</span>
+            <span class="regen">{{ $faction->currentfactiondata->crystal->healingspeedcrystal }} <i class="caret up icon"></i></span>
           </p>
           <img src="{{ url('/img/crystal.gif') }}" alt="">
         </div>
@@ -256,8 +256,8 @@
 @section('script')
   <script type="text/javascript">
     $('#power').progress({
-      total: '60',
-      value: '57',
+      total: '{{ $faction->currentfactiondata->power }}',
+      value: '{{ $faction->currentfactiondata->powermax }}',
       text: {
         percent: '{value}/{total}'
       }

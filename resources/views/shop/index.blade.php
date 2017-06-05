@@ -268,7 +268,7 @@
       $('#rankTableContent').html(table)
 
       // data
-      $('#rankInfosModal .ui.card .header').html(itemData.item.name)
+      $('#rankInfosModal .ui.card .content>.header').html(itemData.item.name)
       $('#rankInfosModal .ui.card .description').html('<b>Informations additionnelles</b><br><br>' + itemData.item.description)
 
       // Toggle modal

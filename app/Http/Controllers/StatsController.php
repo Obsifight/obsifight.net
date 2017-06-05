@@ -30,7 +30,10 @@ class StatsController extends Controller
 
   public function faction(Request $request)
   {
-    return view('stats.faction');
+    $faction = \App\Faction::getFromName($request->name);
+    if (!$faction)
+      return abort(404);
+    return view('stats.faction', ['faction' => $faction]);
   }
 
   public function serverCount(Request $request)

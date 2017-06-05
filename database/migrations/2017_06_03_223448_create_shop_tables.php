@@ -34,6 +34,7 @@ class CreateShopTables extends Migration
       Schema::create('shop_ranks', function (Blueprint $table) {
         $table->increments('id');
         $table->text('advantages');
+        $table->string('slug', 30);
         $table->integer('item_id')->unsigned();
         $table->foreign('item_id')->references('id')->on('shop_items');
         $table->timestamps();
@@ -45,6 +46,25 @@ class CreateShopTables extends Migration
         $table->integer('item_id')->unsigned();
         $table->foreign('item_id')->references('id')->on('shop_items');
         $table->ipAddress('ip');
+        $table->timestamps();
+      });
+      Schema::create('shop_sales', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('product_id')->unsigned()->nullable()->default(null);
+        $table->string('product_type', 8); // ITEM or CATEGORY
+        $table->float('reduction'); // percentage
+        $table->dateTime('deleted_at')->nullable(); // expire date
+        $table->timestamps();
+      });
+      Schema::create('shop_sale_histories', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id')->unsigned();
+        $table->foreign('user_id')->references('id')->on('users');
+        $table->integer('item_id')->unsigned();
+        $table->foreign('item_id')->references('id')->on('shop_items');
+        $table->integer('sale_id')->unsigned();
+        $table->foreign('sale_id')->references('id')->on('shop_sales');
+        $table->float('reduction');
         $table->timestamps();
       });
     }
@@ -60,5 +80,7 @@ class CreateShopTables extends Migration
       Schema::dropIfExists('shop_items');
       Schema::dropIfExists('shop_ranks');
       Schema::dropIfExists('shop_items_purchase_histories');
+      Schema::dropIfExists('shop_sales');
+      Schema::dropIfExists('shop_sale_histories');
     }
 }

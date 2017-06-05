@@ -10,8 +10,8 @@
         <h2 class="ui header" style="display:inline-block">
           <i class="shop icon"></i>
           <div class="content">
-            Nos meilleures ventes
-            <div class="sub header">Voyez les articles préférés</div>
+            @lang('shop.purchases.best.title')
+            <div class="sub header">@lang('shop.purchases.best.subtitle')</div>
           </div>
         </h2>
       </div>
@@ -28,7 +28,7 @@
                   <span class="header">{{ $item->item->name }}</span>
                   <div class="extra">
                     @if ($loop->first)
-                      <div class="ui label"><i class="trophy icon" style="color:#ffd700"></i> 1<sup>ère</sup> place</div>
+                      <div class="ui label"><i class="trophy icon" style="color:#ffd700"></i> @lang('shop.purchases.best')</div>
                     @endif
                     <div class="ui label">{{ $item->item->category->name }}</div>
                   </div>
@@ -46,18 +46,28 @@
       <h1 class="ui header">
         <i class="shopping basket icon"></i>
         <div class="content">
-          Nos articles
+          @lang('shop.items')
         </div>
       </h1>
     </div>
   </div>
   <div class="ui container page-content">
+
+    @foreach ($sales as $sale)
+      <div class="ui info message">
+        <div class="header">
+          @lang('shop.voucher.title')
+        </div>
+        <p>{!! $sale !!}</p>
+      </div>
+    @endforeach
+
     <div class="ui stackable grid">
 
       <div class="ui three wide column">
         <div class="ui vertical menu">
           <a data-menu="ranks" class="{{ (!$categorySelected ? 'active' : '') }} yellow item">
-            Grades
+            @lang('shop.ranks')
             <div class="ui {{ (!$categorySelected ? 'yellow left pointing' : '') }} label">{{ $ranks->count() }}</div>
           </a>
           @foreach ($categories as $category)
@@ -78,7 +88,7 @@
                 @foreach ($ranks as $rank)
                   <th>
                     {{ $rank->item->name }}
-                    <span>{{ $rank->item->price }} points / mois</span>
+                    <span>@lang('shop.rank.price', ['price' => $rank->item->price])</span>
                   </th>
                 @endforeach
               </tr>
@@ -104,7 +114,7 @@
                 @foreach ($ranks as $rank)
                   <td>
                     <button data-rank-slug="{{ $rank->slug }}" data-item="{{ json_encode($rank->toArray()) }}" class="ui yellow button rank-buy">
-                      Acheter
+                      @lang('shop.buy')
                     </button>
                   </td>
                 @endforeach
@@ -126,7 +136,7 @@
                     <div class="ui inverted dimmer">
                       <div class="content">
                         <div class="center">
-                          <div data-item="{{ json_encode($item->toArray()) }}" class="ui yellow button item-infos">Voir les détails</div>
+                          <div data-item="{{ json_encode($item->toArray()) }}" class="ui yellow button item-infos">@lang('shop.item.show')</div>
                         </div>
                       </div>
                     </div>
@@ -138,15 +148,15 @@
                   <div class="extra content">
                     @if ($mostPurchasedItems[0]->item->id === $item->id)
                       <span class="right floated">
-                        <i class="trophy icon" style="color:#ffd700"></i> 1<sup>ère</sup> meilleure vente
+                        <i class="trophy icon" style="color:#ffd700"></i> @lang('shop.purchases.first')
                       </span>
                     @elseif ($mostPurchasedItems[1]->item->id === $item->id)
                       <span class="right floated">
-                        <i class="trophy icon" style="color:#cd7f32"></i> 2<sup>ème</sup> meilleure vente
+                        <i class="trophy icon" style="color:#cd7f32"></i> @lang('shop.purchases.second')
                       </span>
                     @elseif ($mostPurchasedItems[2]->item->id === $item->id)
                       <span class="right floated">
-                        <i class="trophy icon" style="color:#C0C0C0"></i> 3<sup>ème</sup> meilleure vente
+                        <i class="trophy icon" style="color:#C0C0C0"></i> @lang('shop.purchases.third')
                       </span>
                     @endif
                     <span>
@@ -157,7 +167,7 @@
                       @if ($item->price >= 250)
                         <i class="dollar icon" style="margin-left: -14px;"></i>
                       @endif
-                      {{ $item->price }} points
+                      <span class="price">{{ $item->price }}</span> points
                     </span>
                   </div>
                 </div>
@@ -183,27 +193,23 @@
           <div class="header">
           </div>
           <div class="meta">
-            Grades
+            @lang('shop.ranks')
           </div>
           <div class="description">
           </div>
           <div class="ui divider"></div>
           <div class="ui info message">
             <div class="header">
-              Information
+              @lang('global.info')
             </div>
-            <p>Vous obtiendrez ce grade pendant une durée de 1 mois, au bout de cette durée, les avantages vous seront retirés automatiquement et vous devrait le racheter sur cette même page.</p>
+            <p>@lang('shop.rank.info')</p>
           </div>
         </div>
         <div class="extra content">
-          <div class="ui two buttons">
-            <div class="ui basic teal button">
-              <i class="add to cart icon"></i>
-              Ajouter au panier
-            </div>
-            <div class="ui basic green button">
+          <div class="ui one buttons">
+            <div class="ui basic green button buy">
               <i class="shopping basket icon"></i>
-              Acheter cet article
+              @lang('shop.buy.more')
             </div>
           </div>
         </div>
@@ -230,9 +236,9 @@
           <div class="ui divider"></div>
           <div class="ui form segment">
             <div class="field">
-              <label for="number">Combien voulez-vous en acheter ?</label>
-              <div class="ui spinner input">
-                <input type="text" id="number" name="number" value="1" />
+              <label for="number">@lang('shop.item.how')</label>
+              <div class="ui spinner input" id="quantity">
+                <input type="text" name="number" value="1" />
                 <div class="ui vertical buttons">
                   <button type="button" class="ui spinner up icon button">
                     <i class="chevron up icon"></i>
@@ -246,14 +252,10 @@
           </div>
         </div>
         <div class="extra content">
-          <div class="ui two buttons">
-            <div class="ui basic teal button">
-              <i class="add to cart icon"></i>
-              Ajouter au panier
-            </div>
-            <div class="ui basic green button">
+          <div class="ui one buttons">
+            <div class="ui basic green button buy">
               <i class="shopping basket icon"></i>
-              Acheter cet article
+              @lang('shop.buy.more')
             </div>
           </div>
         </div>
@@ -294,9 +296,11 @@
       @endif
     })
 
+    var itemData = {}
     $('.rank-buy').on('click', function () {
       var btn = $(this)
-      var itemData = JSON.parse(btn.attr('data-item'))
+      itemData = JSON.parse(btn.attr('data-item'))
+      itemData.quantity = 1
 
       // Add table
       var table = ''
@@ -305,7 +309,7 @@
           table += '<tr class="center aligned">'
             table += '<th>'
               table += itemData.item.name
-              table += '<span>' + itemData.item.price + ' points / mois</span>'
+              table += '<span>' + '{{ __('shop.rank.price') }}'.replace(':price', itemData.item.price) + '</span>'
             table += '</th>'
           table += '</tr>'
         table += '</thead>'
@@ -329,7 +333,7 @@
 
       // data
       $('#rankInfosModal .ui.card .content>.header').html(itemData.item.name)
-      $('#rankInfosModal .ui.card .description').html('<b>Informations additionnelles</b><br><br>' + itemData.item.description)
+      $('#rankInfosModal .ui.card .description').html('<b>{{ __('shop.item.description') }}</b><br><br>' + itemData.item.description)
 
       // Toggle modal
       $('#rankInfosModal').modal({blurring: true}).modal('show')
@@ -337,7 +341,8 @@
 
     $('.item-infos').on('click', function () {
       var btn = $(this)
-      var itemData = JSON.parse(btn.attr('data-item'))
+      itemData = JSON.parse(btn.attr('data-item'))
+      itemData.quantity = 1
 
       // Add card
       $('#itemContent').html('<div class="card" style="box-shadow: none;">' + $('.card[data-item-id="' + itemData.id + '"]').html() + '</div>')
@@ -348,10 +353,33 @@
       // Data
       $('#itemInfosModal .ui.card .content>.header').html(itemData.name)
       $('#itemInfosModal .ui.card .content>.meta').html(itemData.category.name)
-      $('#itemInfosModal .ui.card .description').html('<b>Informations additionnelles</b><br><br>' + itemData.description)
+      $('#itemInfosModal .ui.card .description').html('<b>{{ __('shop.item.description') }}</b><br><br>' + itemData.description)
 
       // Toggle modal
       $('#itemInfosModal').modal({blurring: true}).modal('show')
+    })
+    $('#itemInfosModal #quantity').on('changed.fu.spinbox', function () {
+      var input = $(this).find('input')
+      var quantity = parseInt(input.val())
+      var price = itemData.price
+      itemData.quantity = quantity
+
+      $('#itemInfosModal .price').html(quantity * price)
+    })
+
+    $('.buy').on('click', function (e) {
+      e.preventDefault()
+      var btn = $(this)
+      var items = [
+        {
+          id: itemData.id,
+          quantity: itemData.quantity
+        }
+      ]
+
+      $.post('{{ url('/shop/buy') }}', JSON.stringify(items), function () {
+
+      })
     })
   </script>
 @endsection

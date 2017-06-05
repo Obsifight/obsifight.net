@@ -30,6 +30,11 @@ class ShopController extends Controller
       $query->where('displayed', 1);
     })->get();
 
-    return view('shop.index', compact('categories', 'mostPurchasedItems', 'ranks'));
+    // Auto select with route
+    $rankSelected = (isset($request->rankslug)) ? $request->rankslug : false;
+    $itemSelected = (isset($request->itemid)) ? $request->itemid : false;
+    $categorySelected = (isset($request->categoryid)) ? $request->categoryid : false;
+
+    return view('shop.index', compact('categories', 'mostPurchasedItems', 'ranks', 'itemSelected', 'categorySelected', 'rankSelected'));
   }
 }

@@ -39,6 +39,34 @@ ul li a:hover {
 }
 
 /* ====
+  SPINNER INPUTS
+======= */
+.ui.spinner.input input {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.ui.spinner.input .button.disabled {
+  cursor: not-allowed;
+}
+.ui.spinner.input .buttons .button {
+  background-color: #fff;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: none;
+  padding: .2em .3em .3em;
+  height: 21px;
+}
+.ui.spinner.input .spinner.up.button {
+  border-bottom: none;
+  border-top-left-radius: 0;
+}
+.ui.spinner.input .spinner.down.button {
+  border-bottom-left-radius: 0;
+}
+.ui.spinner.input .button .icon {
+  margin: 0;
+}
+
+/* ====
   MESSAGES
 ======= */
 .ui.warning.message a:not(.button) {

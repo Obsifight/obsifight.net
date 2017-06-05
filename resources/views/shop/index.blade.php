@@ -56,14 +56,14 @@
 
       <div class="ui three wide column">
         <div class="ui vertical menu">
-          <a data-menu="ranks" class="active yellow item">
+          <a data-menu="ranks" class="{{ (!$categorySelected ? 'active' : '') }} yellow item">
             Grades
-            <div class="ui yellow left pointing label">{{ $ranks->count() }}</div>
+            <div class="ui {{ (!$categorySelected ? 'yellow left pointing' : '') }} label">{{ $ranks->count() }}</div>
           </a>
           @foreach ($categories as $category)
-            <a data-menu="{{ $category->id }}" class="yellow item">
+            <a data-menu="{{ $category->id }}" class="{{ ($categorySelected && $categorySelected == $category->id ? 'active' : '') }} yellow item">
               {{ $category->name }}
-              <div class="ui label">{{ $category->items->count() }}</div>
+              <div class="ui {{ ($categorySelected && $categorySelected == $category->id ? 'yellow left pointing' : '') }} label">{{ $category->items->count() }}</div>
             </a>
           @endforeach
         </div>
@@ -71,7 +71,7 @@
 
       <div class="ui thirteen wide column">
 
-        <div data-menu="ranks" class="active">
+        <div data-menu="ranks" class="{{ (!$categorySelected ? 'active' : '') }}">
           <table class="ui celled table ranks">
             <thead>
               <tr class="center aligned">
@@ -103,7 +103,7 @@
               <tr class="center aligned">
                 @foreach ($ranks as $rank)
                   <td>
-                    <button data-item="{{ json_encode($rank->toArray()) }}" class="ui yellow button rank-buy">
+                    <button data-rank-slug="{{ $rank->slug }}" data-item="{{ json_encode($rank->toArray()) }}" class="ui yellow button rank-buy">
                       Acheter
                     </button>
                   </td>
@@ -114,16 +114,19 @@
         </div>
 
         @foreach ($categories as $category)
-          <div data-menu="{{ $category->id }}">
+          <div data-menu="{{ $category->id }}" {{ ($categorySelected && $categorySelected == $category->id ? 'class=active' : '') }}>
 
             <div class="ui special cards">
               @foreach ($category->items as $item)
-                <div class="card">
+                @php
+                  $item->category = $category->toArray();
+                @endphp
+                <div class="card" data-item-id="{{ $item->id }}">
                   <div class="blurring dimmable image">
                     <div class="ui inverted dimmer">
                       <div class="content">
                         <div class="center">
-                          <div class="ui yellow button">Voir les détails</div>
+                          <div data-item="{{ json_encode($item->toArray()) }}" class="ui yellow button item-infos">Voir les détails</div>
                         </div>
                       </div>
                     </div>
@@ -208,8 +211,59 @@
     </div>
   </div>
 </div>
+<div class="ui basic modal" id="itemInfosModal">
+  <div class="ui stackable grid">
+    <div class="ui five wide column" style="padding-right:0px;">
+      <div class="ui cards" id="itemContent">
+
+      </div>
+    </div>
+    <div class="ui eleven wide column" style="padding-left:0px;">
+      <div class="ui card" style="width:100%;border-top-left-radius:0px;border-bottom-left-radius:0px;">
+        <div class="content">
+          <div class="header">
+          </div>
+          <div class="meta">
+          </div>
+          <div class="description">
+          </div>
+          <div class="ui divider"></div>
+          <div class="ui form segment">
+            <div class="field">
+              <label for="number">Combien voulez-vous en acheter ?</label>
+              <div class="ui spinner input">
+                <input type="text" id="number" name="number" value="1" />
+                <div class="ui vertical buttons">
+                  <button type="button" class="ui spinner up icon button">
+                    <i class="chevron up icon"></i>
+                  </button>
+                  <button type="button" class="ui spinner down icon button">
+                    <i class="chevron down icon"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="extra content">
+          <div class="ui two buttons">
+            <div class="ui basic teal button">
+              <i class="add to cart icon"></i>
+              Ajouter au panier
+            </div>
+            <div class="ui basic green button">
+              <i class="shopping basket icon"></i>
+              Acheter cet article
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 @section('script')
+  <script type="text/javascript" src="{{ url('/js/spinner.jquery.js') }}"></script>
   <script type="text/javascript">
     $('a[data-menu]').on('click', function () {
       var btn = $(this)
@@ -232,6 +286,12 @@
       $('.special.cards .image').dimmer({
         on: 'hover'
       })
+      @if ($itemSelected)
+        $('.card[data-item-id="{{ $itemSelected }}"] .item-infos').click()
+      @endif
+      @if ($rankSelected)
+        $('.rank-buy[data-rank-slug="{{ $rankSelected }}"]').click()
+      @endif
     })
 
     $('.rank-buy').on('click', function () {
@@ -273,6 +333,25 @@
 
       // Toggle modal
       $('#rankInfosModal').modal({blurring: true}).modal('show')
+    })
+
+    $('.item-infos').on('click', function () {
+      var btn = $(this)
+      var itemData = JSON.parse(btn.attr('data-item'))
+
+      // Add card
+      $('#itemContent').html('<div class="card" style="box-shadow: none;">' + $('.card[data-item-id="' + itemData.id + '"]').html() + '</div>')
+      $('#itemContent .card .ui.inverted.dimmer').remove()
+      $('#itemContent .card .blurring.dimmable.image').removeClass('blurring dimmable')
+      $('#itemContent .card>.content.text-center').remove()
+
+      // Data
+      $('#itemInfosModal .ui.card .content>.header').html(itemData.name)
+      $('#itemInfosModal .ui.card .content>.meta').html(itemData.category.name)
+      $('#itemInfosModal .ui.card .description').html('<b>Informations additionnelles</b><br><br>' + itemData.description)
+
+      // Toggle modal
+      $('#itemInfosModal').modal({blurring: true}).modal('show')
     })
   </script>
 @endsection

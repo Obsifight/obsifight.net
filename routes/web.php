@@ -144,3 +144,6 @@ Route::get('/wiki/{article}', function (\App\WikiArticle $article) {
 ===========
 */
 Route::get('/shop', 'ShopController@index');
+Route::get('/shop/rank/{rankslug}', 'ShopController@index');
+Route::get('/shop/item/{itemid}', 'ShopController@index');
+Route::get('/shop/category/{categoryid}', 'ShopController@index');

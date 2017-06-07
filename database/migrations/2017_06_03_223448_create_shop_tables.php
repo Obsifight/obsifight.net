@@ -91,6 +91,7 @@ class CreateShopTables extends Migration
     {
       Schema::dropIfExists('shop_categories');
       Schema::dropIfExists('shop_items');
+      Schema::dropIfExists('shop_items_abilities');
       Schema::dropIfExists('shop_ranks');
       Schema::dropIfExists('shop_items_purchase_histories');
       Schema::dropIfExists('shop_sales');

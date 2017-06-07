@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
       $table->string('password', 50);
       $table->float('money')->default(0);
       $table->ipAddress('ip');
-      $table->boolean('cape')->default(0);
       $table->boolean('obsiguard_dynamic')->default(0);
       $table->rememberToken();
       $table->timestamps();
@@ -114,6 +113,14 @@ class CreateUsersTable extends Migration
       $table->timestamps();
     });
 
+    // cape ability
+    Schema::create('users_edit_cape_abilities', function (Blueprint $table) {
+      $table->increments('id');
+      $table->integer('user_id')->unsigned();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->timestamps();
+    });
+
     // transfers
     Schema::create('users_transfer_money_histories', function (Blueprint $table) {
       $table->increments('id');
@@ -191,6 +198,7 @@ class CreateUsersTable extends Migration
     Schema::dropIfExists('users_email_edit_requests');
     Schema::dropIfExists('users_edit_username_histories');
     Schema::dropIfExists('users_edit_username_abilities');
+    Schema::dropIfExists('users_edit_cape_abilities');
     Schema::dropIfExists('users_transfer_money_histories');
     Schema::dropIfExists('users_youtube_channels');
     Schema::dropIfExists('users_youtube_channel_videos');

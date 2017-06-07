@@ -233,7 +233,7 @@
                   </div>
                   @lang('user.profile.appearence.cape.error.vote')
                 </div>
-              @elseif (Auth::user()->cape === 0)
+              @elseif ($cape === 0)
                 <div class="ui error message">
                   <div class="header">
                     @lang('form.error.title')

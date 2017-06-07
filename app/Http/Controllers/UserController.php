@@ -289,8 +289,11 @@ class UserController extends Controller
       return strtotime($b['created_at']) - strtotime($a['created_at']);
     });
 
+    // CAPE
+    $cape = \App\UsersEditCapeAbility::where('user_id', Auth::user()->id)->count();
+
     // RENDER
-    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications', 'websiteLoginLogs', 'launcherLoginLogs', 'youtube', 'twitter', 'spendings'));
+    return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications', 'websiteLoginLogs', 'launcherLoginLogs', 'youtube', 'twitter', 'spendings', 'cape'));
   }
 
   public function forgotPassword(Request $request)
@@ -635,7 +638,7 @@ class UserController extends Controller
   public function uploadCape(Request $request)
   {
     // can
-    if (!Auth::user()->cape)
+    if (!\App\UsersEditCapeAbility::where('user_id', Auth::user()->id)->count())
       return abort(403);
     // check vote
     $votesCount = \App\Vote::where('user_id', Auth::user()->id)->where('created_at', '>', date('Y-m-00 00:00:00'))->count();

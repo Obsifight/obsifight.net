@@ -18,7 +18,6 @@ class TestingUsersTablesSeeder extends Seeder
         'email' => 'test@test.com',
         'password' => 'dd202cf35d550d12a536a277c8ada507159c7a05', // test
         'money' => 10,
-        'cape' => 1,
         'ip' => '127.0.0.1',
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
@@ -126,6 +125,13 @@ class TestingUsersTablesSeeder extends Seeder
       DB::table('users_edit_username_abilities')->insert([
         'user_id' => 1,
         'history_id' => NULL,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      // cape ability
+      DB::table('users_edit_cape_abilities')->truncate();
+      DB::table('users_edit_cape_abilities')->insert([
+        'user_id' => 1,
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);

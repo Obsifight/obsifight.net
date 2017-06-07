@@ -16,7 +16,7 @@ class ShopItem extends Model
   }
   public function getSalesAttribute()
   {
-    return \App\ShopVoucher::where(function ($query) {
+    return \App\ShopSale::where(function ($query) {
       $query->where('product_type', 'ITEM');
       $query->where('product_id', $this->id);
     })->orWhere(function ($query) {

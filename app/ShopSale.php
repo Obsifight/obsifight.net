@@ -21,6 +21,7 @@ class ShopSale extends Model
     $sales = self::get();
     $salesMessages = [];
     foreach ($sales as $sale) {
+      $sale->reduction = round($sale->reduction);
       if ($sale->product_type === 'ALL')
         $salesMessages[] = __('shop.voucher.all', ['reduction' => $sale->reduction]);
       elseif ($sale->product_type === 'ITEM')

@@ -206,10 +206,20 @@
           </div>
         </div>
         <div class="extra content">
-          <div class="ui one buttons">
-            <div class="ui basic green button buy">
-              <i class="shopping basket icon"></i>
-              @lang('shop.buy.more')
+          <div class="ui stackable grid">
+            <div class="ui five wide column">
+              <div class="ui basic green animated fluid button buy">
+                <div class="visible content">
+                  <i class="shopping basket icon"></i>
+                  @lang('shop.buy.more')
+                </div>
+                <div class="hidden content">
+                  <i class="shopping basket icon"></i>
+                  @lang('shop.buy.action')
+                </div>
+              </div>
+            </div>
+            <div class="ui eleven wide column buy-message">
             </div>
           </div>
         </div>
@@ -252,10 +262,20 @@
           </div>
         </div>
         <div class="extra content">
-          <div class="ui one buttons">
-            <div class="ui basic green button buy">
-              <i class="shopping basket icon"></i>
-              @lang('shop.buy.more')
+          <div class="ui stackable grid">
+            <div class="ui five wide column">
+              <div class="ui basic green animated fluid button buy">
+                <div class="visible content">
+                  <i class="shopping basket icon"></i>
+                  @lang('shop.buy.more')
+                </div>
+                <div class="hidden content">
+                  <i class="shopping basket icon"></i>
+                  @lang('shop.buy.action')
+                </div>
+              </div>
+            </div>
+            <div class="ui eleven wide column buy-message">
             </div>
           </div>
         </div>
@@ -299,8 +319,11 @@
     var itemData = {}
     $('.rank-buy').on('click', function () {
       var btn = $(this)
-      itemData = JSON.parse(btn.attr('data-item'))
+      data = JSON.parse(btn.attr('data-item'))
+      itemData = data.item
       itemData.quantity = 1
+      itemData.type = 'rank'
+      itemData.rank_slug = data.slug
 
       // Add table
       var table = ''
@@ -308,22 +331,22 @@
         table += '<thead>'
           table += '<tr class="center aligned">'
             table += '<th>'
-              table += itemData.item.name
-              table += '<span>' + '{{ __('shop.rank.price') }}'.replace(':price', itemData.item.price) + '</span>'
+              table += itemData.name
+              table += '<span>' + '{{ __('shop.rank.price') }}'.replace(':price', itemData.price) + '</span>'
             table += '</th>'
           table += '</tr>'
         table += '</thead>'
         table += '<tbody>'
-          for (var i = 0; i < itemData.advantages.length; i++) {
+          for (var i = 0; i < data.advantages.length; i++) {
             table += '<tr class="center aligned">'
               table += '<td>'
-                if (itemData.advantages[i].value === true)
+                if (data.advantages[i].value === true)
                   table += '<i class="check circle icon" style="font-size:20px;color:#14ab61"></i>'
-                else if (itemData.advantages[i].value === false)
+                else if (data.advantages[i].value === false)
                   table += '<i class="check circle icon" style="font-size:20px;color:#777"></i>'
                 else
-                  table += itemData.advantages[i].value
-                table += '<span>' + itemData.advantages[i].name + '</span>'
+                  table += data.advantages[i].value
+                table += '<span>' + data.advantages[i].name + '</span>'
               table += '</td>'
             table += '</tr>'
           }
@@ -332,8 +355,13 @@
       $('#rankTableContent').html(table)
 
       // data
-      $('#rankInfosModal .ui.card .content>.header').html(itemData.item.name)
-      $('#rankInfosModal .ui.card .description').html('<b>{{ __('shop.item.description') }}</b><br><br>' + itemData.item.description)
+      $('#rankInfosModal .ui.card .content>.header').html(itemData.name)
+      $('#rankInfosModal .ui.card .description').html('<b>{{ __('shop.item.description') }}</b><br><br>' + itemData.description)
+      $('#rankInfosModal .ui.card .extra.content .animated.button .hidden.content').html($('#rankInfosModal .ui.card .extra.content .animated.button .hidden.content').html().replace(':amount', itemData.price))
+
+      // Remove ajax
+      $('.buy-message').html('')
+      $('.buy').removeClass('loading disabled')
 
       // Toggle modal
       $('#rankInfosModal').modal({blurring: true}).modal('show')
@@ -343,6 +371,7 @@
       var btn = $(this)
       itemData = JSON.parse(btn.attr('data-item'))
       itemData.quantity = 1
+      itemData.type = 'item'
 
       // Add card
       $('#itemContent').html('<div class="card" style="box-shadow: none;">' + $('.card[data-item-id="' + itemData.id + '"]').html() + '</div>')
@@ -354,6 +383,11 @@
       $('#itemInfosModal .ui.card .content>.header').html(itemData.name)
       $('#itemInfosModal .ui.card .content>.meta').html(itemData.category.name)
       $('#itemInfosModal .ui.card .description').html('<b>{{ __('shop.item.description') }}</b><br><br>' + itemData.description)
+      $('#itemInfosModal .ui.card .extra.content .animated.button .hidden.content').html($('#itemInfosModal .ui.card .extra.content .animated.button .hidden.content').html().replace(':amount', itemData.price))
+
+      // Remove ajax
+      $('.buy-message').html('')
+      $('.buy').removeClass('loading disabled')
 
       // Toggle modal
       $('#itemInfosModal').modal({blurring: true}).modal('show')
@@ -370,16 +404,44 @@
     $('.buy').on('click', function (e) {
       e.preventDefault()
       var btn = $(this)
-      var items = [
-        {
-          id: itemData.id,
-          quantity: itemData.quantity
+      var item = {
+        id: itemData.id,
+        quantity: itemData.quantity
+      }
+      btn.addClass('loading disabled')
+
+      $.ajax({
+        url: '{{ url('/shop/buy') }}',
+        method: 'post',
+        data: JSON.stringify({item: item}),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+          if (data.status)
+            display('success', data.success)
+          else
+            display('error', data.error)
+        },
+        statusCode: {
+          400: function () {
+            display('error', '{{ __('form.error.badrequest') }}')
+          },
+          403: function () {
+            display('error', '{{ __('form.error.forbidden') }}')
+          },
+          401: function () {
+            window.location = '{{ url('/login') }}?from=' + ((itemData.type === 'rank') ? ('/shop/rank/' + itemData.rank_slug) : ('/shop/item/' + itemData.id))
+          }
+        },
+        error: function () {
+          display('error', '{{ __('form.error.internal') }}')
         }
-      ]
-
-      $.post('{{ url('/shop/buy') }}', JSON.stringify(items), function () {
-
       })
+
+      function display(type, message) {
+        btn.parent().parent().find('.buy-message').html('<div class="ui ' + type +' message"><div class="header">' + localization[type].title + '</div><div class="content">' + message +'</div></div>')
+        btn.removeClass('loading disabled')
+      }
     })
   </script>
 @endsection

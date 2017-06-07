@@ -28,7 +28,17 @@ class CreateShopTables extends Migration
         $table->foreign('category_id')->references('id')->on('shop_categories');
         $table->float('price');
         $table->boolean('displayed')->default(0);
+        $table->text('commands')->nullable()->default(null);
         $table->string('image_path')->nullable()->default(null);
+        $table->boolean('need_connected')->default(true);
+        $table->timestamps();
+      });
+      Schema::create('shop_items_abilities', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('model'); // model name
+        $table->integer('item_id')->unsigned();
+        $table->foreign('item_id')->references('id')->on('shop_items');
+        $table->integer('condition_max')->unsigned()->nullable()->default(null);
         $table->timestamps();
       });
       Schema::create('shop_ranks', function (Blueprint $table) {
@@ -45,6 +55,7 @@ class CreateShopTables extends Migration
         $table->foreign('user_id')->references('id')->on('users');
         $table->integer('item_id')->unsigned();
         $table->foreign('item_id')->references('id')->on('shop_items');
+        $table->integer('quantity')->unsigned()->default(1);
         $table->ipAddress('ip');
         $table->timestamps();
       });
@@ -64,6 +75,8 @@ class CreateShopTables extends Migration
         $table->foreign('item_id')->references('id')->on('shop_items');
         $table->integer('sale_id')->unsigned();
         $table->foreign('sale_id')->references('id')->on('shop_sales');
+        $table->integer('history_id')->unsigned();
+        $table->foreign('history_id')->references('id')->on('shop_items_purchase_histories');
         $table->float('reduction');
         $table->timestamps();
       });

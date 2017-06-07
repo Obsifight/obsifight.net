@@ -170,6 +170,13 @@ class PermissionsTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+      DB::table('permissions')->insert([
+        'name' => 'shop-buy',
+        'display_name' => 'Acheter',
+        'description' => 'Acheter un article sur la boutique',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
 
       // link permissiosn
       DB::table('permission_role')->truncate();
@@ -247,6 +254,10 @@ class PermissionsTablesSeeder extends Seeder
       ]);
       DB::table('permission_role')->insert([
         'permission_id' => 19,
+        'role_id' => 1
+      ]);
+      DB::table('permission_role')->insert([
+        'permission_id' => 21,
         'role_id' => 1
       ]);
       DB::table('permission_role')->insert([

@@ -147,3 +147,4 @@ Route::get('/shop', 'ShopController@index');
 Route::get('/shop/rank/{rankslug}', 'ShopController@index');
 Route::get('/shop/item/{itemid}', 'ShopController@index');
 Route::get('/shop/category/{categoryid}', 'ShopController@index');
+Route::post('/shop/buy', 'ShopController@buy')->middleware('auth')->middleware('permission:shop-buy');

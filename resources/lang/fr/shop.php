@@ -22,6 +22,14 @@ return [
   'item.show' => 'Voir les détails',
   'item.how' => 'Combien voulez-vous en acheter ?',
   'item.description' => 'Informations additionnelles',
+
   'buy' => 'Acheter',
-  'buy.more' => 'Acheter cet article'
+  'buy.more' => 'Acheter cet article',
+  'buy.action' => 'Payer <span class="price">:amount</span> points',
+  'buy.error.price' => "Vous ne disposez pas d'assez de points pour procéder à cet achat.",
+  'buy.error.save' => "Une erreur est survenue lors de l'enregistrement de l'achat, veuillez réessayer.",
+  'buy.error.ability.max' => "Vous avez déjà atteint le nombre d'achat maximal pour cet article",
+  'buy.error.server.connected' => 'Tu dois être connecté sur le serveur pour procéder à cet achat !',
+  'buy.error.server.online' => 'Le serveur doit être allumé pour procéder à cet achat !',
+  'buy.success' => "Tu as bien procédé à l'achat de <b>\":item_name\"</b> pour :price points ! Bon jeu !"
 ];

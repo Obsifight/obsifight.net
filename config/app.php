@@ -183,7 +183,8 @@ return [
         App\Providers\ObsifightServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
-        'GrahamCampbell\Markdown\MarkdownServiceProvider'
+        'GrahamCampbell\Markdown\MarkdownServiceProvider',
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
     ],
 
     /*

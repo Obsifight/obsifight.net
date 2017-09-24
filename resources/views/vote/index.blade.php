@@ -6,13 +6,13 @@
   <div class="ui container page-content">
     <div class="ui info message">
       <div class="header">
-        Nous sommes positionné <span id="position">&nbsp;&nbsp;<div class="ui active inline tiny loader"></div>&nbsp;&nbsp;</span> dans le classement de RPG-Paradize !
+        @lang('vote.position', ['position' => '<span id="position">&nbsp;&nbsp;<div class="ui active inline tiny loader"></div>&nbsp;&nbsp;</span>'])
       </div>
       <p>
-        Vous ne savez pas comment voter ? C'est simple !
+        @lang('vote.tutorial.title')
       </p>
       <a class="ui primary button" style="position:absolute;right:10px;top:23px;">
-        Voir le tutoriel
+        @lang('vote.tutorial.btn')
       </a>
     </div>
 
@@ -108,17 +108,17 @@
     <div class="ui container text-center">
       <h2 class="ui header">
         <div class="content">
-          Classement
-          <div class="sub header">Voter et gagnez des récompenses supplémentaires chaque mois !</div>
+          @lang('vote.ranking')
+          <div class="sub header">@lang('vote.ranking.subtitle')</div>
         </div>
       </h2>
       <table class="ui very basic table table">
         <thead>
           <tr>
-            <th>Position</th>
-            <th>Pseudo</th>
-            <th>Nbr. votes</th>
-            <th>Gain mensuel</th>
+            <th>@lang('vote.ranking.position')</th>
+            <th>@lang('vote.ranking.username')</th>
+            <th>@lang('vote.ranking.count')</th>
+            <th>@lang('vote.ranking.win')</th>
           </tr>
         </thead>
         <tbody>
@@ -142,15 +142,15 @@
     <div class="ui container text-center">
       <h2 class="ui header">
         <div class="content">
-          Récompenses
-          <div class="sub header">Liste de vos gains lors de chaque vote</div>
+          @lang('vote.rewards.title')
+          <div class="sub header">@lang('vote.rewards.subtitle')</div>
         </div>
       </h2>
       <table class="ui very basic table table">
         <thead>
           <tr>
-            <th>Nom de la récompense</th>
-            <th>Probabilité</th>
+            <th>@lang('vote.rewards.name')</th>
+            <th>@lang('vote.rewards.probability')</th>
           </tr>
         </thead>
         <tbody>

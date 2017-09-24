@@ -13,19 +13,23 @@ class ShopItem extends Model
     'commands' => 'array',
   ];
   protected $hidden = ['displayed', 'commands', 'custom_ability', 'need_connected', 'created_at', 'updated_at'];
+  public $quantity = 1;
 
   public function category()
   {
     return $this->belongsTo('App\ShopCategory', 'category_id');
   }
+
   public function rank()
   {
     return $this->hasOne('App\ShopRank', 'item_id');
   }
+
   public function abilities()
   {
     return $this->hasMany('App\ShopItemsAbility', 'item_id');
   }
+
   public function getSalesAttribute()
   {
     return \App\ShopSale::where(function ($query) {
@@ -36,6 +40,7 @@ class ShopItem extends Model
       $query->where('product_id', $this->category->id);
     })->orWhere('product_type', 'ALL')->get();
   }
+
   public function getReductionAttribute()
   {
     $reduction = 0;
@@ -44,6 +49,7 @@ class ShopItem extends Model
     }
     return $reduction;
   }
+
   public function getPriceWithReductionAttribute()
   {
     return $this->price - ($this->price * ($this->reduction/100));

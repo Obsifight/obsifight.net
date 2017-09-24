@@ -56,7 +56,7 @@ class ShopController extends Controller
     // Find item
     $item = ShopItem::find($requestedItem['id']);
     if (!$item || empty($item))
-      return abort(400, 'Item not found.'); // Item not found
+      return abort(404, 'Item not found.'); // Item not found
     // Add to total
     $totalPrice += $item->priceWithReduction * $requestedItem['quantity'];
     // Set quantity

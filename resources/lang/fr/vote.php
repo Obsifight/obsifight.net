@@ -1,6 +1,15 @@
 <?php
 return [
   'title' => 'Voter',
+  'position' => 'Nous sommes positionné :position dans le classement de RPG-Paradize !',
+  'tutorial.title' => 'Vous ne savez pas comment voter ? C\'est simple !',
+  'tutorial.btn' => 'Voir le tutoriel',
+  'ranking' => 'Classement',
+  'ranking.subtitle' => 'Voter et gagnez des récompenses supplémentaires chaque mois !',
+  'ranking.position' => 'Position',
+  'ranking.username' => 'Pseudo',
+  'ranking.count' => 'Nbr. votes',
+  'ranking.win' => 'Gain mensuel',
 
   'step.one.title' => 'Connexion',
   'step.one.content' => 'Entrez votre pseudo',
@@ -36,6 +45,10 @@ return [
   'rewards.get.success' => 'Vous avez bien reçu la récompense "<em>:reward</em>" en jeu !',
   'rewards.get.error.online' => 'Vous devez être connecté sur le serveur pour recevoir la récompense !',
   'rewards.get.error.server' => 'Le serveur est hors-ligne pour le moment !',
+  'rewards.title' => 'Récompenses',
+  'rewards.subtitle' => 'Liste de vos gains lors de chaque vote',
+  'rewards.name' => 'Nom de la récompense',
+  'rewards.probability' => 'Probabilité',
 
   'step.error.unauthorized' => 'Vous devez être connecté pour procéder aux étapes suivantes.',
   'step.error.valid' => 'Vous devez avoir validé le vote avec de récupérer vos récompenses.',

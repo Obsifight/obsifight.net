@@ -134,7 +134,7 @@ class ObsiguardController extends Controller
         'error' => __('form.error.fields')
       ]);
     // find code
-    $token = \App\UsersToken::where('type', 'OBSIGUARD')->where('user_id', Auth::user()->id)->where('data', $request->input('code'))->first();
+    $token = \App\UsersToken::where('type', 'OBSIGUARD')->where('user_id', Auth::user()->id)->where('used_ip', null)->where('data', $request->input('code'))->first();
     if (count($token) <= 0)
       return response()->json([
         'status' => false,

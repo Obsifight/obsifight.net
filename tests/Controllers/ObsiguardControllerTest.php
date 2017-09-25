@@ -77,6 +77,21 @@ class ObsiguardControllerTest extends TestCase
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.obsiguard.security.error'))), $response->getContent());
   }
+  public function testValidSecurityCodeWithAlreadyUsedCode()
+  {
+    $user = \App\User::find(1);
+    $this->be($user);
+
+    $code = str_random(5);
+    \App\UsersToken::generate('OBSIGUARD', 2, 'token-used');
+    $token = \App\UsersToken::getToken();
+    $token->used_ip = '127.0.0.1';
+    $token->save();
+
+    $response = $this->call('POST', '/user/obsiguard/security/valid', ['code' => 'token-used']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.obsiguard.security.error'))), $response->getContent());
+  }
   public function testValidSecurityCode()
   {
     $code = str_random(5);

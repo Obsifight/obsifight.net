@@ -16,7 +16,6 @@
     <i class="dropdown icon"></i>
     <div class="menu">
       <a href="{{ url('/shop') }}" class="item"><i class="shopping basket icon"></i> @lang('global.navbar.shop')</a>
-      <a href="{{ url('/market') }}" class="item"><i class="protect icon"></i> @lang('global.navbar.webmarket')</a>
     </div>
   </div>
 

@@ -13,7 +13,6 @@ return [
   'navbar.join' => 'Nous rejoindre',
   'navbar.shops' => 'Boutiques',
   'navbar.shop' => 'Boutique',
-  'navbar.webmarket' => 'Market',
   'navbar.community' => 'Communautaire',
   'navbar.forum' => 'Forum',
   'navbar.ranking' => 'Classement',

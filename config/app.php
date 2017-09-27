@@ -183,8 +183,9 @@ return [
         App\Providers\ObsifightServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
-        'GrahamCampbell\Markdown\MarkdownServiceProvider',
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Urb\XenforoBridge\XenforoBridgeServiceProvider::class
     ],
 
     /*
@@ -236,7 +237,8 @@ return [
         'ReCaptcha' => Waavi\ReCaptcha\Facades\ReCaptcha::class,
         'Uuid' => Webpatser\Uuid\Uuid::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
-        'Markdown' => 'GrahamCampbell\Markdown\Facades\Markdown'
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
+        'XF' => Urb\XenforoBridge\Facades\XenforoBridge::class
     ],
 
 ];

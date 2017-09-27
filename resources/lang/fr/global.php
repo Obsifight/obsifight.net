@@ -11,7 +11,6 @@ return [
   // NAVBAR
   'navbar.home' => 'Accueil',
   'navbar.join' => 'Nous rejoindre',
-  'navbar.shops' => 'Boutiques',
   'navbar.shop' => 'Boutique',
   'navbar.community' => 'Communautaire',
   'navbar.forum' => 'Forum',

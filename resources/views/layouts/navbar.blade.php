@@ -11,13 +11,9 @@
   <a href="{{ url('/') }}" class="item"><i class="home icon"></i> @lang('global.navbar.home')</a>
   <a href="{{ url('/join') }}" class="item"><i class="share icon"></i> @lang('global.navbar.join')</a>
 
-  <div class="ui dropdown item">
-    <i class="shop icon"></i> @lang('global.navbar.shops')
-    <i class="dropdown icon"></i>
-    <div class="menu">
-      <a href="{{ url('/shop') }}" class="item"><i class="shopping basket icon"></i> @lang('global.navbar.shop')</a>
-    </div>
-  </div>
+  <a href="{{ url('/shop') }}" class="ui item">
+    <i class="shop icon"></i> @lang('global.navbar.shop')
+  </a>
 
   <div class="ui dropdown item">
     <i class="globe icon"></i> @lang('global.navbar.community')

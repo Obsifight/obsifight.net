@@ -117,6 +117,9 @@ class UserController extends Controller
     // Log user
     Auth::loginUsingId($userId, ($rememberMe ? true : false));
 
+    // Log into xenforo
+    //\XF::loginAsUser($userId);
+
     return response()->json([
       'status' => true,
       'success' => __('user.login.success')

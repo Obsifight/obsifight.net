@@ -160,7 +160,7 @@ class CreateUsersTable extends Migration
     Schema::create('users_youtube_channel_video_remuneration_histories', function (Blueprint $table) {
       $table->increments('id');
       $table->integer('user_id')->unsigned();
-      $table->foreign('user_id')->references('id')->on('users');
+      $table->foreign('user_id', 'ytchanvid_remuhistory_id_foreign')->references('id')->on('users');
       $table->integer('video_id')->unsigned();
       $table->foreign('video_id', 'ytchanvid_remuhistory_id_foreign')->references('id')->on('users_youtube_channel_videos');
       $table->float('remuneration');

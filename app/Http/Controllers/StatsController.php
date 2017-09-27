@@ -79,7 +79,7 @@ class StatsController extends Controller
   {
     if (!Cache::has('visits.count')) {
       // Ping
-      require base_path('vendor/Eywek/Google/GoogleAnalytics.php');
+      require base_path('vendor/eywek/obsifight/Google/GoogleAnalytics.php');
       $count = (new \GoogleAnalytics)->getVisitsFromTo('2015-10-05', 'today');
 
       // Store

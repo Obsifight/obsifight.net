@@ -599,7 +599,7 @@ class UserControllerTest extends TestCase
     $this->be($user);
 
     if (!class_exists('ApiObsifight'))
-      require base_path('vendor/Eywek/API/ApiObsifight.class.php');
+      require base_path('vendor/eywek/obsifight/API/ApiObsifight.class.php');
     $api = $this->getMockBuilder(\ApiObsifight::class)
                 ->setMethods(['get'])
                 ->setConstructorArgs([env('API_OBSIFIGHT_USER'), env('API_OBSIFIGHT_PASS')])

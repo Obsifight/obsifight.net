@@ -70,7 +70,7 @@ class ShopControllerTest extends TestCase
     public function testBuyWithoutBeOnline()
     {
         if (!class_exists('Server'))
-            require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+            require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
         $server = $this->getMockBuilder(\Methods::class)
             ->setMethods(['isConnected', 'get'])
             ->disableOriginalConstructor()
@@ -100,7 +100,7 @@ class ShopControllerTest extends TestCase
     public function testBuy()
     {
         if (!class_exists('Server'))
-            require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+            require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
         $server = $this->getMockBuilder(\Methods::class)
             ->setMethods(['isConnected', 'sendCommand', 'get'])
             ->disableOriginalConstructor()

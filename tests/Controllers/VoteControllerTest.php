@@ -144,7 +144,7 @@ class VoteControllerTest extends TestCase
   public function testStepFourNowWithoutBeConnected()
   {
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'get'])
                    ->disableOriginalConstructor()
@@ -174,7 +174,7 @@ class VoteControllerTest extends TestCase
   public function testStepFourNowWithServerOff()
   {
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'sendCommand', 'get'])
                    ->disableOriginalConstructor()
@@ -206,7 +206,7 @@ class VoteControllerTest extends TestCase
   public function testStepFourNow()
   {
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'sendCommand', 'get'])
                    ->disableOriginalConstructor()
@@ -271,7 +271,7 @@ class VoteControllerTest extends TestCase
     $this->be($user);
 
    if (!class_exists('Server'))
-      require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+      require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'get'])
                    ->disableOriginalConstructor()
@@ -298,7 +298,7 @@ class VoteControllerTest extends TestCase
     $this->be($user);
 
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'sendCommand', 'get'])
                    ->disableOriginalConstructor()
@@ -332,7 +332,7 @@ class VoteControllerTest extends TestCase
     $this->be($user);
 
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'sendCommand', 'get'])
                    ->disableOriginalConstructor()
@@ -405,7 +405,7 @@ class VoteControllerTest extends TestCase
     $this->be($user);
 
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'get'])
                    ->disableOriginalConstructor()
@@ -432,7 +432,7 @@ class VoteControllerTest extends TestCase
     $this->be($user);
 
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'sendCommand', 'get'])
                    ->disableOriginalConstructor()
@@ -462,7 +462,7 @@ class VoteControllerTest extends TestCase
     $this->be($user);
 
     if (!class_exists('Server'))
-       require base_path('vendor/Eywek/Server/MineWebServer.class.php');
+       require base_path('vendor/eywek/obsifight/Server/MineWebServer.class.php');
     $server = $this->getMockBuilder(\Methods::class)
                    ->setMethods(['isConnected', 'sendCommand', 'get'])
                    ->disableOriginalConstructor()

@@ -11,7 +11,9 @@ class DidYouKnowTableSeeder extends Seeder
      */
     public function run()
     {
+      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB::table('did_you_knows')->truncate();
+      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
       DB::table('did_you_knows')->insert([
         'text' =>"ObsiFight a été fondé par Suertz en 2014.",

@@ -162,7 +162,7 @@ class CreateUsersTable extends Migration
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users');
       $table->integer('video_id')->unsigned();
-      $table->foreign('video_id')->references('id')->on('users_youtube_channel_videos');
+      $table->foreign('video_id', 'ytchanvid_remuhistory_id_foreign')->references('id')->on('users_youtube_channel_videos');
       $table->float('remuneration');
       $table->ipAddress('ip');
       $table->timestamps();

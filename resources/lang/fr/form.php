@@ -1,6 +1,8 @@
 <?php
 return [
   'loading' => 'Chargement...',
+  'cancel' => 'Annuler',
+  'valid' => 'Valider',
 
   'error.title' => 'Erreur',
   'error.internal' => 'Une erreur interne est survenue lors du processus, veuillez réessayer.',

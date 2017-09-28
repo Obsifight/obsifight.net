@@ -34,13 +34,6 @@ class ContestController extends Controller
                             'date' => (new Carbon($sanction['date'])),
                             'contest' => Contest::where('sanction_id', $sanction['id'])
                                 ->where('sanction_type', $type)
-                                ->where(function ($query) {
-                                    $query->where('status', 'PENDING')
-                                        ->orWhere(function ($q) {
-                                            $q->where('status', 'CLOSED')
-                                                ->whereRaw('updated_at >= DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)'); // interval 1 month before re-contest
-                                        });
-                                })
                                 ->first()
                         ]);
                     }
@@ -84,7 +77,7 @@ class ContestController extends Controller
                 $query->where('status', 'PENDING')
                     ->orWhere(function ($q) {
                         $q->where('status', 'CLOSED')
-                            ->whereRaw('updated_at >= DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)'); // interval 1 month before re-contest
+                            ->whereRaw('updated_at >= "' . date('Y-m-d', strtotime('-1 month')) . '"'); // interval 1 month before re-contest
                     });
             })
             ->first();

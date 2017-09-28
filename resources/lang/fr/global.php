@@ -4,6 +4,16 @@ return [
   'or' => 'ou',
   'warning' => 'Attention',
   'info' => 'Information',
+  'confirm' => 'Confirmer',
+  'days' => 'jours',
+  'hours' => 'heures',
+  'minutes' => 'minutes',
+  'seconds' => 'secondes',
+  'today' => 'Aujourd\'hui',
+  'now' => 'Maintenant',
+  'days.initials' => '\'D\', \'L\', \'M\', \'M\', \'J\', \'V\', \'S\'',
+  'months.mini' => '\'Janvier\', \'Février\', \'Mars\', \'Avril\', \'Mai\', \'Juin\', \'Juillet\', \'Août\', \'Septembre\', \'Octobre\', \'Novembre\', \'Décembre\'',
+  'months' => '\'Jan\', \'Fév\', \'Mar\', \'Avr\', \'Mai\', \'Jui\', \'Jui\', \'Aoû\', \'Sep\', \'Oct\', \'Nov\', \'Déc\'',
 
   // METAS
   'meta.description' => 'ObsiFight est un serveur minecraft orienté PvP-Faction. Fort de son expérience et de son écoute des joueurs celui-ci est omniprésent et fait au mieux pour satistaire les joueurs.',

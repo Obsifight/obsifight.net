@@ -11,11 +11,11 @@
 
                     @if (!$sanction['state'])
                         <div class="ui active inverted dimmer">
-                            <div class="ui large text loader no-loader">Sanction expirée</div>
+                            <div class="ui large text loader no-loader">@lang('sanction.expired')</div>
                         </div>
                     @elseif ($contest->status === 'CLOSED')
                         <div class="ui active inverted dimmer">
-                            <div class="ui large text loader no-loader">Contestation fermée</div>
+                            <div class="ui large text loader no-loader">@lang('sanction.contest.closed')</div>
                         </div>
                     @endif
 
@@ -27,7 +27,7 @@
                                 </div>
                                 <div class="content">
                                     @if ($sanction['duration'] == 'PERMANENT')
-                                        <span class="ui red right ribbon label">Permanent</span>
+                                        <span class="ui red right ribbon label">@lang('sanction.permanent')</span>
                                     @else
                                         <span class="ui orange right ribbon label formatSeconds">{{ $sanction['duration'] }}</span>
                                     @endif
@@ -43,15 +43,15 @@
                                     <div class="ui divider"></div>
                                     <div class="description">
                                         <p>
-                                            <b>Raison: </b>
+                                            <b>@lang('sanction.reason'): </b>
                                             &laquo; <em>{{ $sanction['reason'] }}</em> &raquo;
                                         </p>
                                         <p>
-                                            <b>Par: </b>
+                                            <b>@lang('sanction.staff'): </b>
                                             {{ $sanction['staff']['username'] }}
                                         </p>
                                         <p>
-                                            <b>Contestation: </b>
+                                            <b>@lang('sanction.contest.content'): </b>
                                             &laquo; <em>{{ nl2br($contest->reason) }}</em> &raquo;
                                         </p>
                                     </div>
@@ -61,14 +61,14 @@
                     </div>
                     <div class="extra content">
                         <div class="right floated author">
-                            Contestée {{ $contest->created_at->diffForHumans() }}
+                            @lang('sanction.contest.date_string', ['date' => $contest->created_at->diffForHumans()])
                         </div>
                     </div>
                 </div>
 
                 <div class="ui segment">
                     <div class="ui comments" style="max-width: none;">
-                        <h3 class="ui dividing header">Commentaires</h3>
+                        <h3 class="ui dividing header">@lang('sanction.contest.comments')</h3>
                         @foreach ($actions as $action)
                             @if ($action->type == 'comment')
                                 <div class="comment">
@@ -89,13 +89,13 @@
                                 <h4 class="ui horizontal divider header">
                                     @if ($action->data->action == 'CLOSE')
                                         <i class="remove icon"></i>
-                                        {{ $action->data->user->username }} a fermé la contestation
+                                        @lang('sanction.contest.action.close', ['user' => $action->data->user->username])
                                     @elseif ($action->data->action == 'UNBAN')
                                         <i class="minus icon"></i>
-                                        {{ $action->data->user->username }} a débanni le joueur
+                                        @lang('sanction.contest.action.unban', ['user' => $action->data->user->username])
                                     @elseif ($action->data->action == 'REDUCE')
                                         <i class="checkmark icon"></i>
-                                        {{ $action->data->user->username }} a réduit la sanction
+                                        @lang('sanction.contest.action.reduce', ['user' => $action->data->user->username])
                                     @endif
                                 </h4>
                             @endif
@@ -109,7 +109,7 @@
                                 </div>
                                 <div style="float:right;">
                                     <button type="submit" class="ui blue labeled submit icon button">
-                                        <i class="icon edit"></i> Répondre à la contestation
+                                        <i class="icon edit"></i> @lang('sanction.contest.comment')
                                     </button>
                                 </div>
                                 <br><br>
@@ -126,19 +126,19 @@
                         <div class="ui sticky">
                             <div class="ui segment" style="margin-top:15px">
                                 <button class="fluid ui red button close{{ $contest->status == 'CLOSED' ? ' disabled' : ''}}"
-                                        data-tooltip="Le joueur ne pourra plus contester la sanction avant 15 jours."
+                                        data-tooltip="@lang('sanction.contest.action.close.text')"
                                         data-inverted>
-                                    <i class="icon remove"></i>&nbsp;<span class="mobile-hidden">Fermer</span>
+                                    <i class="icon remove"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.close.btn')</span>
                                 </button>
                                 <div class="ui divider"></div>
                                 <button class="fluid ui green button unban{{ $sanction['state'] && $contest->status != 'CLOSED' ? '' : ' disabled' }}"
-                                        data-tooltip="Le joueur sera automatique débanni" data-inverted>
-                                    <i class="icon minus"></i>&nbsp;<span class="mobile-hidden">Débannir</span>
+                                        data-tooltip="@lang('sanction.contest.action.unban.text')" data-inverted>
+                                    <i class="icon minus"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.unban.btn')</span>
                                 </button>
                                 <div class="ui divider"></div>
                                 <button class="fluid ui teal button reduce{{ $sanction['state'] && $contest->status != 'CLOSED' ? '' : ' disabled' }}"
-                                        data-tooltip="La sanction du joueur sera réduite" data-inverted>
-                                    <i class="icon checkmark"></i>&nbsp;<span class="mobile-hidden">Réduire</span>
+                                        data-tooltip="@lang('sanction.contest.action.reduce.text')" data-inverted>
+                                    <i class="icon checkmark"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.reduce.btn')</span>
                                 </button>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
     <div class="ui small modal" id="reduceModal">
         <i class="close icon"></i>
         <div class="header">
-            Éditer la durée de la sanction
+            @lang('sanction.contest.action.reduce.modal.title')
         </div>
         <div class="content">
             <form class="ui form" id="reduce">
@@ -159,7 +159,7 @@
                 <div class="ajax-message" style="margin-bottom:5px;"></div>
 
                 <div class="field">
-                    <label>Quand voulez-vous que la sanction se termine ?</label>
+                    <label>@lang('sanction.contest.action.reduce.modal.field')</label>
                     <div class="ui calendar" id="calendar">
                         <div class="ui input left icon">
                             <i class="calendar icon"></i>
@@ -172,10 +172,10 @@
         </div>
         <div class="actions">
             <div class="ui black deny button">
-                Annuler
+                @lang('form.cancel')
             </div>
             <button type="button" id="reduceBtn" class="ui positive right labeled icon button">
-                Valider
+                @lang('form.valid')
                 <i class="checkmark icon"></i>
             </button>
         </div>
@@ -238,11 +238,11 @@
             $('#calendar').calendar({
                 ampm: false,
                 text: {
-                    days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-                    months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-                    monthsShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jui', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
-                    today: 'Aujourd\'hui',
-                    now: 'Maintenant'
+                    days: [@lang('global.days.initials')],
+                    months: [@lang('global.months')],
+                    monthsShort: [@lang('global.months.mini')],
+                    today: '@lang('global.today')',
+                    now: '@lang('global.now')'
                 },
                 formatter: {
                     date: function (date, settings) {
@@ -284,9 +284,9 @@
                     var div = form.find('.ajax-message').hide()
                     if (msg) {
                         if (type)
-                            div.html('<div class="ui success message"><div class="header">Succès</div><p>' + msg + '</p></div>')
+                            div.html('<div class="ui success message"><div class="header">@lang('form.success.title')</div><p>' + msg + '</p></div>')
                         else
-                            div.html('<div class="ui error message"><div class="header">Erreur</div><p>' + msg + '</p></div>')
+                            div.html('<div class="ui error message"><div class="header">@lang('form.error.title')</div><p>' + msg + '</p></div>')
                         div.fadeIn(150)
                     }
                 }
@@ -307,7 +307,7 @@
                             return
                         }
 
-                        displayAlert(true, 'La sanction a bien été réduite !')
+                        displayAlert(true, '@lang('sanction.contest.action.reduce.success')')
                         form.addClass('success')
                         window.location = '?'
                     }
@@ -315,11 +315,11 @@
                     // display error
                     switch (data.status) {
                         case 400:
-                            displayAlert(false, 'Vous devez remplir tous les champs !')
+                            displayAlert(false, '@lang('form.error.fields')')
                             form.addClass('error')
                             break;
                         default:
-                            displayAlert(false, 'Une erreur inconnue est survenue !')
+                            displayAlert(false, '@lang('form.error.internal')')
                             form.addClass('error')
                     }
                     // enable form
@@ -333,10 +333,10 @@
             var comment = ''
             comment += '<div class="comment">'
                 comment += '<a class="avatar">'
-                    comment += '<img style="height:35px;" src="https://skins.obsifight.net/head/{{ Auth::user()->username }}">'
+                    comment += '<img style="height:35px;" src="https://skins.obsifight.net/head/{{ Auth::user() ? Auth::user()->username : '' }}">'
                 comment += '</a>'
                 comment += '<div class="content">'
-                    comment += '<a class="author">{{ Auth::user()->username }}</a>'
+                    comment += '<a class="author">{{ Auth::user() ? Auth::user()->username : '' }}</a>'
                     comment += '<div class="metadata">'
                         comment += '<span class="date moment">' + moment().fromNow() + '</span>'
                     comment += '</div>'
@@ -368,13 +368,13 @@
             var durationFormatted = ''
 
             if (result[0] > 0)
-                durationFormatted += result[0] + ' jours '
+                durationFormatted += result[0] + ' @lang('global.days') '
             if (result[1] > 0)
-                durationFormatted += result[1] + ' heures '
+                durationFormatted += result[1] + ' @lang('global.hours') '
             if (result[2] > 0)
-                durationFormatted += result[2] + ' minutes '
+                durationFormatted += result[2] + ' @lang('global.minutes') '
             if (result[3] > 0)
-                durationFormatted += result[3] + ' secondes '
+                durationFormatted += result[3] + ' @lang('global.seconds') '
 
             return durationFormatted.slice(0, -1)
         }

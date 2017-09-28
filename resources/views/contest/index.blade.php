@@ -8,20 +8,20 @@
         @if(Auth::user())
             <h2 class="ui center aligned icon header">
                 <i class="circular ban icon"></i>
-                Contester une sanction
+                @lang('sanction.contest.title')
             </h2>
 
             <div class="ui three top attached ordered steps">
                 <div class="active step" id="stepchooseSanction">
                     <div class="content">
-                        <div class="title">Sanction</div>
-                        <div class="description">Choississez votre sanction</div>
+                        <div class="title">@lang('sanction.contest.sanction')</div>
+                        <div class="description">@lang('sanction.contest.step.one.subtitle')</div>
                     </div>
                 </div>
                 <div class="disabled step" id="stepExplainSanction">
                     <div class="content">
-                        <div class="title">Explications</div>
-                        <div class="description">Entrez une explication</div>
+                        <div class="title">@lang('sanction.contest.step.two.title')</div>
+                        <div class="description">@lang('sanction.contest.step.two.subtitle')</div>
                     </div>
                 </div>
             </div>
@@ -33,19 +33,19 @@
 
                         <div class="ui segment">
                             @if ($sanction->type === 'ban')
-                                <div class="ui red horizontal label">Ban</div>
+                                <div class="ui red horizontal label">@lang('sanction.ban')</div>
                             @else
-                                <div class="ui orange horizontal label">Mute</div>
+                                <div class="ui orange horizontal label">@lang('sanction.mute')</div>
                             @endif
                             « <b>{{ $sanction->reason }}</b> »
                             <em>{{ $sanction->date->diffForHumans() }}</em>
                             @if($sanction->contest)
                                 <a href="{{ url('/sanctions/contest') . '/' . $sanction->contest->id }}" class="ui primary right floated button" style="margin-top: -7px;">
-                                    Voir la contestation
+                                    @lang('sanction.contest.view.btn')
                                 </a>
                             @else
                                 <button data-sanction='{{ json_encode($sanction) }}' class="ui primary right floated button" style="margin-top: -7px;">
-                                    Contester la sanction
+                                    @lang('sanction.contest')
                                 </button>
                             @endif
                             <div class="clearfix"></div>
@@ -64,11 +64,11 @@
                         <div class="sixteen wide mobile eight wide tablet four wide computer column">
                             <div class="ui card">
                                 <div class="content">
-                                    <div class="header">Informations</div>
-                                    <div class="meta" data-sanction-info="date">Le ../.. à ..h..</div>
+                                    <div class="header">@lang('sanction.contest.infos')</div>
+                                    <div class="meta" data-sanction-info="date">...</div>
                                 </div>
                                 <div class="content">
-                                    <h4 class="ui sub header" data-sanction-info="msg-type">Vous avez été ...</h4>
+                                    <h4 class="ui sub header" data-sanction-info="msg-type">...</h4>
                                     <div class="ui small feed">
 
                                         <div class="ui visible message" style="margin-bottom:0px;" data-sanction-info="reason">
@@ -82,8 +82,8 @@
                                     </div>
                                 </div>
                                 <div class="extra content">
-                                    <a class="fluid ui negative button" style="display:none;" data-sanction-info="duration-permanent">Permanent</a>
-                                    <a class="fluid ui orange button" style="display:none;" data-sanction-info="duration">Temporaire (<span class="sanction-duration">N/A</span>)</a>
+                                    <a class="fluid ui negative button" style="display:none;" data-sanction-info="duration-permanent">@lang('sanction.permanent')</a>
+                                    <a class="fluid ui orange button" style="display:none;" data-sanction-info="duration">@lang('sanction.temp') (<span class="sanction-duration">N/A</span>)</a>
                                 </div>
                             </div>
                         </div>
@@ -94,42 +94,41 @@
                                 <input type="hidden" name="sanction">
                                 <input type="hidden" name="sanction_type">
                                 <div class="field">
-                                    <label>Pourquoi nous devrions réduire votre sanction ?</label>
+                                    <label>@lang('sanction.contest.reason')</label>
                                     <textarea name="reason"></textarea>
                                 </div>
                                 <button id="confirmExplain" class="ui labeled icon green right floated button">
                                     <i class="checkmark icon"></i>
-                                    Confirmer
+                                    @lang('global.confirm')
                                 </button>
                             </form>
                         </div>
 
                     </div>
                 </div>
-            @else
-                <div class="ui segment">
-                    <div class="ui icon error message">
-                        <i class="notched user icon"></i>
-                        <div class="content">
-                            <div class="header">
-                               Contester une sanction
-                            </div>
-                            <p>Connectez-vous pour pouvoir contester vos sanctions.</p>
+            </div>
+        @else
+            <div class="ui segment">
+                <div class="ui icon error message">
+                    <i class="notched user icon"></i>
+                    <div class="content">
+                        <div class="header">
+                           @lang('sanction.contest.title')
                         </div>
+                        <p>@lang('sanction.contest.need_login')</p>
                     </div>
                 </div>
-            @endif
-
-        </div>
+            </div>
+        @endif
 
         @if (count($contests))
             <div class="ui stacked segment">
                 <table class="ui celled table" id="list">
                     <thead>
                     <tr>
-                        <th>Joueur</th>
-                        <th>Type de sanction</th>
-                        <th>Date de création</th>
+                        <th>@lang('sanction.contest.user')</th>
+                        <th>@lang('sanction.contest.type')</th>
+                        <th>@lang('sanction.contest.date')</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -139,16 +138,16 @@
                                 <td>{{ $contest->user->username }}</td>
                                 <td>
                                     @if ($contest->sanction_type === 'ban')
-                                        <div class="ui red horizontal label">Ban</div>
+                                        <div class="ui red horizontal label">@lang('sanction.ban')</div>
                                     @else
-                                        <div class="ui orange horizontal label">Mute</div>
+                                        <div class="ui orange horizontal label">@lang('sanction.mute')</div>
                                     @endif
                                 </td>
                                 <td>
                                     {{ $contest->created_at->diffForHumans() }}
                                 </td>
                                 <td>
-                                    <a href="{{ url('/sanctions/contest/' . $contest->id) }}" class="ui primary right floated button">Voir la contestation</a>
+                                    <a href="{{ url('/sanctions/contest/' . $contest->id) }}" class="ui primary right floated button">@lang('sanction.contest.view.btn')</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -172,9 +171,9 @@
 
             // type
             if (type === 'ban') // ban
-                $('[data-sanction-info="msg-type"]').html('Vous avez été bannis')
+                $('[data-sanction-info="msg-type"]').html('@lang('sanction.ban.msg')')
             else if (type === 'mute') // mute
-                $('[data-sanction-info="msg-type"]').html('Vous avez été réduis au silence')
+                $('[data-sanction-info="msg-type"]').html('@lang('sanction.mute.msg')')
             else
                 throw new Error('Invalid sanction type')
 
@@ -233,13 +232,13 @@
             var durationFormatted = ''
 
             if (result[0] > 0)
-                durationFormatted += result[0] + ' jours '
+                durationFormatted += result[0] + ' @lang('global.days') '
             if (result[1] > 0)
-                durationFormatted += result[1] + ' heures '
+                durationFormatted += result[1] + ' @lang('global.hours') '
             if (result[2] > 0)
-                durationFormatted += result[2] + ' minutes '
+                durationFormatted += result[2] + ' @lang('global.minutes') '
             if (result[3] > 0)
-                durationFormatted += result[3] + ' secondes '
+                durationFormatted += result[3] + ' @lang('global.seconds') '
 
             return durationFormatted.slice(0, -1)
         }

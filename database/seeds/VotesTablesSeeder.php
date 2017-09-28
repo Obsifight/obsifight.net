@@ -11,9 +11,11 @@ class VotesTablesSeeder extends Seeder
      */
     public function run()
     {
-      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB::table('vote_kits')->truncate();
-      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
       DB::table('vote_kits')->insert([
         'name' => 'Voter1',

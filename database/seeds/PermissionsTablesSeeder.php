@@ -12,9 +12,11 @@ class PermissionsTablesSeeder extends Seeder
     public function run()
     {
       // Add default role
-      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB::table('roles')->truncate();
-      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
       DB::table('roles')->insert([
         'name' => 'user',
         'display_name' => 'Joueur',
@@ -31,9 +33,11 @@ class PermissionsTablesSeeder extends Seeder
       ]);
 
       // add permissions
-      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB::table('permissions')->truncate();
-      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
       DB::table('permissions')->insert([
         'name' => 'user-send-confirmation-email',
         'display_name' => 'Renvoie de l\'email de confirmation',
@@ -212,9 +216,11 @@ class PermissionsTablesSeeder extends Seeder
 
       // link permissiosn
 
-      DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+     if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
       DB::table('permission_role')->truncate();
-      DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+      if (DB::getConfig()['driver'] === 'mysql')
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
       DB::table('permission_role')->insert([
         'permission_id' => 1,
         'role_id' => 1
@@ -299,7 +305,7 @@ class PermissionsTablesSeeder extends Seeder
         'permission_id' => 22,
         'role_id' => 1
       ]);
-      DB::table('permission_role')->insert([
+      /*DB::table('permission_role')->insert([
         'permission_id' => 23,
         'role_id' => 1
       ]);
@@ -310,7 +316,7 @@ class PermissionsTablesSeeder extends Seeder
       DB::table('permission_role')->insert([
         'permission_id' => 25,
         'role_id' => 1
-      ]);
+      ]);*/
       DB::table('permission_role')->insert([
         'permission_id' => 1,
         'role_id' => 2

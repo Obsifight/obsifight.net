@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 use App\Contest;
 use App\ContestsComment;
 use App\ContestsHistory;
-use Validator;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
-use App\User;
 
 use Carbon\Carbon;
 

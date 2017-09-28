@@ -24,7 +24,7 @@
       </div>
     @endrole
 
-    @if(!$confirmedAccount && Auth::user()->can('user-user-send-confirmation-email'))
+    @if(!$confirmedAccount && Auth::user()->can('user-send-confirmation-email'))
       <div class="ui warning message">
         <i class="close icon"></i>
         <div class="header">

@@ -44,7 +44,7 @@ function initAjaxForms() {
       success: function (response) {
         if (response.status) {
           if (form.attr('data-ajax-custom-callback'))
-            window[form.attr('data-ajax-custom-callback')](data, response)
+            window[form.attr('data-ajax-custom-callback')](data, response, form)
           displaySuccess(form, response.success)
           if (response.redirect)
             window.location = response.redirect

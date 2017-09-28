@@ -148,3 +148,16 @@ Route::get('/shop/rank/{rankslug}', 'ShopController@index');
 Route::get('/shop/item/{itemid}', 'ShopController@index');
 Route::get('/shop/category/{categoryid}', 'ShopController@index');
 Route::post('/shop/buy', 'ShopController@buy')->middleware('auth')->middleware('permission:shop-buy');
+
+/*
+===========
+  SANCTIONS
+===========
+*/
+Route::get('/sanctions', 'ContestController@index');
+Route::get('/sanctions/contest', 'ContestController@index');
+Route::post('/sanctions/contest', 'ContestController@add')->middleware('auth')->middleware('permission:sanction-contest');
+Route::get('/sanctions/contest/{id}', 'ContestController@view');
+Route::delete('/sanctions/contest/{id}', 'ContestController@close')->middleware('auth')->middleware('permission:sanction-contest-close');
+Route::put('/sanctions/contest/{id}', 'ContestController@edit')->middleware('auth')->middleware('permission:sanction-contest-edit');
+Route::post('/sanctions/contest/{id}/comment', 'ContestController@addComment')->middleware('auth')->middleware('permission:sanction-contest-comment');

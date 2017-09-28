@@ -117,9 +117,6 @@ class UserController extends Controller
     // Log user
     Auth::loginUsingId($userId, ($rememberMe ? true : false));
 
-    // Log into xenforo
-    //\XF::loginAsUser($userId);
-
     return response()->json([
       'status' => true,
       'success' => __('user.login.success')
@@ -193,7 +190,17 @@ class UserController extends Controller
     $user->password = User::hash($request->input('password'), $request->input('username'));
     $user->ip = $request->ip();
     $user->save();
-    $user->roles()->attach(1); // attach default role
+    $user->roles()->attach(env('APP_DEFAULT_ROLE', 1)); // attach default role
+
+    // Add to Xenforo
+    if (env('APP_FORUM_ENABLED', false)) {
+      $xenuser = new \Urb\XenforoBridge\User\User();
+      $xenuser->addUser(
+        $request->input('email'),
+        $request->input('username'),
+        $request->input('password')
+      );
+    }
 
     // generate confirmation token
     $token = UsersToken::generate('EMAIL', $user->id);

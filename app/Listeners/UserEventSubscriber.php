@@ -15,6 +15,10 @@ class UserEventSubscriber
      * Handle user login events.
      */
     public function onUserLogin($event) {
+      // Log into xenforo
+      if (env('APP_FORUM_ENABLED', false))
+        \XF::loginAsUser($event->user->id, $event->remember);
+
       // Log this connection
       $log = new \App\UsersConnectionLog();
       $log->user_id = $event->user->id;

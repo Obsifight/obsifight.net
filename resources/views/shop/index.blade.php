@@ -94,7 +94,7 @@
               </tr>
             </thead>
             <tbody>
-              @for ($i=0; $i < count($ranks[0]->advantages); $i++)
+              @for ($i=0; $i < (isset($ranks[0]) ? count($ranks[0]->advantages) : 0); $i++)
                 <tr class="center aligned">
                   @foreach ($ranks as $rank)
                     <td>

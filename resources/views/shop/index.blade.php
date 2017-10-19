@@ -3,7 +3,7 @@
 @section('title', __('shop.title'))
 
 @section('content')
-  <div class="white-block">
+  <div class="white-block rotate mobile-hide">
     <div class="ui container page-content">
 
       <div class="text-center">
@@ -185,7 +185,7 @@
 
 <div class="ui basic modal" id="rankInfosModal">
   <div class="ui stackable grid">
-    <div class="ui four wide column" id="rankTableContent">
+    <div class="ui four wide column mobile-hide" id="rankTableContent">
     </div>
     <div class="ui twelve wide column">
       <div class="ui card" style="width:100%">

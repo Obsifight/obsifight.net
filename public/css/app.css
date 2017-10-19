@@ -164,6 +164,7 @@ ul li a:hover {
 }
 .ui.menu.navbar.sidebar {
   overflow: visible!important;
+  max-width: 70%;
 }
 .ui.menu.navbar.sidebar .logo {
   text-align: center;
@@ -251,10 +252,37 @@ ul li a:hover {
   color: #fff;
 }
 
+.white-block.rotate:before {
+  content: '';
+  background-color: #e2e2e2;
+  height: 75px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -ms-transform: rotate(-3deg); /* IE 9 */
+  -webkit-transform: rotate(-3deg); /* Chrome, Safari, Opera */
+  transform: rotate(-3deg);
+  transform-origin: top left;
+
+  width: 103%;
+  padding-bottom: 7.1%;
+  right: -1.5%;
+  z-index: 1;
+}
+.white-block.rotate {
+  position: relative;
+}
+.white-block.rotate .page-content {
+  position: relative;
+  z-index: 2;
+}
+
 .white-block {
   background: #e2e2e2;
   padding-top: 20px;
   padding-bottom: 30px;
+  margin-top: -1.8%;
 }
 .white-block .header {
   color: #ec9422;

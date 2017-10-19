@@ -96,9 +96,29 @@ ul li a:hover {
   background-repeat: no-repeat;
   background-size: cover;
 
-  height: 350px;
+  height: 550px;
 
-  border-bottom: 3px solid #ec9422;
+  position: relative;
+  overflow: hidden;
+}
+
+.site-header:after {
+  content: '';
+  background-color: #fff;
+  border-top: 3px solid #ec9422;
+  height: 75px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  -ms-transform: rotate(-3deg); /* IE 9 */
+  -webkit-transform: rotate(-3deg); /* Chrome, Safari, Opera */
+  transform: rotate(-3deg);
+  transform-origin: bottom right;
+
+  width: 103%;
+  padding-bottom: 7.1%;
+  left: -1.5%;
 }
 
 .site-header h2.ui.header {
@@ -123,19 +143,17 @@ ul li a:hover {
 .ui.menu.navbar {
   margin-bottom: 10px;
   border-radius: 0;
-
-  /*background: #333;*/
 }
 .ui.menu.navbar .logo {
-  margin-left: 20px;
-  margin-right: 10px;
+  margin-left: 35px;
+  margin-right: 25px;
+  margin-top: 15px;
 }
 .ui.menu.navbar .item {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 35px;
+  padding-bottom: 35px;
 
-  /*color: #DDD;
-  text-transform: uppercase;*/
+  text-transform: uppercase;
 }
 .ui.menu.navbar .item:before {
   background: transparent;

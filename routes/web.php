@@ -149,6 +149,11 @@ Route::get('/shop/item/{itemid}', 'ShopController@index');
 Route::get('/shop/category/{categoryid}', 'ShopController@index');
 Route::post('/shop/buy', 'ShopController@buy')->middleware('auth')->middleware('permission:shop-buy');
 
+Route::get('/shop/credit/add/paypal/notification', 'CreditController@paypalNotification');
+Route::get('/shop/credit/add/dedipass/notification', 'CreditController@dedipassNotification');
+Route::get('/shop/credit/add/hipay/notification', 'CreditController@hipayNotification');
+Route::get('/shop/credit/add/paysafecard/notification', 'CreditController@paysafecardNotification');
+
 /*
 ===========
   SANCTIONS

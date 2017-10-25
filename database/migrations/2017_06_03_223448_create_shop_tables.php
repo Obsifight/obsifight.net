@@ -80,6 +80,38 @@ class CreateShopTables extends Migration
         $table->float('reduction');
         $table->timestamps();
       });
+      Schema::create('shop_credit_histories', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id')->unsigned();
+        $table->foreign('user_id')->references('id')->on('users');
+        $table->float('money');
+        $table->float('amount');
+        $table->string('transaction_type', 10);
+        $table->integer('transaction_id')->unsigned();
+        $table->timestamps();
+      });
+      Schema::create('shop_credit_dedipass_histories', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('history_id')->unsigned()->nullable()->default(NULL);
+        $table->foreign('history_id')->references('id')->on('shop_credit_histories');
+        $table->float('payout');
+        $table->string('code');
+        $table->string('rate');
+        $table->timestamps();
+      });
+      Schema::create('shop_credit_paypal_histories', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('history_id')->unsigned()->nullable()->default(NULL);
+        $table->foreign('history_id')->references('id')->on('shop_credit_histories');
+        $table->float('payment_amount');
+        $table->float('payment_tax');
+        $table->string('payment_id');
+        $table->string('buyer_email');
+        $table->string('status', 10);
+        $table->dateTime('payment_date');
+        $table->dateTime('case_date')->nullable()->default(NULL);
+        $table->timestamps();
+      });
     }
 
     /**

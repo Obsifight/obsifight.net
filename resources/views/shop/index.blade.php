@@ -475,6 +475,7 @@
       padding-top: 5px;
       padding-bottom: 5px;
       margin-bottom: 50px;
+      margin-top: 5px;
     }
     .colored-block.divider-shop .page-content {
       text-align: center;

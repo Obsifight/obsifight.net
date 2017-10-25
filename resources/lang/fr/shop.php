@@ -31,5 +31,7 @@ return [
   'buy.error.ability.max' => "Vous avez déjà atteint le nombre d'achat maximal pour cet article",
   'buy.error.server.connected' => 'Tu dois être connecté sur le serveur pour procéder à cet achat !',
   'buy.error.server.online' => 'Le serveur doit être allumé pour procéder à cet achat !',
-  'buy.success' => "Tu as bien procédé à l'achat de <b>\":item_name\"</b> pour :price points ! Bon jeu !"
+  'buy.success' => "Tu as bien procédé à l'achat de <b>\":item_name\"</b> pour :price points ! Bon jeu !",
+
+  'shop.credit.add.success' => 'Vous avez bien été crédité de :money points !'
 ];

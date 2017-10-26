@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Role;
 use App\ShopCreditHistory;
 use App\User;
 use App\ShopCreditDedipassHistory;
@@ -9,7 +10,6 @@ use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Srmklive\PayPal\Services\ExpressCheckout;
 
 class CreditController extends Controller
 {
@@ -17,10 +17,10 @@ class CreditController extends Controller
 
     private $offers = [
       'PAYPAL' => [
-          950 => 10.00,
-          2300 => 25.00,
-          4800 => 50.00,
-          9600 => 100.00
+          950 => 10.0,
+          2300 => 25.0,
+          4800 => 50.0,
+          9600 => 100.0
       ]
     ];
 
@@ -69,15 +69,15 @@ class CreditController extends Controller
     {
         $this->request = $request;
         // Check request
-        $paypal = new ExpressCheckout;
+        $paypal = resolve('\Srmklive\PayPal\Services\ExpressCheckout');
         $request->merge(['cmd' => '_notify-validate']);
         $response = (string)$paypal->verifyIPN($request->all());
         if ($response !== 'VERIFIED')
             abort(403);
 
         // Find user
-        $user = User::where('id', $request->input('custom'))->findOrFail();
-        if (!$user->can('shop-credit-add'))
+        $user = User::where('id', $request->input('custom'))->firstOrFail();
+        if (!$user->can('shop-credit-add') && strtoupper($request->input('payment_status')) !== 'CANCELED_REVERSAL')
             abort(403);
         // Check currency
         if ($request->input('mc_currency') !== 'EUR')
@@ -96,11 +96,12 @@ class CreditController extends Controller
                 if (is_object($transaction) && $transaction->status === 'COMPLETED')
                     abort(403);
                 // Find offer
-                if (!in_array($request->input('mc_gross'), $this->offers['PAYPAL']))
+                $amount = floatval($request->input('mc_gross'));
+                if (!in_array($amount, $this->offers['PAYPAL']))
                     abort(404);
 
                 // Add transaction
-                $transaction = new ShopCreditDedipassHistory();
+                $transaction = new ShopCreditPaypalHistory();
                 $transaction->payment_amount = $request->input('mc_gross');
                 $transaction->payment_tax = $request->input('mc_fee');
                 $transaction->payment_id = $request->input('txn_id');
@@ -111,8 +112,8 @@ class CreditController extends Controller
 
                 $this->save(
                     $user,
-                    $this->offers['PAYPAL'][$request->input('mc_gross')],
-                    $request->input('mc_gross'),
+                    array_search($amount, $this->offers['PAYPAL']),
+                    $amount,
                     'PAYPAL',
                     $transaction
                 );
@@ -132,8 +133,8 @@ class CreditController extends Controller
                     )
                 ]);
                 // Edit rank on website
-                $user->roles()->attach(2); // restricted
-                $user->roles()->detach(1);
+                $user->attachRole(Role::where('name', 'restricted')->first());
+                $user->detachRole(Role::where('name', 'user')->first());
 
                 // Edit transaction
                 $transaction->status = strtoupper($request->input('payment_status'));
@@ -155,8 +156,8 @@ class CreditController extends Controller
                     ));
                 }
                 // Edit rank on website
-                $user->roles()->attach(1);
-                $user->roles()->detach(2);
+                $user->attachRole(Role::where('name', 'user')->first());
+                $user->detachRole(Role::where('name', 'restricted')->first());
 
                 // Edit transaction
                 $transaction->status = 'CANCELED_REVERSAL';

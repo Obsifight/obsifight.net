@@ -57,5 +57,17 @@ class TestingShopCreditTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+
+      DB::table('shop_credit_paypal_histories')->truncate();
+      DB::table('shop_credit_paypal_histories')->insert([
+        'payment_amount' => 10,
+        'payment_tax' => 0.8,
+        'payment_id' => '47374DHD',
+        'buyer_email' => 'paypal@buyer.com',
+        'payment_date' => date('Y-m-d H:i:s'),
+        'status' => 'COMPLETED',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
     }
 }

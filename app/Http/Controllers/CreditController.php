@@ -9,6 +9,7 @@ use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Srmklive\PayPal\Services\ExpressCheckout;
 
 class CreditController extends Controller
 {
@@ -39,8 +40,9 @@ class CreditController extends Controller
 
         // Check if payment is valid
         $endpoint = "http://api.dedipass.com/v1/pay/?key=" . env('DEDIPASS_PUBLIC_KEY') . "&rate={$request->input('rate')}&code={$request->input('code')}";
-        $dedipassResult = @file_get_contents($endpoint);
-        $dedipassResult = @json_decode($dedipassResult);
+        $client = resolve('\GuzzleHttp\Client');
+        $dedipassResult = $client->request('GET', $endpoint);
+        $dedipassResult = @json_decode($dedipassResult->getBody());
         if (!$dedipassResult)
             abort(403);
         if ($dedipassResult->status !== 'success')
@@ -60,47 +62,23 @@ class CreditController extends Controller
         $transaction->save();
 
         $this->save(Auth::user(), $money, $money / 80, 'DEDIPASS', $transaction);
-        redirect('/user');
+        return redirect('/user');
     }
 
     public function paypalNotification(Request $request)
     {
         $this->request = $request;
         // Check request
-        $fields = $request->all();
-        array_walk($fields, function ($value, $key) { return "$key=$value"; });
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_URL => 'https://www.paypal.com/cgi-bin/webscr',
-            CURLOPT_ENCODING => 'gzip',
-            CURLOPT_BINARYTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => 'cmd=_notify-validate&' . implode('&', $fields),
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_0,
-            CURLOPT_FORBID_REUSE => true,
-            CURLOPT_FRESH_CONNECT => true,
-            CURLOPT_CONNECTTIMEOUT => 30,
-            CURLOPT_TIMEOUT => 60,
-            CURLINFO_HEADER_OUT => true,
-            CURLOPT_HTTPHEADER => [
-                'Connection: close',
-                'Expect: ',
-            ]
-        ]);
-        $result = curl_exec($curl);
-        $httpCode = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-        if ($httpCode !== 200)
-            abort(403);
-        if (!preg_match('~^(VERIFIED)$~i', trim($result)))
+        $paypal = new ExpressCheckout;
+        $request->merge(['cmd' => '_notify-validate']);
+        $response = (string)$paypal->verifyIPN($request->all());
+        if ($response !== 'VERIFIED')
             abort(403);
 
         // Find user
         $user = User::where('id', $request->input('custom'))->findOrFail();
+        if (!$user->can('shop-credit-add'))
+            abort(403);
         // Check currency
         if ($request->input('mc_currency') !== 'EUR')
             abort(403);
@@ -200,7 +178,7 @@ class CreditController extends Controller
         // Save into history
         $history = new ShopCreditHistory();
         $history->transaction_type = $type;
-        $history->user = $user->id;
+        $history->user_id = $user->id;
         $history->money = $money;
         $history->amount = $amount;
         $history->transaction_id = $transaction->id;
@@ -211,12 +189,18 @@ class CreditController extends Controller
         $transaction->save();
 
         // Add money to user
-        $currentUser = User::find(Auth::user()->id);
+        $currentUser = User::find($user->id);
         $currentUser->money = ($currentUser->money + floatval($money));
         $currentUser->save();
 
         // Notify
-        $this->request->session()->flash('flash.success', __('shop.credit.add.success', ['money' => $money]));
+        $notification = new \App\Notification();
+        $notification->user_id = $user->id;
+        $notification->type = 'success';
+        $notification->key = 'shop.credit.add.success';
+        $notification->vars = ['money' => $money];
+        $notification->auto_seen = 1;
+        $notification->save();
     }
 
 }

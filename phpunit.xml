@@ -32,5 +32,6 @@
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value="database.sqlite"/>
         <env name="SKINS_UPLOAD_CONFIG" value="public"/>
+        <env name="DEDIPASS_PUBLIC_KEY" value="fake"/>
     </php>
 </phpunit>

@@ -185,7 +185,8 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Urb\XenforoBridge\XenforoBridgeServiceProvider::class
+        Urb\XenforoBridge\XenforoBridgeServiceProvider::class,
+        Srmklive\PayPal\Providers\PayPalServiceProvider::class
     ],
 
     /*
@@ -238,7 +239,8 @@ return [
         'Uuid' => Webpatser\Uuid\Uuid::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
-        'XF' => Urb\XenforoBridge\Facades\XenforoBridge::class
+        'XF' => Urb\XenforoBridge\Facades\XenforoBridge::class,
+        'PayPal' => Srmklive\PayPal\Facades\PayPal::class
     ],
 
 ];

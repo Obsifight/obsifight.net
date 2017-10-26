@@ -128,5 +128,8 @@ class CreateShopTables extends Migration
       Schema::dropIfExists('shop_items_purchase_histories');
       Schema::dropIfExists('shop_sales');
       Schema::dropIfExists('shop_sale_histories');
+      Schema::dropIfExists('shop_credit_histories');
+      Schema::dropIfExists('shop_credit_dedipass_histories');
+      Schema::dropIfExists('shop_credit_paypal_histories');
     }
 }

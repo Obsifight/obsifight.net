@@ -69,5 +69,13 @@ class TestingShopCreditTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+
+      DB::table('shop_credit_hipay_histories')->truncate();
+      DB::table('shop_credit_hipay_histories')->insert([
+        'payment_amount' => 10.0,
+        'payment_id' => '58DFDA4488963163',
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
     }
 }

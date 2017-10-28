@@ -4,8 +4,10 @@ namespace Tests\Feature;
 use App\Notification;
 use App\Role;
 use App\ShopCreditDedipassHistory;
+use App\ShopCreditHipayHistory;
 use App\ShopCreditHistory;
 use App\ShopCreditPaypalHistory;
+use Illuminate\Support\Facades\App;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -18,6 +20,48 @@ class CreditControllerTest extends TestCase
         parent::setUp();
         \Artisan::call('db:seed', ['--class' => 'PermissionsTablesSeeder']);
         \Artisan::call('db:seed', ['--class' => 'TestingShopCreditTablesSeeder']);
+    }
+
+    private function generateHipayXML(
+        $amount = '10.00',
+        $currency = 'EUR',
+        $userId = 1,
+        $key = 'random_key',
+        $operation = 'capture',
+        $status = 'ok',
+        $id = '58DFDA4488963162'
+    )
+    {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        <mapi>
+            <mapiversion>1.0</mapiversion>
+            <md5content>32b95f8dfd3b4ee5a5b10859209b50c2</md5content>
+            <result>
+                <operation>$operation</operation>
+                <status>$status</status>
+                <date>2017-04-01</date>
+                <time>16:50:39 UTC+0000</time>
+                <origAmount>$amount</origAmount>
+                <origCurrency>$currency</origCurrency>
+                <idForMerchant>REF1</idForMerchant>
+                <emailClient>alexis@marquis.fr.cr</emailClient>
+                <idClient>237548</idClient>
+                <cardCountry>FR</cardCountry>
+                <ipCountry>FR</ipCountry>
+                <merchantDatas>
+                    <_aKey_user>$userId</_aKey_user>
+                    <_aKey_key>$key</_aKey_key>
+                </merchantDatas>
+                <transid>$id</transid>
+                <is3ds>No</is3ds>
+                <paymentMethod>CB</paymentMethod>
+                <refProduct0>REF1</refProduct0>
+                <customerCountry>FR</customerCountry>
+                <returnCode/>
+                <returnDescriptionShort/>
+                <returnDescriptionLong/>
+            </result>
+        </mapi>";
     }
 
     public function testDedipassNotificationNotLogged()
@@ -481,5 +525,119 @@ class CreditControllerTest extends TestCase
 
         // check transaction
         $this->assertEquals(1,ShopCreditPaypalHistory::where('payment_id', '47374DHD')->where('status', 'CANCELED_REVERSAL')->count());
+    }
+
+    public function testHipayNotificationInvalidRequest()
+    {
+        $response = $this->post('/shop/credit/add/hipay/notification', []);
+        $response->assertStatus(400);
+
+        $response = $this->post('/shop/credit/add/hipay/notification', ['xml' => 'invalid']);
+        $response->assertStatus(500);
+
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => '<?xml version="1.0" encoding="UTF-8"?><mapi><mapiversion>1.0</mapiversion><md5content></md5content></mapi>']);
+        $response->assertStatus(400);
+
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                10,
+                'EUR',
+                1,
+                'invalid_key'
+            )
+        ]);
+        $response->assertStatus(403);
+
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                10,
+                'EUR',
+                1,
+                'random_key',
+                'invalid_operation'
+            )
+        ]);
+        $response->assertStatus(403);
+
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                10,
+                'EUR',
+                1,
+                'random_key',
+                'capture',
+                'ko'
+            )
+        ]);
+        $response->assertStatus(403);
+
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                10,
+                'USD'
+            )
+        ]);
+        $response->assertStatus(403);
+    }
+
+    public function testHipayNotificationWithUnknownAmount()
+    {
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                '12.00'
+            )
+        ]);
+        $response->assertStatus(404);
+    }
+
+    public function testHipayNotificationWithUnknownUser()
+    {
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                '10.00',
+                'EUR',
+                10
+            )
+        ]);
+        $response->assertStatus(404);
+    }
+
+    public function testHipayNotificationWithAlreadyHandledPayment()
+    {
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML(
+                '10.00',
+                'EUR',
+                1,
+                'random_key',
+                'capture',
+                'ok',
+                '58DFDA4488963163'
+            )
+        ]);
+        $response->assertStatus(403);
+    }
+
+    public function testHipayNotification()
+    {
+        $user = \App\User::find(1);
+        $response = $this->post('/shop/credit/add/hipay/notification', [
+            'xml' => $this->generateHipayXML()
+        ]);
+        $response->assertStatus(200);
+
+        // Check history
+        $transaction = ShopCreditHipayHistory::where('payment_amount', 10.0)->where('payment_id', '58DFDA4488963162');
+        $history = ShopCreditHistory::where('transaction_type', 'HIPAY')->where('user_id', 1)->where('money', 950.0)->where('amount', 10.0)->where('transaction_id', $transaction->first()->id);
+        $this->assertEquals(1, $transaction->count());
+        $this->assertEquals(1, $history->count());
+        $this->assertEquals($history->first()->id, $transaction->first()->history_id);
+
+        // Check user money
+        $this->assertEquals($user->money + 950, \App\User::find(1)->money);
+
+        // Check notification
+        $this->assertEquals(1, Notification::where('user_id', 1)->where('type', 'success')->where('key', 'shop.credit.add.success')->where('vars', json_encode(['money' => 950]))->where('auto_seen', 1)->count());
     }
 }

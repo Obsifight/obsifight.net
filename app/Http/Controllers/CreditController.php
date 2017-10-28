@@ -21,12 +21,33 @@ class CreditController extends Controller
           2300 => 25.0,
           4800 => 50.0,
           9600 => 100.0
+      ],
+      'HIPAY' => [
+          950 => 10.0,
+          2300 => 25.0,
+          4800 => 50.0,
+          9600 => 100.0
       ]
     ];
 
     public function add(Request $request)
     {
 
+    }
+
+    public function paymentCancel()
+    {
+        return redirect('/shop/credit/add')->with('flash.error', __('shop.credit.add.cancel'));
+    }
+
+    public function paymentSuccess()
+    {
+        return redirect('/shop/credit/add');
+    }
+
+    public function paymentError()
+    {
+        return redirect('/shop/credit/add')->with('flash.error', __('shop.credit.add.error'));
     }
 
     public function dedipassNotification(Request $request)
@@ -172,6 +193,47 @@ class CreditController extends Controller
     public function hipayNotification(Request $request)
     {
         $this->request = $request;
+        // Check request
+        if (!$request->has('xml'))
+            abort(400);
+        $payment = new \SimpleXMLElement($request->input('xml'));
+        if (!is_object($payment) || !isset($payment->result) || empty($payment->result))
+            abort(400);
+        $payment = $payment->result[0];
+
+        // Check secret key
+        if ((string)$payment->merchantDatas->_aKey_key !== env('HIPAY_SECRET_KEY'))
+            abort(403);
+
+        // Check payment
+        if ((string)$payment->operation != 'capture' || (string)$payment->status != 'ok')
+            abort(403);
+        if ((string)$payment->origCurrency !== 'EUR')
+            abort(403);
+        $amount = floatval((float)$payment->origAmount);
+        if (!in_array($amount, $this->offers['HIPAY']))
+            abort(404);
+
+        // Check user
+        $user = User::findOrFail((int)$payment->merchantDatas->_aKey_user);
+
+        // Check if not already handled
+        if (ShopCreditHipayHistory::where('payment_id', (string)$payment->transid)->count() > 0)
+            abort(403);
+
+        // Add transaction
+        $transaction = new ShopCreditHipayHistory();
+        $transaction->payment_id = (string)$payment->transid;
+        $transaction->payment_amount = $amount;
+        $transaction->save();
+
+        $this->save(
+            $user,
+            array_search($amount, $this->offers['HIPAY']),
+            $amount,
+            'HIPAY',
+            $transaction
+        );
     }
 
     private function save($user, $money, $amount, $type, $transaction)

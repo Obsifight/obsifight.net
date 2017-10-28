@@ -34,5 +34,6 @@
         <env name="SKINS_UPLOAD_CONFIG" value="public"/>
         <env name="DEDIPASS_PUBLIC_KEY" value="fake"/>
         <env name="PAYPAL_EMAIL" value="paypal@obsifight.net"/>
+        <env name="HIPAY_SECRET_KEY" value="random_key"/>
     </php>
 </phpunit>

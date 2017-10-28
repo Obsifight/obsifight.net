@@ -66,7 +66,7 @@ class GoogleController extends Controller
     $channel->link_ip = $request->ip();
     $channel->save();
 
-    // SEND COMMANDS TO SERVER
+    // TODO: SEND COMMANDS TO SERVER
 
     // REDIRECT WITH SUCCESS
     return redirect('/user')->with('flash.success', __('user.profile.socials.youtube.link.success'));

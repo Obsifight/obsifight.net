@@ -95,7 +95,6 @@ class UserController extends Controller
       return abort(403);
 
     // Valid secret
-    require __DIR__ . '/../../../vendor/PHPGangsta/GoogleAuthenticator.php';
     $ga = new \PHPGangsta_GoogleAuthenticator();
 
     // check code

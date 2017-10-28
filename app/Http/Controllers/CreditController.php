@@ -10,6 +10,10 @@ use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SebastianWalker\Paysafecard\Amount;
+use SebastianWalker\Paysafecard\Client;
+use SebastianWalker\Paysafecard\Payment;
+use SebastianWalker\Paysafecard\Urls;
 
 class CreditController extends Controller
 {
@@ -234,6 +238,94 @@ class CreditController extends Controller
             'HIPAY',
             $transaction
         );
+    }
+
+    public function paysafecardInit(Request $request)
+    {
+        // Check request
+        if (!$request->has('amount'))
+            abort(400);
+
+        // Setup payment
+        $client = new Client(env('PAYSAFECARD_API_KEY'));
+        $client->setUrls(new Urls(
+            url("/shop/credit/add/paysafecard/success")->full(),
+            url("/shop/credit/add/error")->full(),
+            url("/shop/credit/add/paysafecard/notification")->full()
+        ));
+        $client->setTestingMode((env('APP_ENV') != 'production'));
+
+        // Initiate the payment
+        $payment = new Payment(
+            new Amount(floatval($request->input('amount')), "EUR"),
+            Auth::user()->id
+        );
+        $payment->create($client);
+
+        // Redirect to Paysafecard payment page
+        return response()->json([
+           'status' => true,
+           'success' => '',
+           'redirect' => $payment->getAuthUrl()
+        ]);
+    }
+
+    public function paysafecardNotification(Request $request)
+    {
+        // Check request
+        if (!$request->has('mtid'))
+            abort(400);
+        // Try to capture payment
+        $client = new Client(env('PAYSAFECARD_API_KEY'));
+        $client->setTestingMode((env('APP_ENV') != 'production'));
+
+        // Check if not already handled
+        if (ShopCreditPaysafecardHistory::where('payment_id', $request->input('mtid'))->count() > 0)
+            abort(403);
+
+        // Find the payment
+        $payment = Payment::find($request->input('mtid'), $client);
+        // Check if the payment was authorized
+        if (!$payment->isAuthorized())
+            abort(403);
+        // capture
+        $payment->capture($client);
+
+        // Check payment
+        $amount = $payment->getAmount();
+        if ($amount->getCurrency() !== 'EUR')
+            abort(403);
+
+        // Find user
+        $user = User::findOrFail($payment->getCustomerId());
+
+        // Add transaction
+        $transaction = new ShopCreditPaysafecardHistory;
+        $transaction->payment_amount = $amount->getAmount();
+        $transaction->payment_id = $payment->getId();
+        $transaction->save();
+
+        // Add sold
+        $this->save(
+            $user,
+            ((float)$amount->getAmount() * 80),
+            (float)$amount->getAmount(),
+            'PAYSAFECARD',
+            $transaction
+        );
+    }
+
+    public function paysafecardSuccess(Request $request)
+    {
+        // Get ID
+        if (!$request->has('payment_id'))
+            abort(400);
+
+        // Request notification to capture it
+        (new \GuzzleHttp\Client())
+            ->post('/shop/credit/add/paysafecard/notification', ['mtid' => $request->input('payment_id')]);
+
+        return redirect('/shop/credit/add/success');
     }
 
     private function save($user, $money, $amount, $type, $transaction)

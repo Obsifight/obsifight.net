@@ -120,6 +120,14 @@ class CreateShopTables extends Migration
         $table->string('payment_id');
         $table->timestamps();
       });
+      Schema::create('shop_credit_paysafecard_histories', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('history_id')->unsigned()->nullable()->default(NULL);
+        $table->foreign('history_id')->references('id')->on('shop_credit_histories');
+        $table->float('payment_amount');
+        $table->string('payment_id');
+        $table->timestamps();
+      });
     }
 
     /**

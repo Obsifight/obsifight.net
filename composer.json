@@ -43,6 +43,7 @@
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "phpgangsta/googleauthenticator": "dev-master",
+        "sebastianwalker/paysafecard-php-api": "^1.0",
         "srmklive/paypal": "~1.0",
         "urb/xenforobridge": "1.0.1",
         "waavi/recaptcha": "1.0.x",

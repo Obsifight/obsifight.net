@@ -153,11 +153,13 @@ Route::get('/shop/credit/add', 'CreditController@add')->middleware('auth')->midd
 Route::get('/shop/credit/add/success', 'CreditController@paymentSuccess')->middleware('auth')->middleware('permission:shop-credit-add');
 Route::get('/shop/credit/add/error', 'CreditController@paymentError')->middleware('auth')->middleware('permission:shop-credit-add');
 Route::get('/shop/credit/add/cancel', 'CreditController@paymentCancel')->middleware('auth')->middleware('permission:shop-credit-add');
+Route::get('/shop/credit/add/paysafecard/success', 'CreditController@paymentSuccess')->middleware('auth')->middleware('permission:shop-credit-add');
 
 Route::post('/shop/credit/add/paypal/notification', 'CreditController@paypalNotification');
 Route::post('/shop/credit/add/dedipass/notification', 'CreditController@dedipassNotification')->middleware('auth')->middleware('permission:shop-credit-add');
 Route::post('/shop/credit/add/hipay/notification', 'CreditController@hipayNotification');
 Route::post('/shop/credit/add/paysafecard/notification', 'CreditController@paysafecardNotification');
+Route::post('/shop/credit/add/paysafecard/init', 'CreditController@paysafecardInit')->middleware('auth')->middleware('permission:shop-credit-add');
 
 /*
 ===========

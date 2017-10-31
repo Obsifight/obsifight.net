@@ -7,6 +7,7 @@ use App\ShopCreditDedipassHistory;
 use App\ShopCreditHipayHistory;
 use App\ShopCreditHistory;
 use App\ShopCreditPaypalHistory;
+use App\ShopCreditPaysafecardHistory;
 use Illuminate\Support\Facades\App;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -639,5 +640,283 @@ class CreditControllerTest extends TestCase
 
         // Check notification
         $this->assertEquals(1, Notification::where('user_id', 1)->where('type', 'success')->where('key', 'shop.credit.add.success')->where('vars', json_encode(['money' => 950]))->where('auto_seen', 1)->count());
+    }
+
+    public function testPaysafecardInitNotLoggedAndWithoutPermission()
+    {
+        $response = $this->post('/shop/credit/add/paysafecard/init');
+        $response->assertStatus(302);
+
+        $user = \App\User::find(2);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/paysafecard/init');
+        $response->assertStatus(403);
+    }
+
+    public function testPaysafecardInitWithoutAmount()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/paysafecard/init');
+        $response->assertStatus(400);
+    }
+
+    public function testPaysafecardInit()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $urlObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Urls::class)
+            ->getMock();
+        $urlObject->expects($this->once())
+            ->method('setSuccessUrl')
+            ->with(url("/shop/credit/add/paysafecard/success"))
+            ->willReturn($urlObject);
+        $urlObject->expects($this->once())
+            ->method('setFailureUrl')
+            ->with(url("/shop/credit/add/error"))
+            ->willReturn($urlObject);
+        $urlObject->expects($this->once())
+            ->method('setNotificationUrl')
+            ->with(url("/shop/credit/add/paysafecard/notification"))
+            ->willReturn($urlObject);
+        $this->app->instance('\SebastianWalker\Paysafecard\Urls', $urlObject);
+
+        $amountObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Amount::class)
+            ->getMock();
+        $amountObject->expects($this->once())
+            ->method('setAmount')
+            ->with(10.0)
+            ->willReturn($amountObject);
+        $amountObject->expects($this->once())
+            ->method('setCurrency')
+            ->with('EUR')
+            ->willReturn($amountObject);
+        $this->app->instance('\SebastianWalker\Paysafecard\Amount', $amountObject);
+
+        $paysafecardClient = $this->getMockBuilder(\SebastianWalker\Paysafecard\Client::class)
+            ->getMock();
+        $paysafecardClient->expects($this->once())
+            ->method('setApiKey')
+            ->with('random_key')
+            ->willReturn($paysafecardClient);
+        $paysafecardClient->expects($this->once())
+            ->method('setUrls')
+            ->with($urlObject)
+            ->willReturn($paysafecardClient);
+        $paysafecardClient->expects($this->once())
+            ->method('setTestingMode')
+            ->with(true)
+            ->willReturn($paysafecardClient);
+        $this->app->instance('\SebastianWalker\Paysafecard\Client', $paysafecardClient);
+
+        $paymentObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Payment::class)
+            ->getMock();
+        $paymentObject->expects($this->once())
+            ->method('setAmount')
+            ->with($amountObject)
+            ->willReturn($paymentObject);
+        $paymentObject->expects($this->once())
+            ->method('setCustomerId')
+            ->with(1)
+            ->willReturn($paymentObject);
+        $paymentObject->expects($this->once())
+            ->method('create')
+            ->with($paysafecardClient)
+            ->willReturn($paymentObject);
+        $paymentObject->expects($this->once())
+            ->method('getAuthUrl')
+            ->willReturn('/redirect/to/paysafecard');
+        $this->app->instance('\SebastianWalker\Paysafecard\Payment', $paymentObject);
+
+        $response = $this->post('/shop/credit/add/paysafecard/init', ['amount' => '10.00']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => true,
+            'success' => '',
+            'redirect' => '/redirect/to/paysafecard'
+        ]);
+    }
+
+    public function testPaysafecardNotificationInvalidRequest()
+    {
+        $amountObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Amount::class)
+            ->getMock();
+        $amountObject->expects($this->at(0))
+            ->method('getCurrency')
+            ->willReturn('USD');
+        $amountObject->expects($this->at(1))
+            ->method('getCurrency')
+            ->willReturn('EUR');
+        $amountObject->expects($this->at(2))
+            ->method('getCurrency')
+            ->willReturn('EUR');
+
+        $paysafecardClient = $this->getMockBuilder(\SebastianWalker\Paysafecard\Client::class)
+            ->getMock();
+        $paysafecardClient->expects($this->exactly(5))
+            ->method('setApiKey')
+            ->with('random_key')
+            ->willReturn($paysafecardClient);
+        $paysafecardClient->expects($this->exactly(5))
+            ->method('setTestingMode')
+            ->with(true)
+            ->willReturn($paysafecardClient);
+        $this->app->instance('\SebastianWalker\Paysafecard\Client', $paysafecardClient);
+
+        $paymentObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Payment::class)
+            ->getMock();
+        $paymentObject->expects($this->at(0))
+            ->method('isAuthorized')
+            ->willReturn(false);
+        $paymentObject->expects($this->at(1))
+            ->method('isAuthorized')
+            ->willReturn(true);
+        $paymentObject->expects($this->at(4))
+            ->method('isAuthorized')
+            ->willReturn(true);
+        $paymentObject->expects($this->at(8))
+            ->method('isAuthorized')
+            ->willReturn(true);
+        $paymentObject->expects($this->exactly(3))
+            ->method('getAmount')
+            ->willReturn($amountObject);
+        $paymentObject->expects($this->at(7))
+            ->method('getCustomerId')
+            ->willReturn(10);
+        $paymentObject->expects($this->at(11))
+            ->method('getCustomerId')
+            ->willReturn(2);
+
+        $paymentStatic = \Mockery::mock(\SebastianWalker\Paysafecard\Payment::class);
+        $paymentStatic->shouldReceive('find')->with(
+            '58DFDA4488963164',
+            $paysafecardClient
+        )->andReturn($paymentObject);
+        $this->app->instance('\SebastianWalker\Paysafecard\Payment', $paymentStatic);
+
+        // no id
+        $response = $this->post('/shop/credit/add/paysafecard/notification');
+        $response->assertStatus(400);
+
+        // already handled
+        $response = $this->post('/shop/credit/add/paysafecard/notification', ['mtid' => '58DFDA4488963163']);
+        $response->assertStatus(403);
+
+        // not authorized
+        $response = $this->post('/shop/credit/add/paysafecard/notification', ['mtid' => '58DFDA4488963164']);
+        $response->assertStatus(403);
+
+        // invalid currency
+        $response = $this->post('/shop/credit/add/paysafecard/notification', ['mtid' => '58DFDA4488963164']);
+        $response->assertStatus(403);
+
+        // user not found
+        $response = $this->post('/shop/credit/add/paysafecard/notification', ['mtid' => '58DFDA4488963164']);
+        $response->assertStatus(404);
+
+        // user doesn't have permission
+        $response = $this->post('/shop/credit/add/paysafecard/notification', ['mtid' => '58DFDA4488963164']);
+        $response->assertStatus(403);
+    }
+
+    public function testPaysafecardNotification()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $amountObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Amount::class)
+            ->getMock();
+        $amountObject->expects($this->exactly(3))
+            ->method('getAmount')
+            ->willReturn(10.0);
+        $amountObject->expects($this->once())
+            ->method('getCurrency')
+            ->willReturn('EUR');
+
+        $paysafecardClient = $this->getMockBuilder(\SebastianWalker\Paysafecard\Client::class)
+            ->getMock();
+        $paysafecardClient->expects($this->once())
+            ->method('setApiKey')
+            ->with('random_key')
+            ->willReturn($paysafecardClient);
+        $paysafecardClient->expects($this->once())
+            ->method('setTestingMode')
+            ->with(true)
+            ->willReturn($paysafecardClient);
+        $this->app->instance('\SebastianWalker\Paysafecard\Client', $paysafecardClient);
+
+        $paymentObject = $this->getMockBuilder(\SebastianWalker\Paysafecard\Payment::class)
+            ->getMock();
+        $paymentObject->expects($this->once())
+            ->method('isAuthorized')
+            ->willReturn(true);
+        $paymentObject->expects($this->once())
+            ->method('getAmount')
+            ->willReturn($amountObject);
+        $paymentObject->expects($this->once())
+            ->method('getId')
+            ->willReturn('58DFDA4488963164');
+        $paymentObject->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn(1);
+
+        $paymentStatic = \Mockery::mock(\SebastianWalker\Paysafecard\Payment::class);
+        $paymentStatic->shouldReceive('find')->with(
+            '58DFDA4488963164',
+            $paysafecardClient
+        )->andReturn($paymentObject);
+        $this->app->instance('\SebastianWalker\Paysafecard\Payment', $paymentStatic);
+
+        $response = $this->post('/shop/credit/add/paysafecard/notification', ['mtid' => '58DFDA4488963164']);
+        $response->assertStatus(200);
+
+        // Check history
+        $transaction = ShopCreditPaysafecardHistory::where('payment_amount', 10.0)->where('payment_id', '58DFDA4488963164');
+        $history = ShopCreditHistory::where('transaction_type', 'PAYSAFECARD')->where('user_id', 1)->where('money', 10.0 * 80)->where('amount', 10.0)->where('transaction_id', $transaction->first()->id);
+        $this->assertEquals(1, $transaction->count());
+        $this->assertEquals(1, $history->count());
+        $this->assertEquals($history->first()->id, $transaction->first()->history_id);
+
+        // Check user money
+        $this->assertEquals($user->money + (10.0 * 80), \App\User::find(1)->money);
+
+        // Check notification
+        $this->assertEquals(1, Notification::where('user_id', 1)->where('type', 'success')->where('key', 'shop.credit.add.success')->where('vars', json_encode(['money' => 10.0 * 80]))->where('auto_seen', 1)->count());
+    }
+
+    public function testPaysafecardSuccessNotLoggedAndWithoutPermission()
+    {
+        $response = $this->post('/shop/credit/add/paysafecard/success');
+        $response->assertStatus(302);
+
+        $user = \App\User::find(2);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/paysafecard/success');
+        $response->assertStatus(403);
+    }
+
+    public function testPaysafecardSuccess()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $guzzleClient = $this->getMockBuilder(\GuzzleHttp\Client::class)
+            ->setMethods(['post'])
+            ->getMock();
+        $guzzleClient->expects($this->once())
+            ->method('post')
+            ->with('/shop/credit/add/paysafecard/notification', [
+                'mtid' => '382YDBS'
+            ])
+            ->willReturn($guzzleClient);
+        $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
+
+        $response = $this->post('/shop/credit/add/paysafecard/success?payment_id=382YDBS');
+        $response->assertStatus(302);
+        $response->assertRedirect('/shop/credit/add/success');
     }
 }

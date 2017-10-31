@@ -26,6 +26,7 @@ return [
     'contest.infos' => 'Informations',
     'contest.reason' => 'Pourquoi nous devrions réduire votre sanction ?',
     'contest.need_login' => 'Connectez-vous pour pouvoir contester vos sanctions.',
+    'contest.empty' => 'Vous n\'avez aucune sanction en cours.',
     'contest.user' => 'Joueur',
     'contest.type' => 'Type de sanction',
     'contest.date' => 'Date de création',

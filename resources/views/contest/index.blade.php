@@ -56,6 +56,18 @@
                         @endif
                     @endforeach
 
+                    @if (empty($sanctions))
+                        <div class="ui icon error message">
+                            <i class="notched user icon"></i>
+                            <div class="content">
+                                <div class="header">
+                                    @lang('sanction.contest.title')
+                                </div>
+                                <p>@lang('sanction.contest.empty')</p>
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
 
                 <div class="step-content" data-step="ExplainSanction" style="display:none;">

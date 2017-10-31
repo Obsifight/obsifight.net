@@ -179,7 +179,7 @@
 @section('script')
     <script type="text/javascript">
         function next(step) {
-            $('[data-step-display="' + (step - 1).toString() + '"]').removeClass('active')
+            $('[data-step-display="' + (step - 1).toString() + '"]').removeClass('active').addClass('completed')
             $('[data-step-display="' + step.toString() + '"]').removeClass('disabled').addClass('active')
         }
 

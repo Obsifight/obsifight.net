@@ -35,5 +35,6 @@
         <env name="DEDIPASS_PUBLIC_KEY" value="fake"/>
         <env name="PAYPAL_EMAIL" value="paypal@obsifight.net"/>
         <env name="HIPAY_SECRET_KEY" value="random_key"/>
+        <env name="PAYSAFECARD_API_KEY" value="random_key"/>
     </php>
 </phpunit>

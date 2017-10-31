@@ -202,6 +202,35 @@ ul li a:hover {
   font-weight: 300;
 }
 
+.sub-header.rotate:before {
+  content: '';
+  background-color: #f5f4f4;
+  height: 75px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -ms-transform: rotate(-3deg); /* IE 9 */
+  -webkit-transform: rotate(-3deg); /* Chrome, Safari, Opera */
+  transform: rotate(-3deg);
+  transform-origin: top left;
+
+  width: 103%;
+  padding-bottom: 7.1%;
+  right: -1.5%;
+  z-index: 1;
+}
+.sub-header.rotate {
+  position: relative;
+  margin-top: -1.8%;
+  padding-top: 0;
+  background-color: #f5f4f4;
+}
+.sub-header.rotate .header {
+  position: relative;
+  z-index: 2;
+}
+
 /* ====
   BLOCKS/CONTENT
 ======= */
@@ -231,6 +260,8 @@ ul li a:hover {
   padding: 40px;
 
   color: #fff;
+  z-index: 2;
+  position: relative;
 }
 
 .colored-block {

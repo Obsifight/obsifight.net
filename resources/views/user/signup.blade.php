@@ -3,7 +3,7 @@
 @section('title', __('user.signup'))
 
 @section('content')
-  <div class="sub-header">
+  <div class="sub-header rotate">
     <div class="ui large header">@lang('user.signup.join_now')</div>
   </div>
   <div class="parallax-block" style="background-image: url('{{ url('/img/parallax-2.png') }}');">

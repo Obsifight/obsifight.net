@@ -10,10 +10,6 @@ use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SebastianWalker\Paysafecard\Amount;
-use SebastianWalker\Paysafecard\Client;
-use SebastianWalker\Paysafecard\Payment;
-use SebastianWalker\Paysafecard\Urls;
 
 class CreditController extends Controller
 {
@@ -247,20 +243,24 @@ class CreditController extends Controller
             abort(400);
 
         // Setup payment
-        $client = new Client(env('PAYSAFECARD_API_KEY'));
-        $client->setUrls(new Urls(
-            url("/shop/credit/add/paysafecard/success")->full(),
-            url("/shop/credit/add/error")->full(),
-            url("/shop/credit/add/paysafecard/notification")->full()
-        ));
+        $client = resolve('\SebastianWalker\Paysafecard\Client');
+
+        $client->setApiKey(env('PAYSAFECARD_API_KEY'));
+        $client->setUrls(resolve('\SebastianWalker\Paysafecard\Urls')
+            ->setSuccessUrl(url("/shop/credit/add/paysafecard/success"))
+            ->setFailureUrl(url("/shop/credit/add/error"))
+            ->setNotificationUrl(url("/shop/credit/add/paysafecard/notification"))
+        );
         $client->setTestingMode((env('APP_ENV') != 'production'));
 
         // Initiate the payment
-        $payment = new Payment(
-            new Amount(floatval($request->input('amount')), "EUR"),
-            Auth::user()->id
-        );
-        $payment->create($client);
+        $payment = resolve('\SebastianWalker\Paysafecard\Payment')
+            ->setAmount(resolve('\SebastianWalker\Paysafecard\Amount')
+                ->setAmount(floatval($request->input('amount')))
+                ->setCurrency('EUR')
+            )
+            ->setCustomerId(Auth::user()->id)
+            ->create($client);
 
         // Redirect to Paysafecard payment page
         return response()->json([
@@ -276,7 +276,8 @@ class CreditController extends Controller
         if (!$request->has('mtid'))
             abort(400);
         // Try to capture payment
-        $client = new Client(env('PAYSAFECARD_API_KEY'));
+        $client = resolve('\SebastianWalker\Paysafecard\Client');
+        $client->setApiKey(env('PAYSAFECARD_API_KEY'));
         $client->setTestingMode((env('APP_ENV') != 'production'));
 
         // Check if not already handled
@@ -284,8 +285,9 @@ class CreditController extends Controller
             abort(403);
 
         // Find the payment
-        $payment = Payment::find($request->input('mtid'), $client);
+        $payment = resolve('\SebastianWalker\Paysafecard\Payment')::find($request->input('mtid'), $client);
         // Check if the payment was authorized
+
         if (!$payment->isAuthorized())
             abort(403);
         // capture
@@ -298,10 +300,12 @@ class CreditController extends Controller
 
         // Find user
         $user = User::findOrFail($payment->getCustomerId());
+        if (!$user->can('shop-credit-add'))
+            abort(403);
 
         // Add transaction
         $transaction = new ShopCreditPaysafecardHistory;
-        $transaction->payment_amount = $amount->getAmount();
+        $transaction->payment_amount = floatval($amount->getAmount());
         $transaction->payment_id = $payment->getId();
         $transaction->save();
 
@@ -322,8 +326,10 @@ class CreditController extends Controller
             abort(400);
 
         // Request notification to capture it
-        (new \GuzzleHttp\Client())
-            ->post('/shop/credit/add/paysafecard/notification', ['mtid' => $request->input('payment_id')]);
+        resolve('\GuzzleHttp\Client')
+            ->post('/shop/credit/add/paysafecard/notification', [
+                'mtid' => $request->input('payment_id')
+            ]);
 
         return redirect('/shop/credit/add/success');
     }

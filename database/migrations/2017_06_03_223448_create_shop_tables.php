@@ -148,5 +148,6 @@ class CreateShopTables extends Migration
       Schema::dropIfExists('shop_credit_dedipass_histories');
       Schema::dropIfExists('shop_credit_paypal_histories');
       Schema::dropIfExists('shop_credit_hipay_histories');
+      Schema::dropIfExists('shop_credit_paysafecard_histories');
     }
 }

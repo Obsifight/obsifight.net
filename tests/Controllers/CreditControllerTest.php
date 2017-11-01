@@ -889,13 +889,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaysafecardSuccessNotLoggedAndWithoutPermission()
     {
-        $response = $this->post('/shop/credit/add/paysafecard/success');
+        $response = $this->get('/shop/credit/add/paysafecard/success');
         $response->assertStatus(302);
 
         $user = \App\User::find(2);
         $this->be($user);
 
-        $response = $this->post('/shop/credit/add/paysafecard/success');
+        $response = $this->get('/shop/credit/add/paysafecard/success');
         $response->assertStatus(403);
     }
 
@@ -915,7 +915,7 @@ class CreditControllerTest extends TestCase
             ->willReturn($guzzleClient);
         $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
 
-        $response = $this->post('/shop/credit/add/paysafecard/success?payment_id=382YDBS');
+        $response = $this->get('/shop/credit/add/paysafecard/success?payment_id=382YDBS');
         $response->assertStatus(302);
         $response->assertRedirect('/shop/credit/add/success');
     }

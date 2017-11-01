@@ -30,9 +30,77 @@ class CreditController extends Controller
       ]
     ];
 
+    private function __encryptHipayWallet($source, $privateKey) {
+        $maxLength = 117;
+        $output = "";
+        while ($source) {
+            $slice = substr($source, 0, $maxLength);
+            $source = substr($source, $maxLength);
+            openssl_private_encrypt($slice, $encrypted, $privateKey);
+            $output .= $encrypted;
+        }
+        return $output;
+    }
+    private function __signHipayWallet($data, $privateKey) {
+        $output = "";
+        openssl_private_encrypt(sha1($data), $output, $privateKey);
+        return $output;
+    }
+
+    private function __generateHipayWalletForm($amount, $money) {
+        $xml = "<?xml version='1.0' encoding='utf-8' ?>"
+            . "<order>"
+            . "<userAccountId>" . env('HIPAY_USER_ACCOUNT_ID') . "</userAccountId>"
+            . "<currency>EUR</currency>"
+            . "<label>" . __('shop.credit.add.hipay.details', ['username' => Auth::user()->username, 'money' => $money]) . "</label>"
+            . "<ageGroup>ALL</ageGroup>"
+            . "<categoryId>251</categoryId>"
+            . "<urlAcquital><![CDATA[" . url('/shop/credit/add/hipay/notification') . "]]></urlAcquital>"
+            . "<urlOk><![CDATA[" . url('/shop/credit/add/success') . "]]></urlOk>"
+            . "<urlKo><![CDATA[" . url('/shop/credit/add/error') . "]]></urlKo>"
+            . "<urlCancel><![CDATA[" . url('/shop/credit/add/cancel') . "]]></urlCancel>"
+            . "<urlInstall><![CDATA[" . url()->full() . "]]></urlInstall>"
+            . "<urlLogo><![CDATA[" . url('/img/logo.png') . "]]></urlLogo>"
+            . "<!-- optional -->"
+            //. "<thirdPartySecurity>compatible</thirdPartySecurity>"
+            . "<locale>fr_FR</locale>"
+            //. "<issuerAccountLogin>".$offer['data']->issue_email."</issuerAccountLogin>"
+            . "<data>"
+            . "<user>"
+            . "<id>" . Auth::user()->id . "</id>"
+            . "</user>"
+            . "<key>"
+            . "<id>" . env('HIPAY_SECRET_KEY') . "</id>"
+            . "</key>"
+            . "</data>"
+            . "<items>"
+            . "<item id='1'>"
+            . "<name>" . __('shop.credit.add.hipay.details', ['username' => Auth::user()->username, 'money' => $money]) . "</name>"
+            . "<infos>" . __('shop.credit.add.hipay.details', ['username' => Auth::user()->username, 'money' => $money]) . "</infos>"
+            . "<amount>$amount</amount>"
+            . "<categoryId>251</categoryId>"
+            . "<quantity>1</quantity>"
+            . "<reference>REF1</reference>"
+            . "</item>"
+            . "</items>"
+            . "</order>";
+        $xml = trim($xml);
+        $privateKey = str_replace('\n', "\n", env('HIPAY_PRIVATE_KEY'));
+        $encodedData = base64_encode($this->__encryptHipayWallet(base64_encode($xml), $privateKey));
+        $md5Sign = base64_encode($this->__signHipayWallet(base64_encode($xml), $privateKey));
+        return array($encodedData, $md5Sign);
+    }
+
     public function add(Request $request)
     {
-
+        $offers = $this->offers;
+        foreach ($offers['HIPAY'] as $money => $amount) {
+            $offers['HIPAY'][$money] = [
+                'amount' => $amount,
+                'data' => $this->__generateHipayWalletForm($amount, $money)
+            ];
+        }
+        return view('shop.credit-add', ['offers' => $offers]);
     }
 
     public function paymentCancel()
@@ -60,7 +128,7 @@ class CreditController extends Controller
             abort(403);
 
         // Check if payment is valid
-        $endpoint = "http://api.dedipass.com/v1/pay/?key=" . env('DEDIPASS_PUBLIC_KEY') . "&rate={$request->input('rate')}&code={$request->input('code')}";
+        $endpoint = "http://api.dedipass.com/v1/pay/?key=" . env('DEDIPASS_PUBLIC_KEY') . "&private_key=" . env('DEDIPASS_PRIVATE_KEY') . "&rate={$request->input('rate')}&code={$request->input('code')}";
         $client = resolve('\GuzzleHttp\Client');
         $dedipassResult = $client->request('GET', $endpoint);
         $dedipassResult = @json_decode($dedipassResult->getBody());

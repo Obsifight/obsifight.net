@@ -188,6 +188,20 @@ ul li a:hover {
 }
 
 /* ====
+  BUTTONS
+======= */
+.ui.obsifight.button,
+.ui.obsifight.button:active,
+.ui.obsifight.button:visited,
+.ui.obsifight.button:focus {
+  background-color: #ec9422;
+  color: #ffffff;
+}
+.ui.obsifight.button:hover {
+  background-color: #d88820;
+}
+
+/* ====
   SUBHEADER
 ======= */
 .sub-header {

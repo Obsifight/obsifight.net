@@ -15,6 +15,8 @@
 
       <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
       <script type="text/javascript" src="{{ url('/js/jquery-3.2.1.min.js') }}"></script>
+
+      <link rel="icon" type="image/png" href="{{ url('/img/favicon.png') }}" />
     </head>
     <body>
       <div class="pusher">

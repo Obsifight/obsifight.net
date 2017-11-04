@@ -16,5 +16,7 @@ return [
     'success.online.version.8' => 'Connecté pour la v8',
     'success.money' => 'Avoir :number$',
 
+    'factions.ranking' => 'Classement factions',
+
     'title' => 'Statistiques'
 ];

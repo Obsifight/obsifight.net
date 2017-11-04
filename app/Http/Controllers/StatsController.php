@@ -37,6 +37,11 @@ class StatsController extends Controller
     return view('stats.faction', ['faction' => $faction]);
   }
 
+  public function factionRanking(Request $request)
+  {
+    return view('stats.faction_ranking');
+  }
+
   public function serverCount(Request $request)
   {
     if (!Cache::has('server.count')) {

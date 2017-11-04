@@ -124,6 +124,8 @@ Route::get('/stats/visits/count', 'StatsController@visitsCount');
 Route::get('/stats/{username}', 'StatsController@user');
 Route::get('/stats/faction/{name}', 'StatsController@faction');
 
+Route::get('/ranking', 'StatsController@factionRanking');
+
 /*
 ===========
   WIKI

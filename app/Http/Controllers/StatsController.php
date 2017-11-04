@@ -33,6 +33,7 @@ class StatsController extends Controller
     $faction = \App\Faction::getFromName($request->name);
     if (!$faction)
       return abort(404);
+    $faction->successList = \App\Faction::getSuccessList($faction->id);
     return view('stats.faction', ['faction' => $faction]);
   }
 

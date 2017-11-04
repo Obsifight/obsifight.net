@@ -5,14 +5,13 @@
 @section('content')
   <div class="ui container page-content">
     <h1 class="ui center aligned header">
-      <!--<img src="https://skins.obsifight.net/head/Eywek/64" class="ui rounded staff image" alt="Eywek">-->
       <div class="content">
-        <a href="{{ url('/stats/' . $faction->leader->playername) }}" class="ui blue image medium label">
-          {{ $faction->leader->playername }}
+        <a href="{{ url('/stats/' . $faction->leader->username) }}" class="ui blue image medium label">
+          {{ $faction->leader->username }}
           <div class="detail">Chef</div>
         </a>
         {{ $faction->name }}
-        <div class="sub header" style="margin-top:5px;">Créée il y a 3 ans</div>
+        <div class="sub header" style="margin-top:5px;">Créée {{ $faction->created_at->diffForHumans() }}</div>
       </div>
     </h1>
     <div class="ui divider"></div>
@@ -28,7 +27,7 @@
         <div class="ui two small statistics">
           <div class="statistic">
             <div class="value">
-              <i class="list icon" style="color:#ffd700"></i> {{ $faction->currentfactiondata->position }}
+              <i class="list icon" style="color:#ffd700"></i> {{ $faction->position }}
             </div>
             <div class="label">
               Position au classement
@@ -36,7 +35,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              <i class="trophy icon" style="color:#ffd700"></i> {{ $faction->currentfactiondata->score }}
+              <i class="trophy icon" style="color:#ffd700"></i> {{ $faction->score }}
             </div>
             <div class="label">
               Score
@@ -46,7 +45,7 @@
         <div class="ui four small statistics">
           <div class="statistic">
             <div class="value">
-              {{ count($faction->members) }}
+              {{ count($faction->players) }}
             </div>
             <div class="label">
               Joueurs
@@ -54,7 +53,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              {{ $faction->currentfactiondata->claimcount }}
+              {{ $faction->claims_count }}
             </div>
             <div class="label">
               Claims
@@ -62,7 +61,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              {{ $faction->currentfactiondata->kills }}
+              {{ $faction->kills_count }}
             </div>
             <div class="label">
               Tués
@@ -70,7 +69,7 @@
           </div>
           <div class="statistic">
             <div class="value">
-              {{ $faction->currentfactiondata->deaths }}
+              {{ $faction->deaths_count }}
             </div>
             <div class="label">
               Morts
@@ -92,9 +91,9 @@
           <div class="sub header">Triés par grade</div>
         </h2><br>
 
-        @foreach ($faction->members as $member)
-          <a href="{{ url('/stats/' . $member->playername) }}">
-            <img src="https://skins.obsifight.net/head/{{ $member->playername }}/64" class="ui rounded member image" alt="{{ $member->playername }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $member->playername }}">
+        @foreach ($faction->players as $member)
+          <a href="{{ url('/stats/' . $member->username) }}">
+            <img src="https://skins.obsifight.net/head/{{ $member->username }}/64" class="ui rounded member image" alt="{{ $member->username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $member->username }}">
           </a>
         @endforeach
       </div>
@@ -108,103 +107,32 @@
           <div class="sub header">Débloqués au cours de la saison {{ env('APP_VERSION_COUNT') }}</div>
         </h2><br>
 
-        <span class="ui achievement green label">
-          <i class="check icon"></i>
-          Avoir plus de 100$
-        </span>
-        <span class="ui achievement active label">
-          <i class="wait icon"></i>
-          Avoir plus de 10.000$
-        </span>
+        @foreach($faction->successList as $successList)
+          @foreach($successList as $successName => $successValue)
+            <span class="ui achievement {{ is_bool($successValue) ? ($successValue ? 'green' : 'red') : ($successValue == 100 ? 'green' : 'active p' . $successValue) }} label">
+              <i class="{{ $successValue == 100 || $successValue === true ? 'check' : ($successValue === false ? 'remove' : 'wait') }} icon"></i>
+              {{ $successName }}
+            </span>
+          @endforeach
+          @if (!$loop->last)
+            <div class="ui divider"></div>
+          @endif
+        @endforeach
 
-        <div class="ui divider"></div>
-
-        <span class="ui achievement green label">
-          <i class="check icon"></i>
-          Tuer 10 enemis
-        </span>
-        <span class="ui achievement green label">
-          <i class="check icon"></i>
-          Tuer 50 enemis
-        </span>
-        <span class="ui achievement green label">
-          <i class="check icon"></i>
-          Tuer 100 enemis
-        </span>
-        <span class="ui achievement green label">
-          <i class="check icon"></i>
-          Tuer 500 enemis
-        </span>
-        <span class="ui achievement active label">
-          <i class="wait icon"></i>
-          Tuer 1.000 enemis
-        </span>
-
-        <div class="ui divider"></div>
-
-        <span class="ui achievement green label">
-          <i class="check icon"></i>
-          Placer son crystal
-        </span>
-        <span class="ui achievement grey disabled label">
-          <i class="remove icon"></i>
-          Augmenter son crystal
-        </span>
       </div>
       <div class="ui vertical divider"></div>
       <div class="ui eight wide column">
         <h2 class="ui header">
-          Son crystal
-          <div class="sub header">Le cœur de la faction</div>
+          Ses ressources
+          <div class="sub header">Les richesses de la faction</div>
         </h2><br>
 
-        <div id="crystal">
-          <h3><span>Crystal</span> - {{ $faction->name }}</h3>
-          <h4>
-            <i class="long arrow up icon"></i>
-            Régénération
-            <i class="long arrow up icon"></i>
-          </h4>
-          <p>
-            <span class="min">{{ $faction->currentfactiondata->crystal->healthcrystal }}</span>
-            /
-            <span class="max">{{ $faction->currentfactiondata->crystal->healthmaxcrystal }}</span>
-            <span class="regen">{{ $faction->currentfactiondata->crystal->healingspeedcrystal }} <i class="caret up icon"></i></span>
-          </p>
-          <img src="{{ url('/img/crystal.gif') }}" alt="">
-        </div>
       </div>
     </div>
   </div>
 @endsection
 @section('style')
   <style media="screen">
-    #crystal {
-      text-align: center;
-    }
-    #crystal h3 {
-      color: #bbbbbb;
-    }
-    #crystal h3 span {
-      color: #41d7d7;
-      text-transform: uppercase;
-    }
-    #crystal h4 {
-      color: #40fe52;
-      margin-bottom: 2px;
-      margin-top: 8px;
-    }
-    #crystal p {
-      color: #d1a633;
-    }
-    #crystal p .min {
-      color: #bd06ba;
-    }
-    #crystal p .regen {
-      color: #00be01;
-      margin-left: 15px;
-    }
-
     img.member.image {
       background-color: #bdc3c7;
       border: 2px solid #c0392b;
@@ -248,16 +176,22 @@
       top: 0;
       bottom: 0;
       left: 0;
-      right: calc(100% - 80%);
+      right: calc(100% - 0%);
       border-radius: .28571429rem;
     }
+
+    @for ($i = 0; $i <= 100; $i += 0.1)
+      .achievement.active.label.p{{ str_replace('.', '-', round($i, 1)) }}:after {
+        right: calc(100% - {{ round($i, 1) }}%);
+      }
+    @endfor
   </style>
 @endsection
 @section('script')
   <script type="text/javascript">
     $('#power').progress({
-      total: '{{ $faction->currentfactiondata->power }}',
-      value: '{{ $faction->currentfactiondata->powermax }}',
+      total: '{{ $faction->max_power }}',
+      value: '{{ $faction->current_power }}',
       text: {
         percent: '{value}/{total}'
       }

@@ -18,11 +18,11 @@ class Faction extends Model
 
         // Order players by rank
         usort($faction->players, function ($a, $b) {
-            if ($a->relation === $b->relation)
+            if ($a->role === $b->role)
                 return 0;
-            if ($a->relation === 'LEADER')
+            if ($a->role === 'leader')
                 return 1;
-            if ($a->relation === 'OFFICER' && $b->relation === 'MEMBER')
+            if ($a->role === 'officer' && $b->role === 'member')
                 return 1;
         });
         $faction->players = array_reverse($faction->players);
@@ -58,8 +58,6 @@ class Faction extends Model
             }
         }
 
-        $successList[] = ['Avoir une cape' => false];
-        $successList[] = ['Avoir un skin' => true];
         return $successList;
     }
 }

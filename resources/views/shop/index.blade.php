@@ -358,6 +358,7 @@
       $('#rankInfosModal .ui.card .content>.header').html(itemData.name)
       $('#rankInfosModal .ui.card .description').html('<b>{{ __('shop.item.description') }}</b><br><br>' + itemData.description)
       $('#rankInfosModal .ui.card .extra.content .animated.button .hidden.content').html($('#rankInfosModal .ui.card .extra.content .animated.button .hidden.content').html().replace(':amount', itemData.price))
+      $('#rankInfosModal .ui.card .extra.content .animated.button .hidden.content .price').html(itemData.price)
 
       // Remove ajax
       $('.buy-message').html('')

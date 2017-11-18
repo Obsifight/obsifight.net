@@ -34,6 +34,7 @@ class StatsController extends Controller
     if (!$faction)
       return abort(404);
     $faction->successList = \App\Faction::getSuccessList($faction->id);
+    $faction->stats = \App\Faction::getStats($faction->id);
     return view('stats.faction', ['faction' => $faction]);
   }
 

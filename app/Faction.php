@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Model;
 
 class Faction extends Model
@@ -59,5 +60,23 @@ class Faction extends Model
         }
 
         return $successList;
+    }
+
+    static public function getStats($factionId)
+    {
+        $body = @file_get_contents(env('DATA_SERVER_ENDPOINT') . '/factions/' . $factionId . '/graph');
+        if (!$body) return false;
+        $data = @json_decode($body);
+        if (!$data) return false;
+        if (!$data->status) return false;
+        $stats = $data->data;
+        // Update range
+        Carbon::setLocale(\Config::get('app.locale'));
+        $stats->update_range = call_user_func_array([CarbonInterval::class, 'create'], explode(', ', $stats->update_range));
+        // x axis
+        $stats->graphs->materials->x_axis = array_map(function ($label) {
+            return Carbon::parse($label)->diffForHumans();
+        }, $stats->graphs->materials->x_axis);
+        return $stats;
     }
 }

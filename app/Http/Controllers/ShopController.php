@@ -29,7 +29,7 @@ class ShopController extends Controller
     $ranks = ShopRank::whereHas('item', function ($query) {
       $query->where('displayed', 1);
     })->get();
-    $sales = \App\ShopSale::getMessage();
+    $sales = \App\ShopSale::getMessage(); // TODO: Display sales on item price
 
     // Auto select with route
     $rankSelected = (isset($request->rankslug)) ? $request->rankslug : false;

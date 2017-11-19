@@ -10,12 +10,12 @@
                 @if (isset($user->faction->name))
                     <a href="{{ url('/stats/faction/' . $user->faction->name) }}" class="ui blue image medium label">
                         {{ $user->faction->name }}
-                        <div class="detail">{{ __('stats.faction.role.', $user->faction->role)  }}</div>
+                        <div class="detail">{{ __('stats.factions.role.' . $user->faction->role)  }}</div>
                     </a>
                 @endif
                 {{ $user->username }}
                 <div class="sub header" style="margin-top:5px;"><i class="{{ $user->country }} flag"></i>
-                    Inscrit {{ $user->register_date->diffForHumans() }}
+                    @lang('stats.users.register.date', ['date' => $user->register_date->diffForHumans()])
                 </div>
             </div>
         </h1>
@@ -25,8 +25,8 @@
 
             <div class="ui eight wide column">
                 <h2 class="ui header">
-                    Ses infos
-                    <div class="sub header">Informations sur la saison en cours</div>
+                    @lang('stats.users.infos.title')
+                    <div class="sub header">@lang('stats.users.infos.subtitle')</div>
                 </h2>
                 <br>
 
@@ -36,7 +36,7 @@
                             {{ $user->online->total_time }}
                         </div>
                         <div class="label">
-                            Heures de jeu
+                            @lang('stats.users.logtime')
                         </div>
                     </div>
                     <div class="statistic">
@@ -44,7 +44,7 @@
                             {{ $user->stats->kills + $user->stats->deaths }}
                         </div>
                         <div class="label">
-                            Combats
+                            @lang('stats.users.fights')
                         </div>
                     </div>
                     <div class="statistic">
@@ -52,7 +52,7 @@
                             {{ $user->stats->kills }}
                         </div>
                         <div class="label">
-                            Tués
+                            @lang('stats.users.kills')
                         </div>
                     </div>
                     <div class="statistic">
@@ -60,7 +60,7 @@
                             {{ $user->stats->deaths }}
                         </div>
                         <div class="label">
-                            Morts
+                            @lang('stats.users.deaths')
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                             {{ number_format($user->stats->blocks->placed, 0, ',', '.') }}
                         </div>
                         <div class="label">
-                            Blocs posés
+                            @lang('stats.users.blocks.placed')
                         </div>
                     </div>
                     <div class="statistic">
@@ -79,7 +79,7 @@
                             {{ number_format($user->stats->blocks->broken, 0, ',', '.') }}
                         </div>
                         <div class="label">
-                            Blocs cassés
+                            @lang('stats.users.blocks.broken')
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                 @for($i = 1; $i <= 8; $i++)
                     <span class="ui {{ in_array($i, $user->versions) ? 'green' : 'red' }} label">
                         <i class="remove icon"></i>
-                        Connecté pour la V{{ $i }}
+                        @lang('stats.users.versions', ['number' => $i])
                     </span>
                 @endfor
 
@@ -97,21 +97,21 @@
 
                 <span class="ui {{ $user->cape ? 'blue' : 'grey disabled' }} label">
                   <i class="remove icon"></i>
-                  Possède une cape
+                    @lang('stats.users.cape')
                 </span>
                 <span class="ui {{ $user->skin ? 'blue' : 'grey disabled' }} label">
                   <i class="check icon"></i>
-                  Possède un skin
+                    @lang('stats.users.skin')
                 </span>
 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>Dernière connexion {{ $user->online->last_connection->diffForHumans() }}</em>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>@lang('stats.users.last_connection', ['date' => $user->online->last_connection->diffForHumans()])</em>
 
             </div>
             <div class="ui vertical divider"></div>
             <div class="ui eight wide column">
                 <h2 class="ui header">
-                    Ses succès
-                    <div class="sub header">Débloqués au cours de la saison {{ env('APP_VERSION_COUNT') }}</div>
+                    @lang('stats.success.title')
+                    <div class="sub header">@lang('stats.success.subtitle', ['number' => env('APP_VERSION_COUNT')])</div>
                 </h2>
 
                 @foreach($faction->successList as $successList)

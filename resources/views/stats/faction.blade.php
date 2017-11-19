@@ -8,10 +8,10 @@
             <div class="content">
                 <a href="{{ url('/stats/' . $faction->leader->username) }}" class="ui blue image medium label">
                     {{ $faction->leader->username }}
-                    <div class="detail">Chef</div>
+                    <div class="detail">@lang('stats.factions.role.leader')</div>
                 </a>
                 {{ $faction->name }}
-                <div class="sub header" style="margin-top:5px;">Créée {{ $faction->created_at->diffForHumans() }}</div>
+                <div class="sub header" style="margin-top:5px;">@lang('stats.factions.created_at', ['date' => $faction->created_at->diffForHumans()])</div>
             </div>
         </h1>
         <div class="ui divider"></div>
@@ -20,8 +20,8 @@
 
             <div class="ui eight wide column">
                 <h2 class="ui header">
-                    Ses infos
-                    <div class="sub header">Informations sur la saison en cours</div>
+                    @lang('stats.factions.infos.title')
+                    <div class="sub header">@lang('stats.factions.infos.subtitle')</div>
                 </h2>
                 <br>
 
@@ -32,18 +32,18 @@
                             {{ $faction->position }}
                             @if ($faction->stats->counts->position > 0)
                                 <span class="stats-up">
-                    <i class="icon chevron up"></i>
+                                    <i class="icon chevron up"></i>
                                     {{ $faction->stats->counts->position }}
-                </span>
+                                </span>
                             @elseif ($faction->stats->counts->position < 0)
                                 <span class="stats-down">
-                    <i class="icon chevron down"></i>
+                                    <i class="icon chevron down"></i>
                                     {{ $faction->stats->counts->position * - 1 }}
-                </span>
+                                </span>
                             @endif
                         </div>
                         <div class="label">
-                            Position au classement
+                            @lang('stats.factions.position')
                         </div>
                     </div>
                     <div class="statistic">
@@ -51,7 +51,7 @@
                             <i class="trophy icon" style="color:#ffd700"></i> {{ $faction->score }}
                         </div>
                         <div class="label">
-                            Score
+                            @lang('stats.factions.score')
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                             {{ count($faction->players) }}
                         </div>
                         <div class="label">
-                            Joueurs
+                            @lang('stats.factions.players.count')
                         </div>
                     </div>
                     <div class="statistic">
@@ -69,7 +69,7 @@
                             {{ $faction->claims_count }}
                         </div>
                         <div class="label">
-                            Claims
+                            @lang('stats.factions.claims.count')
                         </div>
                     </div>
                     <div class="statistic">
@@ -77,7 +77,7 @@
                             {{ $faction->kills_count }}
                         </div>
                         <div class="label">
-                            Tués
+                            @lang('stats.factions.kills')
                         </div>
                     </div>
                     <div class="statistic">
@@ -85,7 +85,7 @@
                             {{ $faction->deaths_count }}
                         </div>
                         <div class="label">
-                            Morts
+                            @lang('stats.factions.deaths')
                         </div>
                     </div>
                 </div>
@@ -94,14 +94,14 @@
                     <div class="bar">
                         <div class="progress"></div>
                     </div>
-                    <div class="label">Power</div>
+                    <div class="label">@lang('stats.factions.power')</div>
                 </div>
             </div>
             <div class="ui vertical divider"></div>
             <div class="ui eight wide column">
                 <h2 class="ui header">
-                    Ses membres
-                    <div class="sub header">Triés par grade</div>
+                    @lang('stats.factions.members.title')
+                    <div class="sub header">@lang('stats.factions.members.subtitle')</div>
                 </h2>
                 <br>
 
@@ -120,8 +120,8 @@
         <div class="ui stackable grid" style="position:relative;">
             <div class="ui eight wide column">
                 <h2 class="ui header">
-                    Ses succès
-                    <div class="sub header">Débloqués au cours de la saison {{ env('APP_VERSION_COUNT') }}</div>
+                    @lang('stats.success.title')
+                    <div class="sub header">@lang('stats.success.subtitle', ['number' => env('APP_VERSION_COUNT')])</div>
                 </h2>
                 <br>
 
@@ -141,8 +141,8 @@
             <div class="ui vertical divider"></div>
             <div class="ui eight wide column">
                 <h2 class="ui header">
-                    Ses ressources
-                    <div class="sub header">Les richesses de la faction</div>
+                    @lang('stats.factions.ressources.title')
+                    <div class="sub header">@lang('stats.factions.ressources.subtitle')</div>
                 </h2>
                 <br>
                 <div id="graph-materials"></div>
@@ -250,11 +250,11 @@
         Highcharts.chart('graph-materials', {
 
             title: {
-                text: 'Différents minerais de la faction'
+                text: '@lang('stats.factions.graph.title.materials')'
             },
 
             subtitle: {
-                text: 'Mis à jour toutes les {{ $faction->stats->update_range }}'
+                text: '@lang('stats.factions.graph.update.range', ['range' => $faction->stats->update_range])'
             },
 
             yAxis: {

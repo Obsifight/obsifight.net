@@ -14,7 +14,7 @@
                     </a>
                 @endif
                 {{ $user->username }}
-                <div class="sub header" style="margin-top:5px;"><i class="france flag"></i>
+                <div class="sub header" style="margin-top:5px;"><i class="{{ $user->country }} flag"></i>
                     Inscrit {{ $user->register_date->diffForHumans() }}
                 </div>
             </div>

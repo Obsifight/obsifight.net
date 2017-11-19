@@ -184,6 +184,7 @@ class UserController extends Controller
 
     // register user
     $user = new User();
+    $user->uuid = \Uuid::generate();
     $user->username = $request->input('username');
     $user->email = $request->input('email');
     $user->password = User::hash($request->input('password'), $request->input('username'));

@@ -17,6 +17,7 @@ class StatsController extends Controller
 
   public function index(Request $request)
   {
+      // TODO: get staff from API, generate graphs from api / database
     return view('stats.index');
   }
 
@@ -29,6 +30,7 @@ class StatsController extends Controller
     $user->register_date = \App\User::where('username', $request->username)->first()->created_at;
     $user->online->last_connection = Carbon::parse($user->online->last_connection);
     $user->successList = \App\User::getSuccessList($request->username);
+    $user->country = 'france'; // TODO: package torann/geoip
     return view('stats.user', ['user' => $user]);
   }
 

@@ -128,9 +128,9 @@
                 @foreach($faction->successList as $successList)
                     @foreach($successList as $successName => $successValue)
                         <span class="ui achievement {{ is_bool($successValue) ? ($successValue ? 'green' : 'red') : ($successValue == 100 ? 'green' : 'active p' . $successValue) }} label">
-              <i class="{{ $successValue == 100 || $successValue === true ? 'check' : ($successValue === false ? 'remove' : 'wait') }} icon"></i>
+                            <i class="{{ $successValue == 100 || $successValue === true ? 'check' : ($successValue === false ? 'remove' : 'wait') }} icon"></i>
                             {{ $successName }}
-            </span>
+                        </span>
                     @endforeach
                     @if (!$loop->last)
                         <div class="ui divider"></div>

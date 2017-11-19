@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
-use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 use \Cache;
@@ -25,7 +22,14 @@ class StatsController extends Controller
 
   public function user(Request $request)
   {
-    return view('stats.user');
+    $user = \App\User::getStatsFromUsername($request->username);
+    if (!$user)
+        return abort(404);
+    $user->username = $request->username;
+    $user->register_date = \App\User::where('username', $request->username)->first()->created_at;
+    $user->online->last_connection = Carbon::parse($user->online->last_connection);
+    $user->successList = \App\User::getSuccessList($request->username);
+    return view('stats.user', ['user' => $user]);
   }
 
   public function faction(Request $request)

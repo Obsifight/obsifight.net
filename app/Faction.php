@@ -79,4 +79,14 @@ class Faction extends Model
         }, $stats->graphs->materials->x_axis);
         return $stats;
     }
+
+    static public function getFactionFromUsername($username)
+    {
+        $body = @file_get_contents(env('DATA_SERVER_ENDPOINT') . '/factions/search/user/' . $username);
+        if (!$body) return false;
+        $data = @json_decode($body);
+        if (!$data) return false;
+        if (!$data->status) return false;
+        return ($data->data);
+    }
 }

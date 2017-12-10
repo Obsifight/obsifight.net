@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
       $table->float('money')->default(0);
       $table->ipAddress('ip');
       $table->boolean('obsiguard_dynamic')->default(0);
+      $table->string('access_token')->nullable()->default(NULL);
+      $table->string('client_token')->nullable()->default(NULL);
       $table->rememberToken();
       $table->timestamps();
     });
@@ -46,6 +48,7 @@ class CreateUsersTable extends Migration
     // Log
     Schema::create('users_connection_logs', function (Blueprint $table) {
       $table->increments('id');
+      $table->string('type', 8)->default('WEB');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users');
       $table->ipAddress('ip');

@@ -406,7 +406,7 @@
                 @foreach ($launcherLoginLogs as $log)
                   <tr>
                     <td>{{ $log->ip }}</td>
-                    <td>{{ \Carbon\Carbon::parse($log->date)->diffForHumans() }}</td>
+                    <td>{{ $log->created_at->diffForHumans() }}</td>
                   </tr>
                 @endforeach
               </tbody>

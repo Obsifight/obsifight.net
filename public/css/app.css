@@ -90,7 +90,7 @@ ul li a:hover {
   HEADER
 ======= */
 .site-header {
-  background: url('../img/background-min.png');
+  background: url('../img/background-min.jpg');
   background-attachment: fixed;
   background-position: center center;
   background-repeat: no-repeat;
@@ -265,7 +265,7 @@ ul li a:hover {
 }
 
 .parallax-block {
-  background-image: url('../img/parallax-1.png');
+  background-image: url('../img/parallax-1.jpg');
   background-attachment: fixed;
   background-position: center center;
   background-repeat: no-repeat;

@@ -878,7 +878,7 @@ class UserControllerTest extends TestCase
     $this->be($user);
 
     $response = $this->call('POST', '/user/skin', [], [], [
-      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img') . '/parallax-1.png', 'skin.png', filesize(base_path('public/img') . '/parallax-1.png'), 'image/png', null, true)
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img') . '/parallax-1.jpg', 'skin.png', filesize(base_path('public/img') . '/parallax-1.jpg'), 'image/png', null, true)
     ]);
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.file.type'))), $response->getContent());
@@ -968,7 +968,7 @@ class UserControllerTest extends TestCase
     $this->be($user);
 
     $response = $this->call('POST', '/user/cape', [], [], [
-      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img') . '/parallax-1.png', 'cape.png', filesize(base_path('public/img') . '/parallax-1.png'), 'image/png', null, true)
+      'image' => new \Illuminate\Http\UploadedFile(base_path('public/img') . '/parallax-1.jpg', 'cape.png', filesize(base_path('public/img') . '/parallax-1.jpg'), 'image/png', null, true)
     ]);
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.profile.upload.error.file.type'))), $response->getContent());

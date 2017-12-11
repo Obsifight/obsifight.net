@@ -53,12 +53,12 @@ class StatsController extends Controller
   {
     if (!Cache::has('server.count')) {
       // Ping
-      require base_path('vendor/xpaw/ping/MinecraftPing.php');
-      require base_path('vendor/xpaw/ping/MinecraftPingException.php');
+      require base_path('vendor/xpaw/ping/src/MinecraftPing.php');
+      require base_path('vendor/xpaw/ping/src/MinecraftPingException.php');
       try {
-        $query = new \MinecraftPing(env('MINECRAFT_PROXY_PING_IP'), env('MINECRAFT_PROXY_PING_PORT'), 1);
+        $query = new \xPaw\MinecraftPing(env('MINECRAFT_PROXY_PING_IP'), env('MINECRAFT_PROXY_PING_PORT'), 1);
         $info = $query->query();
-      } catch(\MinecraftPingException $e) {
+      } catch(\xPaw\MinecraftPingException $e) {
         return response()->json(['status' => false, 'count' => 0]);
       }
       $query->close();

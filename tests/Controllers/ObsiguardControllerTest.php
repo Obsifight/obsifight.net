@@ -43,7 +43,7 @@ class ObsiguardControllerTest extends TestCase
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => true, 'success' => __('user.obsiguard.enable.success'), 'data' => ['ip' => '127.0.0.1', 'id' => 3])), $response->getContent());
     // check db
-    $ip = \App\UsersObsiguardIp::where('user_id', 2)->first();
+    $ip = \App\UsersObsiguardIP::where('user_id', 2)->first();
     $this->assertEquals(1, count($ip));
     $this->assertEquals('127.0.0.1', $ip->ip);
     $token = \App\UsersToken::where('user_id', 2)->where('used_ip', '127.0.0.1')->first();

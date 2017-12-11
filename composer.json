@@ -20,6 +20,18 @@
         {
             "type":"package",
             "package": {
+                "name": "xpaw/ping",
+                "version":"1.0.0",
+                "source": {
+                    "url": "git@github.com:xPaw/PHP-Minecraft-Query.git",
+                    "type": "git",
+                    "reference":"master"
+                }
+            }
+        },
+        {
+            "type":"package",
+            "package": {
                 "name": "urb/xenforobridge",
                 "version":"1.0.1",
                 "source": {
@@ -48,7 +60,8 @@
         "urb/xenforobridge": "1.0.1",
         "waavi/recaptcha": "1.0.x",
         "webpatser/laravel-uuid": "2.*",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "xpaw/ping": "1.0.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

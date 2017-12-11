@@ -261,7 +261,7 @@ class UserController extends Controller
     $twoFactorEnabled = ($findTwoFactorAuthSecret && $findTwoFactorAuthSecret->enabled);
 
     // OBSIGUARD
-    $findObsiGuardIPs = \App\UsersObsiguardIp::where('user_id', Auth::user()->id)->get();
+    $findObsiGuardIPs = \App\UsersObsiguardIP::where('user_id', Auth::user()->id)->get();
     $obsiguardDynamicIP = Auth::user()->obsiguard_dynamic;
 
     // NOTIFICATION

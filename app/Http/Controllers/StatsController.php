@@ -23,6 +23,7 @@ class StatsController extends Controller
 
   public function user(Request $request)
   {
+      abort(403);
     $user = \App\User::getStatsFromUsername($request->username);
     $userDB = \App\User::where('username', $request->username)->firstOrFail();
     if (!$user)

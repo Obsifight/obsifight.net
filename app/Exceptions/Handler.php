@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -61,5 +62,14 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest(route('login'));
+    }
+
+    protected function renderHttpException(HttpException $e)
+    {
+        if (env('APP_DEBUG') === true) {
+            // Display Laravel's default error message with appropriate error information
+            return $this->convertExceptionToResponse($e);
+        }
+        return parent::renderHttpException($e); // Continue as normal
     }
 }

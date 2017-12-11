@@ -33,6 +33,7 @@ return [
   'buy.error.server.online' => 'Le serveur doit être allumé pour procéder à cet achat !',
   'buy.success' => "Tu as bien procédé à l'achat de <b>\":item_name\"</b> pour :price points ! Bon jeu !",
 
+  'credit.add' => 'Acheter des points',
   'credit.add.success' => 'Vous avez bien été crédité de :money points !',
   'credit.add.cancel' => 'Le paiement a été annulé.',
   'credit.add.error' => 'Le paiement a échoué, veuillez réessayer !',

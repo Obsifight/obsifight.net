@@ -62,5 +62,7 @@ return [
     'graph.visits' => 'Statistiques des visites',
     'graph.register' => 'Statistiques des inscriptions',
     'graph.load.title' => 'Juste une seconde',
-    'graph.load.subtitle' => 'Nous affichons le graphique pour vous.'
+    'graph.load.subtitle' => 'Nous affichons le graphique pour vous.',
+    'graph.no_data.title' => 'Aucune données',
+    'graph.no_data.subtitle' => 'Nous n\'avons pas assez de données pour générer un graphique.'
 ];

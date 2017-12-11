@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Eywek')
+@section('title', $user->username)
 
 @section('content')
     <div class="ui container page-content">

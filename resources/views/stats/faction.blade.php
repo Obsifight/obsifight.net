@@ -30,12 +30,12 @@
                         <div class="value">
                             <i class="list icon" style="color:#ffd700"></i>
                             {{ $faction->position }}
-                            @if ($faction->stats->counts->position > 0)
+                            @if ($faction->stats && $faction->stats->counts->position > 0)
                                 <span class="stats-up">
                                     <i class="icon chevron up"></i>
                                     {{ $faction->stats->counts->position }}
                                 </span>
-                            @elseif ($faction->stats->counts->position < 0)
+                            @elseif ($faction->stats && $faction->stats->counts->position < 0)
                                 <span class="stats-down">
                                     <i class="icon chevron down"></i>
                                     {{ $faction->stats->counts->position * - 1 }}
@@ -145,7 +145,19 @@
                     <div class="sub header">@lang('stats.factions.ressources.subtitle')</div>
                 </h2>
                 <br>
-                <div id="graph-materials"></div>
+                @if ($faction->stats)
+                    <div id="graph-materials"></div>
+                @else
+                    <div class="ui icon message">
+                        <i class="database icon"></i>
+                        <div class="content">
+                            <div class="header">
+                                @lang('stats.graph.no_data.title')
+                            </div>
+                            <p>@lang('stats.graph.no_data.subtitle')</p>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -247,48 +259,50 @@
         })
     </script>
     <script type="text/javascript">
-        Highcharts.chart('graph-materials', {
+        @if ($faction->stats)
+            Highcharts.chart('graph-materials', {
 
-            title: {
-                text: '@lang('stats.factions.graph.title.materials')'
-            },
-
-            subtitle: {
-                text: '@lang('stats.factions.graph.update.range', ['range' => $faction->stats->update_range])'
-            },
-
-            yAxis: {
                 title: {
-                    text: ''
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
+                    text: '@lang('stats.factions.graph.title.materials')'
+                },
 
-            xAxis: {
-                categories: {!! json_encode($faction->stats->graphs->materials->x_axis) !!},
-            },
+                subtitle: {
+                    text: '@lang('stats.factions.graph.update.range', ['range' => $faction->stats->update_range])'
+                },
 
-            series: {!! json_encode($faction->stats->graphs->materials->data) !!},
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 1500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
+                yAxis: {
+                    title: {
+                        text: ''
                     }
-                }]
-            }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
 
-        });
+                xAxis: {
+                    categories: {!! json_encode($faction->stats->graphs->materials->x_axis) !!},
+                },
+
+                series: {!! json_encode($faction->stats->graphs->materials->data) !!},
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 1500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                }
+
+            });
+        @endif
     </script>
 @endsection

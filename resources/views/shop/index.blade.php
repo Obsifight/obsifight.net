@@ -3,44 +3,46 @@
 @section('title', __('shop.title'))
 
 @section('content')
-  <div class="white-block rotate mobile-hide">
-    <div class="ui container page-content">
+  @if ($mostPurchasedItems->count() > 0)
+    <div class="white-block rotate mobile-hide">
+      <div class="ui container page-content">
 
-      <div class="text-center">
-        <h2 class="ui header" style="display:inline-block">
-          <i class="shop icon"></i>
-          <div class="content">
-            @lang('shop.purchases.best.title')
-            <div class="sub header">@lang('shop.purchases.best.subtitle')</div>
-          </div>
-        </h2>
-      </div>
+        <div class="text-center">
+          <h2 class="ui header" style="display:inline-block">
+            <i class="shop icon"></i>
+            <div class="content">
+              @lang('shop.purchases.best.title')
+              <div class="sub header">@lang('shop.purchases.best.subtitle')</div>
+            </div>
+          </h2>
+        </div>
 
-      <div class="ui stackable centered grid">
-        @foreach ($mostPurchasedItems as $item)
-          <div class="ui five wide column">
-            <div class="ui very relaxed items best-sales">
-              <div class="item">
-                <div class="image">
-                  <img src="{{ $item->item->image_path ? $item->item->image_path : url('/img/logo.png') }}">
-                </div>
-                <div class="middle aligned content">
-                  <span class="header">{{ $item->item->name }}</span>
-                  <div class="extra">
-                    @if ($loop->first)
-                      <div class="ui label"><i class="trophy icon" style="color:#ffd700"></i> @lang('shop.purchases.best')</div>
-                    @endif
-                    <div class="ui label">{{ $item->item->category->name }}</div>
+        <div class="ui stackable centered grid">
+          @foreach ($mostPurchasedItems as $item)
+            <div class="ui five wide column">
+              <div class="ui very relaxed items best-sales">
+                <div class="item">
+                  <div class="image">
+                    <img src="{{ $item->item->image_path ? $item->item->image_path : url('/img/logo.png') }}">
+                  </div>
+                  <div class="middle aligned content">
+                    <span class="header">{{ $item->item->name }}</span>
+                    <div class="extra">
+                      @if ($loop->first)
+                        <div class="ui label"><i class="trophy icon" style="color:#ffd700"></i> @lang('shop.purchases.best')</div>
+                      @endif
+                      <div class="ui label">{{ $item->item->category->name }}</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        @endforeach
-      </div>
+          @endforeach
+        </div>
 
+      </div>
     </div>
-  </div>
+  @endif
   <div class="colored-block divider-shop">
     <div class="ui container page-content">
       <h1 class="ui header">
@@ -65,6 +67,12 @@
     <div class="ui stackable grid">
 
       <div class="ui three wide column">
+        @if (Auth::user())
+          <a href="{{ url('/shop/credit/add') }}" class="ui yellow fluid button">
+            <i class="shop icon"></i>
+            @lang('shop.credit.add')
+          </a>
+        @endif
         <div class="ui vertical menu">
           <a data-menu="ranks" class="{{ (!$categorySelected ? 'active' : '') }} yellow item">
             @lang('shop.ranks')
@@ -94,7 +102,7 @@
               </tr>
             </thead>
             <tbody>
-              @for ($i=0; $i < (isset($ranks[0]) ? count($ranks[0]->advantages) : 0); $i++)
+              @for ($i=0; $i < (!empty($ranks) && isset($ranks[0]) ? count($ranks[0]->advantages) : 0); $i++)
                 <tr class="center aligned">
                   @foreach ($ranks as $rank)
                     <td>
@@ -146,15 +154,15 @@
                     <span class="header">{{ $item->name }}</span>
                   </div>
                   <div class="extra content">
-                    @if ($mostPurchasedItems[0]->item->id === $item->id)
+                    @if (!empty($mostPurchasedItems) && isset($mostPurchasedItems[0]) && $mostPurchasedItems[0]->item->id === $item->id)
                       <span class="right floated">
                         <i class="trophy icon" style="color:#ffd700"></i> @lang('shop.purchases.first')
                       </span>
-                    @elseif ($mostPurchasedItems[1]->item->id === $item->id)
+                    @elseif (!empty($mostPurchasedItems) && isset($mostPurchasedItems[1]) && $mostPurchasedItems[1]->item->id === $item->id)
                       <span class="right floated">
                         <i class="trophy icon" style="color:#cd7f32"></i> @lang('shop.purchases.second')
                       </span>
-                    @elseif ($mostPurchasedItems[2]->item->id === $item->id)
+                    @elseif (!empty($mostPurchasedItems) && isset($mostPurchasedItems[2]) && $mostPurchasedItems[2]->item->id === $item->id)
                       <span class="right floated">
                         <i class="trophy icon" style="color:#C0C0C0"></i> @lang('shop.purchases.third')
                       </span>

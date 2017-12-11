@@ -3,106 +3,6 @@
 @section('title', __('shop.title'))
 
 @section('content')
-    <style>
-        div.price-table {
-            background: rgba(0, 0, 0, 0.03);
-            margin: 30px 0;
-            text-align: center;
-            padding-bottom: 30px;
-            border-left: #fff 1px solid;
-        }
-
-        div.price-table h3 {
-            font-size: 25px;
-            line-height: 25px;
-            padding: 30px 0;
-            border-bottom: rgba(0, 0, 0, 0.1) 2px solid;
-            text-transform: uppercase;
-            font-weight: 300;
-            letter-spacing: normal;
-            margin: 0 0 32px 0;
-        }
-
-        div.price-table p {
-            color: #666;
-            font-size: 36px;
-            line-height: 36px;
-            padding: 30px 0;
-            font-weight: 400;
-            width: 150px;
-            height: 150px;
-            padding-top: 53px;
-            display: inline-block;
-            background-color: rgba(0, 0, 0, 0.05);
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            border-radius: 50%;
-            margin-top: 0;
-        }
-
-        .price-table {
-            border: 2px solid transparent;
-            transition: border .2s, box-shadow .2s;
-            border-left-width: 2px !important;
-        }
-
-        .price-table:hover {
-            cursor: pointer;
-            border-color: #ec9422;
-            -moz-box-shadow: 5px 5px 5px -5px #656565;
-            -webkit-box-shadow: 5px 5px 5px -5px #656565;
-            -o-box-shadow: 5px 5px 5px -5px #656565;
-            box-shadow: 5px 5px 5px -5px #656565;
-            transition: border .2s, box-shadow .2s;
-        }
-
-        .btn-pay {
-            -webkit-transition: border .4s;
-            -moz-transition: border .4s;
-            -ms-transition: border .4s;
-            -o-transition: border .4s;
-            transition: border .4s;
-            border: 2px solid #DADADA;
-            border-radius: 5px;
-            padding: 14px 14px;
-            display: inline-block;
-            background: #FCFCFC;
-            color: #777;
-            margin-top: 5px;
-            cursor: pointer;
-            width: 100%;
-            padding-left: 0px;
-        }
-
-        .btn-pay:hover,
-        .btn-pay.active {
-            border: 2px solid #ec9422;
-        }
-
-        .btn-pay.active h5,
-        .btn-pay.active p {
-            color: #ec9422;
-        }
-
-        .btn-pay i {
-            font-size: 60px;
-            color: #ec9422;
-        }
-
-        .btn-pay h5 {
-            font-size: 20px;
-            font-weight: bold;
-            font-family: 'Lato';
-            color: #777;
-            margin-bottom: 8px;
-        }
-
-        .btn-pay span {
-            font-size: 15px;
-            font-weight: normal;
-            color: #777;
-        }
-    </style>
     <div class="ui container page-content">
 
         <div class="ui fluid big steps" style="margin-bottom: 40px">
@@ -413,6 +313,110 @@
 
         </div>
     </div>
+@endsection
+@section('style')
+    <style>
+        div.price-table {
+            background: rgba(0, 0, 0, 0.03);
+            margin: 30px 0;
+            text-align: center;
+            padding-bottom: 30px;
+            border-left: #fff 1px solid;
+        }
+
+        div.price-table h3 {
+            font-size: 25px;
+            line-height: 25px;
+            padding: 30px 0;
+            border-bottom: rgba(0, 0, 0, 0.1) 2px solid;
+            text-transform: uppercase;
+            font-weight: 300;
+            letter-spacing: normal;
+            margin: 0 0 32px 0;
+        }
+
+        div.price-table p {
+            color: #666;
+            font-size: 36px;
+            line-height: 36px;
+            padding: 30px 0;
+            font-weight: 400;
+            width: 150px;
+            height: 150px;
+            padding-top: 53px;
+            display: inline-block;
+            background-color: rgba(0, 0, 0, 0.05);
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            margin-top: 0;
+        }
+
+        .price-table {
+            border: 2px solid transparent;
+            transition: border .2s, box-shadow .2s;
+            border-left-width: 2px !important;
+        }
+
+        .price-table:hover {
+            cursor: pointer;
+            border-color: #ec9422;
+            -moz-box-shadow: 5px 5px 5px -5px #656565;
+            -webkit-box-shadow: 5px 5px 5px -5px #656565;
+            -o-box-shadow: 5px 5px 5px -5px #656565;
+            box-shadow: 5px 5px 5px -5px #656565;
+            transition: border .2s, box-shadow .2s;
+        }
+
+        .btn-pay {
+            -webkit-transition: border .4s;
+            -moz-transition: border .4s;
+            -ms-transition: border .4s;
+            -o-transition: border .4s;
+            transition: border .4s;
+            border: 2px solid #DADADA;
+            border-radius: 5px;
+            padding: 14px 14px;
+            display: inline-block;
+            background: #FCFCFC;
+            color: #777;
+            margin-top: 5px;
+            cursor: pointer;
+            width: 100%;
+            padding-left: 0px;
+        }
+
+        .btn-pay:hover,
+        .btn-pay.active {
+            border: 2px solid #ec9422;
+        }
+
+        .btn-pay.active h5,
+        .btn-pay.active p {
+            color: #ec9422;
+        }
+
+        .btn-pay i {
+            font-size: 60px;
+            color: #ec9422;
+        }
+
+        .btn-pay h5 {
+            font-size: 20px;
+            font-weight: bold;
+            font-family: 'Lato';
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .btn-pay span {
+            font-size: 15px;
+            font-weight: normal;
+            color: #777;
+        }
+    </style>
+@endsection
+@section('script')
     <script type="text/javascript">
         $(document).ready(function () {
             // =====

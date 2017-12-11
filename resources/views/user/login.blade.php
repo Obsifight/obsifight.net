@@ -56,7 +56,7 @@
             @lang('user.login.two_factor_auth')
           </div>
         </h1>
-        <form method="post" action="{{ url('/login/two-factor-auth') }}" data-ajax class="ui form">
+        <form method="post" action="{{ url('/login/two-factor-auth') }}" data-ajax data-ajax-custom-callback="afterLogin" class="ui form">
           <div class="field">
             <label>@lang('user.field.two_factor_auth_code')</label>
             <div class="ui left icon input" id="code">
@@ -127,7 +127,6 @@
         return redirect()
       $('#login-content').slideUp(150)
       $('#two-factor-auth-content').slideDown(150)
-      redirect()
     }
   </script>
 @endsection

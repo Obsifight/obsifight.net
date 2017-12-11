@@ -353,7 +353,8 @@ class CreditController extends Controller
             abort(403);
 
         // Find the payment
-        $payment = resolve('\SebastianWalker\Paysafecard\Payment')::find($request->input('mtid'), $client);
+        $payment = resolve('\SebastianWalker\Paysafecard\Payment');
+        $payment = $payment::find($request->input('mtid'), $client);
         // Check if the payment was authorized
 
         if (!$payment->isAuthorized())

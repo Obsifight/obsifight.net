@@ -79,7 +79,7 @@ Route::get('/user/socials/twitter/link', 'TwitterController@auth')->middleware('
 Route::get('/user/socials/twitter/link/success', 'TwitterController@success')->middleware('auth')->middleware('permission:user-link-twitter-account');
 Route::post('/user/socials/twitter/link/callback', 'TwitterController@callback');
 
-Route::get('/user/server/logged', 'UserController@isLogged');
+Route::get('/user/server/logged/{user}', 'UserController@isLogged');
 
 /*
 ===========
@@ -100,12 +100,6 @@ Route::get('/vote/reward/kit/get', 'VoteController@getRewardKit')->middleware('a
 ===========
 */
 Route::get('/stats', 'StatsController@index');
-Route::get('/stats/users/count', function (Request $request) {
-  return response()->json([
-    'status' => true,
-    'count' => \App\User::count()
-  ]);
-});
 Route::get('/stats/users/search', function (Request $request) {
   return response()->json([
     'status' => true,
@@ -118,6 +112,14 @@ Route::get('/stats/users/search', function (Request $request) {
     }, \App\User::where('username', 'LIKE', '%' . $_GET['q'] . '%')->get()->toArray())
   ]);
 });
+Route::get('/stats/users/count', 'StatsController@usersCount');
+Route::get('/stats/users/graph', 'StatsController@usersGraph');
+Route::get('/stats/users/graph/peak', 'StatsController@usersPeakGraph');
+Route::get('/stats/users/graph/register', 'StatsController@usersRegisterGraph');
+Route::get('/stats/users/graph/visits', 'StatsController@usersVisitsGraph');
+Route::get('/stats/fights/count', 'StatsController@fightsCount');
+Route::get('/stats/factions/count', 'StatsController@factionsCount');
+Route::get('/stats/users/count/version', 'StatsController@usersCountThisVersion');
 Route::get('/stats/server/count', 'StatsController@serverCount');
 Route::get('/stats/server/max', 'StatsController@serverMax');
 Route::get('/stats/visits/count', 'StatsController@visitsCount');

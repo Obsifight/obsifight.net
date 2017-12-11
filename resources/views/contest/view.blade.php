@@ -120,31 +120,33 @@
 
             </div>
 
-            @if (Auth::user())
-                <div class="column">
-                    <div class="ui rail">
-                        <div class="ui sticky">
-                            <div class="ui segment" style="margin-top:15px">
-                                <button class="fluid ui red button close{{ $contest->status == 'CLOSED' ? ' disabled' : ''}}"
-                                        data-tooltip="@lang('sanction.contest.action.close.text')"
-                                        data-inverted>
-                                    <i class="icon remove"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.close.btn')</span>
-                                </button>
-                                <div class="ui divider"></div>
-                                <button class="fluid ui green button unban{{ $sanction['state'] && $contest->status != 'CLOSED' ? '' : ' disabled' }}"
-                                        data-tooltip="@lang('sanction.contest.action.unban.text')" data-inverted>
-                                    <i class="icon minus"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.unban.btn')</span>
-                                </button>
-                                <div class="ui divider"></div>
-                                <button class="fluid ui teal button reduce{{ $sanction['state'] && $contest->status != 'CLOSED' ? '' : ' disabled' }}"
-                                        data-tooltip="@lang('sanction.contest.action.reduce.text')" data-inverted>
-                                    <i class="icon checkmark"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.reduce.btn')</span>
-                                </button>
+            @ability('', 'sanction-contest-close,sanction-contest-edit')
+                @if (Auth::user())
+                    <div class="column">
+                        <div class="ui rail">
+                            <div class="ui sticky">
+                                <div class="ui segment" style="margin-top:15px">
+                                    <button class="fluid ui red button close{{ $contest->status == 'CLOSED' ? ' disabled' : ''}}"
+                                            data-tooltip="@lang('sanction.contest.action.close.text')"
+                                            data-inverted>
+                                        <i class="icon remove"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.close.btn')</span>
+                                    </button>
+                                    <div class="ui divider"></div>
+                                    <button class="fluid ui green button unban{{ $sanction['state'] && $contest->status != 'CLOSED' ? '' : ' disabled' }}"
+                                            data-tooltip="@lang('sanction.contest.action.unban.text')" data-inverted>
+                                        <i class="icon minus"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.unban.btn')</span>
+                                    </button>
+                                    <div class="ui divider"></div>
+                                    <button class="fluid ui teal button reduce{{ $sanction['state'] && $contest->status != 'CLOSED' ? '' : ' disabled' }}"
+                                            data-tooltip="@lang('sanction.contest.action.reduce.text')" data-inverted>
+                                        <i class="icon checkmark"></i>&nbsp;<span class="mobile-hidden">@lang('sanction.contest.action.reduce.btn')</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            @endability
 
         </div>
     </div>
@@ -241,8 +243,8 @@
                     days: [@lang('global.days.initials')],
                     months: [@lang('global.months')],
                     monthsShort: [@lang('global.months.mini')],
-                    today: '@lang('global.today')',
-                    now: '@lang('global.now')'
+                    today: "@lang('global.today')",
+                    now: "@lang('global.now')"
                 },
                 formatter: {
                     date: function (date, settings) {

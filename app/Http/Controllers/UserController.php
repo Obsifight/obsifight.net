@@ -757,7 +757,7 @@ class UserController extends Controller
   {
     return response()->json([
       'status' => true,
-      'logged' => resolve('\Server')->isConnected(Auth::user()->username)->get()['isConnected']
+      'logged' => resolve('\Server')->isConnected($request->user)->get()['isConnected']
     ]);
   }
 

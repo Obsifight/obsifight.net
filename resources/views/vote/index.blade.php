@@ -192,7 +192,7 @@
 
         function afterStepThree(req, res) {
             // Check if logged
-            $.get('{{ url('/user/server/logged') }}', function (data) {
+            $.get('{{ url('/user/server/logged') }}/' + $('input[name="username"]').val(), function (data) {
                 if (data.status && data.logged) {
                     $('[data-reward-type="now"]').removeClass('disabled')
                     $('[data-reward-type="after"]').addClass('disabled')

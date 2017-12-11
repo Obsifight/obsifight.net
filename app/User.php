@@ -54,4 +54,26 @@ class User extends Authenticatable
 
         return $successList;
     }
+
+    public static function getStaff()
+    {
+        $staffList = [];
+        $staff = json_decode(file_get_contents('http://api.obsifight.net/users/staff'))->data;
+        $staffColors = ['red', 'red', 'green', 'olive', 'yellow'];
+        $i = 0;
+        foreach ($staff as $group => $users) {
+            if ($group === 'Fondateur')
+                $group = 'Administrateur';
+            if ($group === 'Anim-Test' || $group === 'Chef-Anim')
+                $group = 'Animateur';
+            if ($group === 'Chef-Modo' || $group === 'Modo-Test')
+                $group = 'Modo-Joueur';
+            $group = $group . 's';
+            if (!isset($staffList[$group]))
+                $staffList[$group] = ['color' => $staffColors[$i++], 'users' => []];
+            foreach ($users as $user)
+                array_push($staffList[$group]['users'], $user);
+        }
+        return ($staffList);
+    }
 }

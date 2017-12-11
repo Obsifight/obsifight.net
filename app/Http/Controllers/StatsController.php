@@ -17,8 +17,8 @@ class StatsController extends Controller
 
   public function index(Request $request)
   {
-      // TODO: get staff from API, generate graphs from api / database
-    return view('stats.index');
+    $staff = \App\User::getStaff();
+    return view('stats.index', compact('staff'));
   }
 
   public function user(Request $request)

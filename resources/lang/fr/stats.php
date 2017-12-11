@@ -46,5 +46,21 @@ return [
     'users.skin' => 'Possède un skin',
     'users.last_connection' => 'Dernière connexion :date',
 
-    'title' => 'Statistiques'
+    'title' => 'Statistiques',
+
+    'find.user' => 'Chercher un joueur',
+    'users.amount.max' => 'Record de joueurs',
+    'users.amount.online' => 'Joueurs en ligne',
+    'users.amount.register' => 'Joueurs inscrits',
+    'users.amount.register.version' => 'Joueurs uniques',
+    'factions.amount' => 'Factions créées',
+    'fights.amount' => 'Combats',
+    'visits.amount' => 'Visites du site',
+    'graph.users' => 'Statistiques des joueurs',
+    'graph.range' => 'Calculées sur les 7 derniers jours',
+    'graph.users.hours' => 'Les heures avec le plus de connectés',
+    'graph.visits' => 'Statistiques des visites',
+    'graph.register' => 'Statistiques des inscriptions',
+    'graph.load.title' => 'Juste une seconde',
+    'graph.load.subtitle' => 'Nous affichons le graphique pour vous.'
 ];

@@ -9,7 +9,7 @@
       <div class="ui four wide column">
         <div class="ui search">
           <div class="ui left icon input" style="width: 100%;">
-            <input class="prompt" type="text" placeholder="Chercher un joueur">
+            <input class="prompt" type="text" placeholder="@lang('stats.find.user')">
             <i class="user icon"></i>
           </div>
         </div>
@@ -18,49 +18,15 @@
           <i class="circular users icon"></i>
         </h3>
 
-        <h2 class="ui dividing red staff header">
-          Administrateurs
-        </h2>
-        @foreach (['Suertzz', 'HiZe_', 'roumi1996', 'Fenixx57'] as $username)
-          <a href="{{ url('/stats/' . $username) }}">
-            <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded staff image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
-          </a>
-        @endforeach
-
-        <h2 class="ui dividing red staff header">
-          Développeurs
-        </h2>
-        @foreach (['Eywek', 'CharpenteDocile', 'ThisIsMac'] as $username)
-          <a href="{{ url('/stats/' . $username) }}">
-            <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded staff image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
-          </a>
-        @endforeach
-
-        <h2 class="ui dividing green staff header">
-          Modérateurs
-        </h2>
-        @foreach (["CronosS","Ludoo","yelrambec","SkyThenak","Newon_","lummix","ANEMIC"] as $username)
-          <a href="{{ url('/stats/' . $username) }}">
-            <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded staff image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
-          </a>
-        @endforeach
-
-        <h2 class="ui dividing olive staff header">
-          Supports
-        </h2>
-        @foreach (["pTanguy"] as $username)
-          <a href="{{ url('/stats/' . $username) }}">
-            <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded staff image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
-          </a>
-        @endforeach
-
-        <h2 class="ui dividing yellow staff header">
-          Animateurs
-        </h2>
-        @foreach (["_Clem01_","Droweurss","Gallix2","Fairyme","KogMaw"] as $username)
-          <a href="{{ url('/stats/' . $username) }}">
-            <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded staff image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
-          </a>
+        @foreach($staff as $group => $data)
+          <h2 class="ui dividing {{ $data['color'] }} staff header">
+            {{ $group }}
+          </h2>
+          @foreach ($data['users'] as $username)
+            <a href="{{ url('/stats/' . $username) }}">
+              <img src="https://skins.obsifight.net/head/{{ $username }}/64" class="ui rounded staff image" alt="{{ $username }}" data-toggle="popup" data-variation="inverted" data-placement="top center" data-content="{{ $username }}">
+            </a>
+          @endforeach
         @endforeach
       </div>
 
@@ -72,7 +38,7 @@
               530
             </div>
             <div class="label">
-              Record de joueurs
+              @lang('stats.users.amount.max')
             </div>
           </div>
           <div class="statistic">
@@ -80,7 +46,7 @@
               350
             </div>
             <div class="label">
-              Joueurs en ligne
+              @lang('stats.users.amount.online')
             </div>
           </div>
           <div class="statistic">
@@ -88,7 +54,7 @@
               77.012
             </div>
             <div class="label">
-              Joueurs inscrits
+              @lang('stats.users.amount.register')
             </div>
           </div>
         </div>
@@ -99,7 +65,7 @@
               3.700
             </div>
             <div class="label">
-              Joueurs uniques
+              @lang('stats.users.amount.register.version')
             </div>
           </div>
           <div class="statistic">
@@ -107,7 +73,7 @@
               2.200
             </div>
             <div class="label">
-              Factions créées
+              @lang('stats.factions.amount')
             </div>
           </div>
           <div class="statistic">
@@ -115,7 +81,7 @@
               160.000
             </div>
             <div class="label">
-              Combats
+              @lang('stats.fights.amount')
             </div>
           </div>
           <div class="statistic">
@@ -123,7 +89,7 @@
               980.000
             </div>
             <div class="label">
-              Visites du site
+              @lang('stats.visits.amount')
             </div>
           </div>
         </div>
@@ -133,8 +99,8 @@
         <h1 class="ui header">
           <i class="child icon"></i>
           <div class="content">
-            Statistiques des joueurs
-            <div class="sub header">Calculées sur les 7 derniers jours</div>
+            @lang('stats.graph.users')
+            <div class="sub header">@lang('stats.graph.range')</div>
           </div>
         </h1><br>
 
@@ -142,23 +108,23 @@
           <i class="notched circle loading icon"></i>
           <div class="content">
             <div class="header">
-              Juste une seconde
+              @lang('stats.graph.load.title')
             </div>
-            <p>Nous affichons le graphique pour vous.</p>
+            <p>@lang('stats.graph.load.subtitle')</p>
           </div>
         </div>
 
         <h3 class="ui dividing header">
-          Les heures avec le plus de connectés
+          @lang('stats.graph.users.hours')
         </h3>
 
         <div class="ui icon info message">
           <i class="notched circle loading icon"></i>
           <div class="content">
             <div class="header">
-              Juste une seconde
+              @lang('stats.graph.load.title')
             </div>
-            <p>Nous affichons les graphiques pour vous.</p>
+            <p>@lang('stats.graph.load.subtitle')</p>
           </div>
         </div>
 
@@ -167,8 +133,8 @@
         <h1 class="ui header">
           <i class="hand pointer icon"></i>
           <div class="content">
-            Statistiques des visites
-            <div class="sub header">Calculées sur les 7 derniers jours</div>
+            @lang('stats.graph.visits')
+            <div class="sub header">@lang('stats.graph.range')</div>
           </div>
         </h1><br>
 
@@ -176,9 +142,9 @@
           <i class="notched circle loading icon"></i>
           <div class="content">
             <div class="header">
-              Juste une seconde
+              @lang('stats.graph.load.title')
             </div>
-            <p>Nous affichons le graphique pour vous.</p>
+            <p>@lang('stats.graph.load.subtitle')</p>
           </div>
         </div>
 
@@ -187,8 +153,8 @@
         <h1 class="ui header">
           <i class="signup icon"></i>
           <div class="content">
-            Statistiques des inscriptions
-            <div class="sub header">Calculées sur les 7 derniers jours</div>
+            @lang('stats.graph.register')
+            <div class="sub header">@lang('stats.graph.range')</div>
           </div>
         </h1><br>
 
@@ -196,9 +162,9 @@
           <i class="notched circle loading icon"></i>
           <div class="content">
             <div class="header">
-              Juste une seconde
+              @lang('stats.graph.load.title')
             </div>
-            <p>Nous affichons le graphique pour vous.</p>
+            <p>@lang('stats.graph.load.subtitle')</p>
           </div>
         </div>
 

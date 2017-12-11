@@ -24,14 +24,13 @@ class User extends Authenticatable
       if (!$data) return false;
       if (!$data->status) return false;
       $user = $data->data;
-      if (!($user->faction = \App\Faction::getFactionFromUsername($username)))
-          return false;
+      $user->faction = \App\Faction::getFactionFromUsername($username);
       return ($user);
   }
 
-    static public function getSuccessList($username)
+    static public function getSuccessList($uuid)
     {
-        $body = @file_get_contents(env('DATA_SERVER_ENDPOINT') . '/users/' . $username . '/success');
+        $body = @file_get_contents(env('DATA_SERVER_ENDPOINT') . '/users/' . $uuid . '/success');
         if (!$body) return false;
         $data = @json_decode($body);
         if (!$data) return false;

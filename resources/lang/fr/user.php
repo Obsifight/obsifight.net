@@ -202,5 +202,7 @@ return [
 
   // ROLES
   'role.restricted' => 'Compte restreint',
-  'role.restricted.description' => "Votre compte est temporairement restreint. Vous avez perdu certaines permissions vous empêchant d'utiliser pleinement votre compte."
+  'role.restricted.description' => "Votre compte est temporairement restreint. Vous avez perdu certaines permissions vous empêchant d'utiliser pleinement votre compte.",
+
+  'refund.msg' => 'Vous avez été remboursé de :money points boutique pour vos précédents achats !'
 ];

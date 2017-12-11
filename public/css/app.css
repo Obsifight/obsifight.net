@@ -140,6 +140,17 @@ ul li a:hover {
 /* ====
   NAV
 ======= */
+
+.ui.menu .dropdown.item .menu {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.ui.menu .ui.dropdown .menu>.item {
+  text-transform: uppercase!important;
+}
+
 .ui.menu.navbar {
   margin-bottom: 10px;
   border-radius: 0;

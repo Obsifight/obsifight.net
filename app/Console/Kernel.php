@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
       Commands\GetYoutubeVideos::class,
-      Commands\VoteReset::class
+      Commands\VoteReset::class,
+      Commands\RefundV8::class
     ];
 
     /**

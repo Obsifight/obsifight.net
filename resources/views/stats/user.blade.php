@@ -5,7 +5,7 @@
 @section('content')
     <div class="ui container page-content">
         <h1 class="ui center aligned header">
-            <img src="https://skins.obsifight.net/head/Eywek/64" class="ui rounded staff image" alt="Eywek">
+            <img src="https://skins.obsifight.net/head/{{ $user->username }}/64" class="ui rounded staff image" alt="Eywek">
             <div class="content">
                 @if (isset($user->faction->name))
                     <a href="{{ url('/stats/faction/' . $user->faction->name) }}" class="ui blue image medium label">
@@ -86,7 +86,7 @@
 
                 <div class="ui divider"></div>
 
-                @for($i = 1; $i <= 8; $i++)
+                @for($i = 5; $i <= 8; $i++)
                     <span class="ui {{ in_array($i, $user->versions) ? 'green' : 'red' }} label">
                         <i class="remove icon"></i>
                         @lang('stats.users.versions', ['number' => $i])
@@ -96,15 +96,17 @@
                 <div class="ui divider"></div>
 
                 <span class="ui {{ $user->cape ? 'blue' : 'grey disabled' }} label">
-                  <i class="remove icon"></i>
+                  <i class="{{ $user->cape ? 'check' : 'remove' }} icon"></i>
                     @lang('stats.users.cape')
                 </span>
                 <span class="ui {{ $user->skin ? 'blue' : 'grey disabled' }} label">
-                  <i class="check icon"></i>
+                  <i class="{{ $user->cape ? 'check' : 'remove' }} icon"></i>
                     @lang('stats.users.skin')
                 </span>
 
+                @if (is_object($user->online->last_connection))
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>@lang('stats.users.last_connection', ['date' => $user->online->last_connection->diffForHumans()])</em>
+                @endif
 
             </div>
             <div class="ui vertical divider"></div>
@@ -114,7 +116,7 @@
                     <div class="sub header">@lang('stats.success.subtitle', ['number' => env('APP_VERSION_COUNT')])</div>
                 </h2>
 
-                @foreach($faction->successList as $successList)
+                @foreach($user->successList as $successList)
                     @foreach($successList as $successName => $successValue)
                         <span class="ui achievement {{ is_bool($successValue) ? ($successValue ? 'green' : 'red') : ($successValue == 100 ? 'green' : 'active p' . $successValue) }} label">
                             <i class="{{ $successValue == 100 || $successValue === true ? 'check' : ($successValue === false ? 'remove' : 'wait') }} icon"></i>
@@ -177,5 +179,10 @@
             right: calc(100% - 80%);
             border-radius: .28571429rem;
         }
+        @for ($i = 0; $i <= 100; $i += 0.1)
+            .achievement.active.label.p{{ str_replace('.', '-', round($i, 1)) }}:after {
+            right: calc(100% - {{ round($i, 1) }}%);
+        }
+        @endfor
     </style>
 @endsection

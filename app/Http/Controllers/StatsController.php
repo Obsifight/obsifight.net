@@ -24,12 +24,14 @@ class StatsController extends Controller
   public function user(Request $request)
   {
     $user = \App\User::getStatsFromUsername($request->username);
+    $userDB = \App\User::where('username', $request->username)->firstOrFail();
     if (!$user)
         return abort(404);
     $user->username = $request->username;
-    $user->register_date = \App\User::where('username', $request->username)->first()->created_at;
-    $user->online->last_connection = Carbon::parse($user->online->last_connection);
-    $user->successList = \App\User::getSuccessList($request->username);
+    $user->register_date = $userDB->created_at;
+    if ($user->online->last_connection > 0)
+        $user->online->last_connection = Carbon::parse($user->online->last_connection);
+    $user->successList = \App\User::getSuccessList($userDB->uuid);
     $user->country = 'france'; // TODO: package torann/geoip
     return view('stats.user', ['user' => $user]);
   }

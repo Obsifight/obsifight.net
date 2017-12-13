@@ -64,6 +64,18 @@
       </div>
     @endforeach
 
+    @if ($categories->count() == 0)
+      <div class="ui icon error message">
+        <i class="shopping basket circle icon"></i>
+        <div class="content">
+          <div class="header">
+            @lang('shop.no_items.title')
+          </div>
+          <p>@lang('shop.no_items.subtitle')</p>
+        </div>
+      </div>
+    @endif
+
     <div class="ui stackable grid">
 
       <div class="ui three wide column">
@@ -74,10 +86,12 @@
           </a>
         @endif
         <div class="ui vertical menu">
-          <a data-menu="ranks" class="{{ (!$categorySelected ? 'active' : '') }} yellow item">
-            @lang('shop.ranks')
-            <div class="ui {{ (!$categorySelected ? 'yellow left pointing' : '') }} label">{{ $ranks->count() }}</div>
-          </a>
+          @if ($ranks->count() > 0)
+            <a data-menu="ranks" class="{{ (!$categorySelected ? 'active' : '') }} yellow item">
+              @lang('shop.ranks')
+              <div class="ui {{ (!$categorySelected ? 'yellow left pointing' : '') }} label">{{ $ranks->count() }}</div>
+            </a>
+          @endif
           @foreach ($categories as $category)
             <a data-menu="{{ $category->id }}" class="{{ ($categorySelected && $categorySelected == $category->id ? 'active' : '') }} yellow item">
               {{ $category->name }}

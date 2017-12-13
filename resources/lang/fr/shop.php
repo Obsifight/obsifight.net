@@ -63,4 +63,9 @@ return [
   'credit.add.paysafecard.currency' => 'Monnaie',
   'credit.add.paysafecard.confirm' => 'Vous allez payer :amount€ sur paysafecard. Une fois le paiement effectué, vous serez automatiquement redirigé sur notre site et crédité de :money points.',
   'credit.add.hipay.details' => 'Achat de :money points sur le compte de :username sur ObsiFight.',
+
+  'no_items.title' => 'Aucun article',
+  'no_items.subtitle' => 'Aucun article n\'est disponible pour le moment.',
+
+  'forbidden' => 'Vous devez vous connecter une première fois en jeu pour pouvoir accèder à la boutique.'
 ];

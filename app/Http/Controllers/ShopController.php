@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\UsersVersion;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ class ShopController extends Controller
 {
   public function index(Request $request)
   {
+    if (UsersVersion::where('user_id', Auth::user()->id)->count() === 0)
+        return redirect('/user')->with('flash.error', __('shop.forbidden'));
     $categories = ShopCategory::with(['items' => function ($query) {
       $query->where('displayed', 1);
       $query->doesntHave('rank');
@@ -110,6 +113,7 @@ class ShopController extends Controller
         $command = $server->sendCommand(str_replace('{PLAYER}', Auth::user()->username, $command))->get();
       }
     }
+    $server->sendCommand(strtr(env('SHOP_GLOBAL_CMD'), ['{PLAYER}' => Auth::user()->username, '{NAME}' => $item->name]))->get();
     /* ====
       Handle success message
     ==== */

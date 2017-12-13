@@ -121,8 +121,10 @@ class VoteController extends Controller
       $command = $server->isConnected($request->user->username)->get();
       if ($command['isConnected']) {
         $command = $server->sendCommand(str_replace('{PLAYER}', $request->user->username, $reward->commands))->get();
-        if ($command['sendCommand'])
-          $reward_getted = true;
+        if ($command['sendCommand']) {
+            $server->sendCommand(strtr(env('VOTE_GLOBAL_CMD'), ['{PLAYER}' => $request->user->username, '{REWARD_NAME}' => $reward->name, '{PROBA}' => $reward->probability]))->get();
+            $reward_getted = true;
+        }
       }
     }
 

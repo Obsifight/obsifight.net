@@ -66,7 +66,8 @@ class GoogleController extends Controller
     $channel->link_ip = $request->ip();
     $channel->save();
 
-    // TODO: SEND COMMANDS TO SERVER
+    $server = resolve('\Server');
+    $server->sendCommand(strtr(env('YOUTUBE_RANK_CMD'), ['{PLAYER}' => Auth::user()->username]))->get();
 
     // REDIRECT WITH SUCCESS
     return redirect('/user')->with('flash.success', __('user.profile.socials.youtube.link.success'));

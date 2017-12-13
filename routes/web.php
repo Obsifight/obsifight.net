@@ -147,10 +147,10 @@ Route::get('/wiki/{article}', function (\App\WikiArticle $article) {
   SHOP
 ===========
 */
-Route::get('/shop', 'ShopController@index');
-Route::get('/shop/rank/{rankslug}', 'ShopController@index');
-Route::get('/shop/item/{itemid}', 'ShopController@index');
-Route::get('/shop/category/{categoryid}', 'ShopController@index');
+Route::get('/shop', 'ShopController@index')->middleware('auth');
+Route::get('/shop/rank/{rankslug}', 'ShopController@index')->middleware('auth');
+Route::get('/shop/item/{itemid}', 'ShopController@index')->middleware('auth');
+Route::get('/shop/category/{categoryid}', 'ShopController@index')->middleware('auth');
 Route::post('/shop/buy', 'ShopController@buy')->middleware('auth')->middleware('permission:shop-buy');
 
 Route::get('/shop/credit/add', 'CreditController@add')->middleware('auth')->middleware('permission:shop-credit-add');
@@ -176,4 +176,4 @@ Route::post('/sanctions/contest', 'ContestController@add')->middleware('auth')->
 Route::get('/sanctions/contest/{id}', 'ContestController@view');
 Route::delete('/sanctions/contest/{id}', 'ContestController@close')->middleware('auth')->middleware('permission:sanction-contest-close');
 Route::put('/sanctions/contest/{id}', 'ContestController@edit')->middleware('auth')->middleware('permission:sanction-contest-edit');
-Route::post('/sanctions/contest/{id}/comment', 'ContestController@addComment')->middleware('auth')->middleware('permission:sanction-contest-comment');
+Route::post('/sanctions/contest/{id}/comment', 'ContestController@addComment')->middleware('auth');

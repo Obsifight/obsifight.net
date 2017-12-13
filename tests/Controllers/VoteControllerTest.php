@@ -216,7 +216,7 @@ class VoteControllerTest extends TestCase
     $server->expects($this->once())
            ->method('isConnected')
            ->willReturn($server);
-    $server->expects($this->once())
+    $server->expects($this->exactly(2))
            ->method('sendCommand')
            ->willReturn($server);
     $this->app->instance('\Server', $server);

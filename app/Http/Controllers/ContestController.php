@@ -214,6 +214,9 @@ class ContestController extends Controller
         $findContest = Contest::where('id', $id)->first();
         if (empty($findContest)) // not found
             abort(404);
+        // check if can
+        if (!Auth::user()->can('sanction-contest-comment') && Auth::user()->id !== $findContest->user->id)
+            abort(403);
         // check request
         if (!$request->has('content') || empty($request->input('content')))
             return response()->json(['status' => true, 'success' => 'Missing content.'], 400);

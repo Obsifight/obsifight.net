@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use Urb\XenforoBridge\XenforoBridge;
 use Validator;
 use Illuminate\Http\Request;
 
@@ -115,6 +116,12 @@ class UserController extends Controller
   {
     // Log user
     Auth::loginUsingId($userId, ($rememberMe ? true : false));
+    if (env('APP_FORUM_ENABLED', false))
+        \Urb\XenforoBridge\XenforoBridge::loginAsUser(
+            (new \Urb\XenforoBridge\User\User())->getUserByUsername(Auth::user()->username)['id'],
+            $rememberMe,
+            true
+        );
 
     return response()->json([
       'status' => true,

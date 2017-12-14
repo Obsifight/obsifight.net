@@ -9,7 +9,7 @@ use App\UsersTransferMoneyHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
-use Yajra\Datatables\Datatables;
+use Yajra\Datatables\Facades\Datatables;
 
 class UserController extends Controller
 {
@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function transferHistoryData(Request $request)
     {
-        return Datatables::of(UsersTransferMoneyHistory::with('user')->with('receiver')->orderBy('id', 'DESC')->get())->make(true);
+        return Datatables::eloquent(UsersTransferMoneyHistory::with('user')->with('receiver')->orderBy('users_transfer_money_histories.id', 'DESC'))->make(true);
     }
 
     public function index(Request $request)
@@ -31,12 +31,12 @@ class UserController extends Controller
 
     public function find(Request $request)
     {
-        return Datatables::of(User::orderBy('id', 'DESC')->get())->make(true);
+        return Datatables::eloquent(User::orderBy('id', 'DESC'))->make(true);
     }
 
     public function usernameHistory(Request $request)
     {
-        return Datatables::of(UsersEditUsernameHistory::with('user')->orderBy('id', 'DESC')->get())->make(true);
+        return Datatables::eloquent(UsersEditUsernameHistory::with('user')->orderBy('users_edit_username_histories.id', 'DESC'))->make(true);
     }
 
     public function edit(Request $request)

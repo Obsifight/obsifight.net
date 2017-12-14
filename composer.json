@@ -61,7 +61,7 @@
         "waavi/recaptcha": "1.0.x",
         "webpatser/laravel-uuid": "2.*",
         "xpaw/ping": "1.0.0",
-        "yajra/laravel-datatables-oracle": "~6.0",
+        "yajra/laravel-datatables-oracle": "~7.0",
         "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {

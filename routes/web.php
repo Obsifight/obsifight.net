@@ -177,3 +177,14 @@ Route::get('/sanctions/contest/{id}', 'ContestController@view');
 Route::delete('/sanctions/contest/{id}', 'ContestController@close')->middleware('auth')->middleware('permission:sanction-contest-close');
 Route::put('/sanctions/contest/{id}', 'ContestController@edit')->middleware('auth')->middleware('permission:sanction-contest-edit');
 Route::post('/sanctions/contest/{id}/comment', 'ContestController@addComment')->middleware('auth');
+
+/*
+===========
+  ADMIN
+===========
+*/
+
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['permission:view-admin-dashboard']], function() {
+    // DASHBOARD
+    Route::get('/', 'DashboardController@index');
+});

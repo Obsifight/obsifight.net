@@ -1,0 +1,7 @@
+.bg-maintenance-image {
+  background-image : url(../../images/backgrounds/bg-2.jpg);
+  background-repeat : no-repeat;
+  -webkit-background-size : cover;
+          background-size : cover;
+}
+/* Localized */

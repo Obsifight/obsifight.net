@@ -47,5 +47,7 @@ return [
   'footer.incidents' => 'Incidents',
   'footer.title.credits' => 'Crédits',
   'footer.credit' => 'Ce site a été développé pour ObsiFight par <a href=":link">:username</a>.',
-  'footer.version' => 'Version actuelle du site : :version'
+  'footer.version' => 'Version actuelle du site : :version',
+
+  'users' => 'Utilisateurs'
 ];

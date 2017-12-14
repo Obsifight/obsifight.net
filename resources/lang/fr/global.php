@@ -3,6 +3,9 @@ return [
 
   'date' => 'Date',
   'or' => 'ou',
+  'edit' => 'Éditer',
+  'yes' => 'Oui',
+  'no' => 'Non',
   'warning' => 'Attention',
   'info' => 'Information',
   'confirm' => 'Confirmer',

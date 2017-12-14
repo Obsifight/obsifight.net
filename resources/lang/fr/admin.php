@@ -54,6 +54,21 @@ return [
     'shop.history.transaction.points' => 'Points reçu',
     'shop.history.dedipass.code' => 'Code',
     'shop.history.dedipass.rate' => 'Palier',
+    'shop.items' => 'Articles',
+    'shop.categories' => 'Catégories',
+    'shop.item.name' => 'Nom de l\'article',
+    'shop.category.name' => 'Nom de la catégorie',
+    'shop.item.price' => 'Prix de l\'article',
+    'shop.item.displayed' => 'Affiché',
+    'shop.ranks' => 'Grades',
+    'shop.rank.slug' => 'Slug',
+    'shop.sales' => 'Promotions',
+    'shop.sale.type' => 'Type de promotion',
+    'shop.sale.type_name' => 'Nom du type',
+    'shop.sale.reduction' => 'Réduction',
+    'shop.sale.all' => 'Toute la boutique',
+    'shop.sale.item' => 'Article',
+    'shop.sale.category' => 'Catégorie',
 
     'shop.history.hipay' => 'Transactions HiPay',
 
@@ -84,5 +99,10 @@ return [
     'users.obsiguard.history.date' => 'Date',
     'users.obsiguard.ips' => 'Liste des IPs',
     'users.update.success' => 'Le joueur a bien été modifié !',
-    'users.logs' => 'Logs de connexion'
+    'users.logs' => 'Logs de connexion',
+
+    'users.emails.update.requests' => 'Demande de changement d\'email',
+    'users.emails.new' => 'Nouvel email',
+    'users.emails.update.requests.valid' => 'Valider',
+    'users.emails.update.requests.invalid' => 'Refuser'
 ];

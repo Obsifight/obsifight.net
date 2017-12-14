@@ -198,8 +198,15 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::post('/users/edit/{id}/obsiguard/delete/{ipId}', 'UserController@deleteObsiguardIP')->where('id', '[0-9]*')->where('ipId', '[0-9]*');
     Route::get('/users/transfers', 'UserController@transferHistory');
     Route::get('/users/transfers/data', 'UserController@transferHistoryData');
+    Route::get('/emails/updates', 'UserController@emailsUpdate');
+    Route::post('/emails/updates/{id}/valid', 'UserController@emailsUpdateValid')->where('id', '[0-9]*');
+    Route::post('/emails/updates/{id}/invalid', 'UserController@emailsUpdateInvalid')->where('id', '[0-9]*');
 
     // Boutique
+    Route::get('/shop/items', 'ShopController@items');
+    Route::get('/shop/item/delete/{id}', 'ShopController@deleteItem')->where('id', '[0-9]*');
+    Route::get('/shop/category/delete/{id}', 'ShopController@deleteCategory')->where('id', '[0-9]*');
+    Route::get('/shop/sale/delete/{id}', 'ShopController@deleteSale')->where('id', '[0-9]*');
     Route::get('/shop/history', 'ShopController@history');
     Route::get('/shop/history/data/items', 'ShopController@historyDataItems');
     Route::get('/shop/history/data/credits', 'ShopController@historyDataCredits');

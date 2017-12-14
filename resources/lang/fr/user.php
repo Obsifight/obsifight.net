@@ -73,6 +73,8 @@ return [
   'profile.email.edit.reason' => 'Raison du changement',
   'profile.email.edit.subtitle' => 'Soumettez-nous votre demande de changement d\'email',
   'profile.email.edit.send' => 'Soumettre ma demande',
+  'profile.email.edit.success' => 'Votre demande de changement d\'email à bien été validée !',
+  'profile.email.edit.unsuccess' => 'Votre demande de changement d\'email à été refusée.',
   'profile.password.edit' => 'Éditer mon mot de passe',
   'profile.password.edit.placeholder' => 'Entrez un nouveau de mot de passe',
   'profile.edit.username.error.purchase' => "Vous devez acheter l'article <em>Changement de pseudo</em> pour pouvoir le changer !",

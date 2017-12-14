@@ -18,6 +18,7 @@ class CreateShopTables extends Migration
         $table->string('name', 50);
         $table->integer('order')->unsigned();
         $table->boolean('displayed')->default(0);
+        $table->dateTime('deleted_at')->nullable(); // expire date
         $table->timestamps();
       });
       Schema::create('shop_items', function (Blueprint $table) {
@@ -31,6 +32,7 @@ class CreateShopTables extends Migration
         $table->text('commands')->nullable()->default(null);
         $table->string('image_path')->nullable()->default(null);
         $table->boolean('need_connected')->default(true);
+        $table->dateTime('deleted_at')->nullable(); // expire date
         $table->timestamps();
       });
       Schema::create('shop_items_abilities', function (Blueprint $table) {
@@ -47,6 +49,7 @@ class CreateShopTables extends Migration
         $table->string('slug', 30);
         $table->integer('item_id')->unsigned();
         $table->foreign('item_id')->references('id')->on('shop_items');
+        $table->dateTime('deleted_at')->nullable(); // expire date
         $table->timestamps();
       });
       Schema::create('shop_items_purchase_histories', function (Blueprint $table) {

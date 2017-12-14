@@ -1,11 +1,14 @@
 /*
 === GLOBAL ===
 */
-$('.ui.menu.navbar').clone().insertBefore('.pusher').addClass('inverted vertical masthead sidebar')
-$(document).ready(function () {
-  $('.dropdown').dropdown({on: 'hover'})
-  $('.ui.checkbox').checkbox()
-})
+if (($('body.front').length))
+{
+    $('.ui.menu.navbar').clone().insertBefore('.pusher').addClass('inverted vertical masthead sidebar')
+    $(document).ready(function () {
+        $('.dropdown').dropdown({on: 'hover'})
+        $('.ui.checkbox').checkbox()
+    })
+}
 
 function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;

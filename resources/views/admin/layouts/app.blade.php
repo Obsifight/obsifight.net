@@ -28,6 +28,12 @@
 <body data-open="click" data-menu="vertical-menu-modern" data-col="2-columns" class="vertical-layout vertical-menu-modern 2-columns   menu-expanded fixed-navbar">
     @include('admin.layouts.header')
 
+    <div class="app-content content">
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
+    </div>
+
     <!-- BEGIN VENDOR JS-->
     <script src="{{ url('/admin-assets/vendors/js/vendors.min.js') }}" type="text/javascript"></script>
     <!-- BEGIN VENDOR JS-->
@@ -43,5 +49,7 @@
     <script src="{{ url('/admin-assets/js/scripts/customizer.js') }}" type="text/javascript"></script>
     <!-- END STACK JS-->
     <!-- BEGIN PAGE LEVEL JS-->
-    <script src="{{ url('/admin-assets/js/scripts/pages/dashboard-ecommerce.js') }}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
+    <script type="text/javascript" src="{{ url('/js/form.js') }}"></script>
+    @yield('script')
 </body>

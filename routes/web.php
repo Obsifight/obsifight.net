@@ -187,4 +187,8 @@ Route::post('/sanctions/contest/{id}/comment', 'ContestController@addComment')->
 Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['permission:view-admin-dashboard']], function() {
     // DASHBOARD
     Route::get('/', 'DashboardController@index');
+
+    // Users
+    Route::get('/users/transfers', 'UserController@transferHistory');
+    Route::get('/users/transfers/data', 'UserController@transferHistoryData');
 });

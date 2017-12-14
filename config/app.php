@@ -186,7 +186,8 @@ return [
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Urb\XenforoBridge\XenforoBridgeServiceProvider::class,
-        Srmklive\PayPal\Providers\PayPalServiceProvider::class
+        Srmklive\PayPal\Providers\PayPalServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class
     ],
 
     /*
@@ -240,7 +241,8 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
         'XF' => Urb\XenforoBridge\Facades\XenforoBridge::class,
-        'PayPal' => Srmklive\PayPal\Facades\PayPal::class
+        'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
+        'Datatables' => Yajra\Datatables\DatatablesServiceProvider::class,
     ],
 
 ];

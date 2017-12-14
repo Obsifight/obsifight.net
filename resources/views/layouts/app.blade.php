@@ -18,7 +18,7 @@
 
       <link rel="icon" type="image/png" href="{{ url('/img/favicon.png') }}" />
     </head>
-    <body>
+    <body class="front">
       <div class="pusher">
         @include('layouts.header')
 

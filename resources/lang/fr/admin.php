@@ -15,5 +15,12 @@ return [
     'nav.wiki' => 'Wiki',
     'nav.utilities' => 'Utilitaires',
     'nav.maintenance' => 'Maintenance',
-    'nav.users.permissions' => 'Permissions'
+    'nav.users.permissions' => 'Permissions',
+
+    'users.transfer.history' => 'Historique des transferts de points entre joueurs',
+    'users.transfer.history.username' => 'Émetteur',
+    'users.transfer.history.amount' => 'Montant',
+    'users.transfer.history.receiver' => 'Destinataire',
+    'users.transfer.history.date' => 'Date du transfert',
+    'users.transfer.history.ip' => 'IP du transfert'
 ];

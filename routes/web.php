@@ -191,4 +191,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     // Users
     Route::get('/users/transfers', 'UserController@transferHistory');
     Route::get('/users/transfers/data', 'UserController@transferHistoryData');
+
+    // Boutique
+    Route::get('/shop/history', 'ShopController@history');
+    Route::get('/shop/history/data/items', 'ShopController@historyDataItems');
+    Route::get('/shop/history/data/credits', 'ShopController@historyDataCredits');
+    Route::get('/shop/history/data/paypal', 'ShopController@historyDataPaypal');
+    Route::get('/shop/history/data/dedipass', 'ShopController@historyDataDedipass');
+    Route::get('/shop/history/data/hipay', 'ShopController@historyDataHipay');
+    Route::get('/shop/history/data/paysafecard', 'ShopController@historyDataPaysafecard');
 });

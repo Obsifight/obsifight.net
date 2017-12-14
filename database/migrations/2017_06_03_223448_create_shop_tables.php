@@ -86,7 +86,7 @@ class CreateShopTables extends Migration
         $table->foreign('user_id')->references('id')->on('users');
         $table->float('money');
         $table->float('amount');
-        $table->string('transaction_type', 10);
+        $table->string('transaction_type', 11);
         $table->integer('transaction_id')->unsigned();
         $table->timestamps();
       });

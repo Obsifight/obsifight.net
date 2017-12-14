@@ -34,7 +34,6 @@
                                     <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
                                     <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
                                     <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                    <li><a data-action="close"><i class="ft-x"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -63,6 +62,11 @@
 @endsection
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{ url('/admin-assets/vendors/css/tables/datatable/datatables.min.css') }}">
+    <style>
+        table {
+            width: 100%!important;
+        }
+    </style>
 @endsection
 @section('script')
     <script src="{{ url('/admin-assets/vendors/js/tables/datatable/datatables.min.js') }}" type="text/javascript"></script>
@@ -100,28 +104,7 @@
                     "targets": 2
                 }
             ],
-            'language': {
-                "sProcessing":     "Traitement en cours...",
-                "sSearch":         "Rechercher&nbsp;:",
-                "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
-                "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
-                "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                "sInfoPostFix":    "",
-                "sLoadingRecords": "Chargement en cours...",
-                "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
-                "oPaginate": {
-                    "sFirst":      "Premier",
-                    "sPrevious":   "Pr&eacute;c&eacute;dent",
-                    "sNext":       "Suivant",
-                    "sLast":       "Dernier"
-                },
-                "oAria": {
-                    "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
-                    "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-                }
-            }
+            'language': datatableLang
         });
         $('[data-action="reload"]').on('click', function () {
             table.ajax.reload();

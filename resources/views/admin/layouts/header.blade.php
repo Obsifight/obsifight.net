@@ -69,6 +69,9 @@
             <li class=" nav-item">
                 <a href="{{ url('/admin/wiki') }}"><i class="fa fa-wikipedia-w"></i><span data-i18n="" class="menu-title">@lang('admin.nav.wiki')</span></a>
             </li>
+            <li class=" nav-item">
+                <a href="{{ url('/admin/did-you-know') }}"><i class="fa fa-question-circle"></i><span data-i18n="" class="menu-title">@lang('admin.nav.didyouknow')</span></a>
+            </li>
 
             <li class=" navigation-header">
                 <span>@lang('admin.nav.utilities')</span><i data-toggle="tooltip" data-placement="right" data-original-title="@lang('admin.nav.utilities')" class=" ft-minus"></i>

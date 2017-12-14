@@ -259,7 +259,7 @@
             "columnDefs": [
                 {
                     "render": function ( data, type, row ) {
-                        return '<a href="{{ url('/users/edit') }}/' + data + '">' + data + '</a>';
+                        return '<a href="{{ url('/admin/users/edit') }}/' + data + '">' + data + '</a>';
                     },
                     "targets": 0
                 },
@@ -299,7 +299,7 @@
             "columnDefs": [
                 {
                     "render": function ( data, type, row ) {
-                        return '<a href="{{ url('/users/edit') }}/' + data + '">' + data + '</a>';
+                        return '<a href="{{ url('/admin/users/edit') }}/' + data + '">' + data + '</a>';
                     },
                     "targets": 0
                 },
@@ -344,7 +344,7 @@
             "columnDefs": [
                 {
                     "render": function ( data, type, row ) {
-                        return '<a href="{{ url('/users/edit') }}/' + data + '">' + data + '</a>';
+                        return '<a href="{{ url('/admin/users/edit') }}/' + data + '">' + data + '</a>';
                     },
                     "targets": 0
                 },
@@ -410,7 +410,7 @@
             "columnDefs": [
                 {
                     "render": function ( data, type, row ) {
-                        return '<a href="{{ url('/users/edit') }}/' + data + '">' + data + '</a>';
+                        return '<a href="{{ url('/admin/users/edit') }}/' + data + '">' + data + '</a>';
                     },
                     "targets": 0
                 },
@@ -450,7 +450,7 @@
             "columnDefs": [
                 {
                     "render": function ( data, type, row ) {
-                        return '<a href="{{ url('/users/edit') }}/' + data + '">' + data + '</a>';
+                        return '<a href="{{ url('/admin/users/edit') }}/' + data + '">' + data + '</a>';
                     },
                     "targets": 0
                 },
@@ -490,7 +490,7 @@
             "columnDefs": [
                 {
                     "render": function ( data, type, row ) {
-                        return '<a href="{{ url('/users/edit') }}/' + data + '">' + data + '</a>';
+                        return '<a href="{{ url('/admin/users/edit') }}/' + data + '">' + data + '</a>';
                     },
                     "targets": 0
                 },

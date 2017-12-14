@@ -81,11 +81,13 @@ function initAjaxForms() {
     }
     // Display messages
     function displaySuccess(form, message) {
-      form.find('.ajax-message').html('<div class="ui positive message"><div class="header">' + localization.success.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
+      var classAlert = localization.class ? localization.class.success : 'ui positive message';
+      form.find('.ajax-message').html('<div class="' + classAlert + '"><div class="header">' + localization.success.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
       removeDimmer(form)
     }
     function displayError(form, message) {
-      form.find('.ajax-message').html('<div class="ui negative message"><div class="header">' + localization.error.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
+        var classAlert = localization.class ? localization.class.error : 'ui negative message';
+      form.find('.ajax-message').html('<div class="' + classAlert + '"><div class="header">' + localization.error.title + '</div><p>' + message + '</p></div><div class="ui divider"></div>')
       removeDimmer(form)
       if (typeof grecaptcha !== "undefined")
         grecaptcha.reset()

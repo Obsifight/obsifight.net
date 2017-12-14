@@ -7,26 +7,66 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
-  use EntrustUserTrait;
+    use EntrustUserTrait;
 
-  protected $fillable = ['username', 'email', 'password', 'ip'];
+    protected $fillable = ['username', 'email', 'password', 'ip'];
 
-  static public function hash($password, $username)
-  {
-    return sha1($username . 'PApVSuS8hDUEsOEP0fWZESmODaHkXVst27CTnYMM' . $password);
-  }
+    public function connectionLog()
+    {
+        return $this->hasMany('App\UsersConnectionLog');
+    }
 
-  static public function getStatsFromUsername($username)
-  {
-      $body = @file_get_contents(env('DATA_SERVER_ENDPOINT') . '/users/' . $username);
-      if (!$body) return false;
-      $data = @json_decode($body);
-      if (!$data) return false;
-      if (!$data->status) return false;
-      $user = $data->data;
-      $user->faction = \App\Faction::getFactionFromUsername($username);
-      return ($user);
-  }
+    public function usernameHistory()
+    {
+        return $this->hasMany('App\UsersEditUsernameHistory');
+    }
+
+    public function obsiguardIP()
+    {
+        return $this->hasMany('App\UsersObsiguardIP');
+    }
+
+    public function obsiguardLog()
+    {
+        return $this->hasMany('App\UsersObsiguardLog');
+    }
+
+    public function refundHistory()
+    {
+        return $this->hasOne('App\UsersRefundHistory');
+    }
+
+    public function twitterAccount()
+    {
+        return $this->hasOne('App\UsersTwitterAccount');
+    }
+
+    public function youtubeChannel()
+    {
+        return $this->hasOne('App\UsersYoutubeChannel');
+    }
+
+    public function transferMoneyHistory()
+    {
+        return $this->hasMany('App\UsersTransferMoneyHistory');
+    }
+
+    static public function hash($password, $username)
+    {
+        return sha1($username . 'PApVSuS8hDUEsOEP0fWZESmODaHkXVst27CTnYMM' . $password);
+    }
+
+    static public function getStatsFromUsername($username)
+    {
+        $body = @file_get_contents(env('DATA_SERVER_ENDPOINT') . '/users/' . $username);
+        if (!$body) return false;
+        $data = @json_decode($body);
+        if (!$data) return false;
+        if (!$data->status) return false;
+        $user = $data->data;
+        $user->faction = \App\Faction::getFactionFromUsername($username);
+        return ($user);
+    }
 
     static public function getSuccessList($uuid)
     {

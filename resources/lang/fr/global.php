@@ -1,10 +1,13 @@
 <?php
 return [
 
+  'date' => 'Date',
   'or' => 'ou',
   'warning' => 'Attention',
   'info' => 'Information',
   'confirm' => 'Confirmer',
+  'delete' => 'Supprimer',
+  'save' => 'Sauvegarder',
   'days' => 'jours',
   'hours' => 'heures',
   'minutes' => 'minutes',

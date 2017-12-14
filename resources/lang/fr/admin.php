@@ -57,5 +57,32 @@ return [
 
     'shop.history.hipay' => 'Transactions HiPay',
 
-    'shop.history.paysafecard' => 'Transactions Paysafecard'
+    'shop.history.paysafecard' => 'Transactions Paysafecard',
+
+    'users.find' => 'Rechercher un utilisateur',
+    'users.stats.count' => 'Utilisateurs',
+    'users.stats.count.version' => 'Utilisateurs cette version',
+    'users.stats.count.online' => 'En jeu',
+    'users.stats.count.online.max' => 'Record en jeu',
+    'users.profile' => 'Profil utilisateur',
+    'users.profile.basic' => 'Informations principales',
+    'users.profile.basic.password.edit' => 'Remplissez le champ pour changer le mot de passe',
+    'users.profile.contact' => 'Détails',
+    'users.profile.username.history' => 'Historique des changements de pseudo',
+    'users.history.usernames' => 'Historique des changements de pseudos',
+    'users.history.usernames.old' => 'Ancien pseudo',
+    'users.history.usernames.new' => 'Nouveau pseudo',
+    'users.obsiguard.disabled' => 'ObsiGuard n\'est pas actif chez cet utilisateur.',
+    'users.obsiguard.history' => 'Historique des actions ObsiGuard',
+    'users.obsiguard.remove_ip' => 'Suppression d\'une IP',
+    'users.obsiguard.add_ip' => 'Ajout d\'une IP',
+    'users.obsiguard.enable' => 'Activation',
+    'users.obsiguard.disable' => 'Désactivation',
+    'users.obsiguard.history.type' => 'Type',
+    'users.obsiguard.history.data' => 'Donnée',
+    'users.obsiguard.history.ip' => 'IP',
+    'users.obsiguard.history.date' => 'Date',
+    'users.obsiguard.ips' => 'Liste des IPs',
+    'users.update.success' => 'Le joueur a bien été modifié !',
+    'users.logs' => 'Logs de connexion'
 ];

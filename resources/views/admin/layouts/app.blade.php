@@ -44,6 +44,26 @@
     <script src="{{ url('/admin-assets/js/scripts/customizer.js') }}" type="text/javascript"></script>
     <!-- END STACK JS-->
     <!-- BEGIN PAGE LEVEL JS-->
+    <script type="text/javascript">
+        var localization = {
+            loading: "@lang('form.loading')",
+            error: {
+                title: "@lang('form.error.title')",
+                internal: "@lang('form.error.internal')",
+                notfound: "@lang('form.error.notfound')",
+                forbidden: "@lang('form.error.forbidden')",
+                badrequest: "@lang('form.error.badrequest')",
+                methodnotallowed: "@lang('form.error.methodnotallowed')"
+            },
+            success: {
+                title: "@lang('form.success.title')"
+            },
+            class: {
+                error: 'alert bg-danger',
+                success: 'alert bg-success'
+            }
+        }
+    </script>
     <script type="text/javascript" src="{{ url('/js/app.js') }}"></script>
     <script type="text/javascript" src="{{ url('/js/form.js') }}"></script>
     @yield('script')

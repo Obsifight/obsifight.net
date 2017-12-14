@@ -12,6 +12,8 @@ return [
   'field.remember_me' => 'Se souvenir de moi',
   'field.two_factor_auth_code' => 'Code de vérification',
   'field.two_factor_auth_code.placeholder' => "Vous trouvez ce code sur l'application mobile comme Google Authentificator",
+  'field.youtube_channel' => 'Chaîne YouTube',
+  'field.twitter_account' => 'Compte Twitter',
 
   'password.forgot' => 'Mot de passe oublié',
   'password.forgot.subtitle' => 'Retrouvez votre compte depuis votre email',

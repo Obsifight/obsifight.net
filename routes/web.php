@@ -189,6 +189,13 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::get('/', 'DashboardController@index');
 
     // Users
+    Route::get('/users', 'UserController@index');
+    Route::get('/users/username/history', 'UserController@usernameHistory');
+    Route::get('/users/find', 'UserController@find');
+    Route::get('/users/edit/{id}', 'UserController@edit')->where('id', '[0-9]*');
+    Route::get('/users/edit/{username}', 'UserController@edit')->where('username', '[A-Za-z_\-0-9]*');
+    Route::post('/users/edit/{id}', 'UserController@editData')->where('id', '[0-9]*');
+    Route::post('/users/edit/{id}/obsiguard/delete/{ipId}', 'UserController@deleteObsiguardIP')->where('id', '[0-9]*')->where('ipId', '[0-9]*');
     Route::get('/users/transfers', 'UserController@transferHistory');
     Route::get('/users/transfers/data', 'UserController@transferHistoryData');
 

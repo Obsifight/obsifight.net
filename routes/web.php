@@ -44,6 +44,7 @@ Route::get('/user/email/confirm/{token}', 'UserController@confirmEmail')->where(
 Route::get('/user/email/send', 'UserController@sendConfirmationMail')->middleware('auth')->middleware('permission:user-send-confirmation-email');
 
 Route::get('/user', 'UserController@profile')->middleware('auth');
+Route::get('/user/notification/seen/{id}', 'UserController@setNotificationAsSeen')->middleware('auth');
 
 Route::post('/user/password/forgot', 'UserController@forgotPassword');
 Route::get('/user/password/reset/{token}', function (\Illuminate\Http\Request $request) {

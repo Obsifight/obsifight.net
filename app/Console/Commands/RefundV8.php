@@ -100,20 +100,6 @@ class RefundV8 extends Command
             }
 
             /*
-              === Historique de remboursement lors V7 ===
-            */
-                $findAddedPointsOnV7Refunds = $db_v7->selectOne('SELECT added_money FROM obsi__refund_histories WHERE user_id = ?', array($user_id));
-                if (!empty($findAddedPointsOnV7Refunds)) {
-                  $added_money = floatval($findAddedPointsOnV7Refunds->added_money);
-                  $user_added_money += $added_money;
-                  $refund_others_versions += $added_money;
-                  $users_refund_others_versions++;
-                  $this->comment('    Remboursement trouvé lors de la V7 : '.$added_money);
-                } else {
-                  $this->comment('    Aucun remboursement trouvé lors de la V7');
-                }
-
-            /*
               === Historique d'achats parmis $items lors de la V7 ===
             */
             $findBuysOnV7 = $db_v7->select('SELECT item_id FROM shop__items_buy_histories WHERE user_id = ? AND (item_id = '.implode(' OR item_id = ', $this->items).')', array($user_id));
@@ -161,9 +147,9 @@ class RefundV8 extends Command
                 $notification->auto_seen = 0;
 
                 if ($save) {
-                    //$user->save();
-                    //$history->save();
-                    //$notification->save();
+                    $user->save();
+                    $history->save();
+                    $notification->save();
                 }
 
 

@@ -56,7 +56,7 @@ return [
 
         'web_v7' => [
             'driver' => 'mysql',
-            'host' => '127.0.0.1',
+            'host' => '87.98.188.0',
             'port' => '3306',
             'database' => 'web_v7',
             'username' => 'web',

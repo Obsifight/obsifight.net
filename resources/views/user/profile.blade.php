@@ -38,6 +38,9 @@
       @foreach ($notifications as $notification)
         <div class="ui {{ $notification['type'] }} message">
           {!! $notification['message'] !!}
+          @if (!$notification->auto_seen)
+            /user/notification/seen/
+          @endif
         </div>
       @endforeach
     @endif

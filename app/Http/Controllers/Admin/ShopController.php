@@ -85,4 +85,87 @@ class ShopController extends Controller
         return response()->redirectTo('/admin/shop/items');
     }
 
+    public function editItem(Request $request)
+    {
+        if (isset($request->id)) {
+            $item = ShopItem::where('id', $request->id)->first();
+            $title = __('admin.shop.item.edit');
+        }
+        else {
+            $title = __('admin.shop.item.add');
+            $item = new ShopItem();
+        }
+        $categories = ShopCategory::get();
+        return view('admin.shop.item_edit', compact('item', 'title', 'categories'));
+    }
+
+    public function editItemData(Request $request)
+    {
+        if (isset($request->id))
+            $item = ShopItem::where('id', $request->id)->first();
+        else
+            $item = new ShopItem();
+        foreach (['name', 'price', 'description', 'category_id', 'displayed', 'commands', 'image_path', 'need_connected'] as $name)
+        {
+            if (!$request->has($name))
+                return response()->json([
+                    'status' => false,
+                    'error' => __('form.error.fields')
+                ]);
+            $item->{$name} = $request->input($name);
+        }
+        if ($item->save())
+            return response()->json([
+                'status' => true,
+                'success' => __('admin.shop.item.edit.success'),
+                'redirect' => url('/admin/shop/items')
+            ]);
+        else
+            return response()->json([
+                'status' => false,
+                'error' => __('form.error.internal')
+            ]);
+    }
+
+    public function editCategory(Request $request)
+    {
+        if (isset($request->id)) {
+            $category = ShopCategory::where('id', $request->id)->first();
+            $title = __('admin.shop.category.edit');
+        }
+        else {
+            $title = __('admin.shop.category.add');
+            $category = new ShopCategory();
+        }
+        return view('admin.shop.category_edit', compact('category', 'title'));
+    }
+
+    public function editCategoryData(Request $request)
+    {
+        if (isset($request->id))
+            $category = ShopCategory::where('id', $request->id)->first();
+        else
+            $category = new ShopCategory();
+        foreach (['name', 'displayed'] as $name)
+        {
+            if (!$request->has($name))
+                return response()->json([
+                    'status' => false,
+                    'error' => __('form.error.fields')
+                ]);
+            $category->{$name} = $request->input($name);
+        }
+        if ($category->save())
+            return response()->json([
+                'status' => true,
+                'success' => __('admin.shop.category.edit.success'),
+                'redirect' => url('/admin/shop/items')
+            ]);
+        else
+            return response()->json([
+                'status' => false,
+                'error' => __('form.error.internal')
+            ]);
+    }
+
 }

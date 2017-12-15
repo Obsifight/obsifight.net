@@ -29,9 +29,11 @@
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    <li>
+                                        <a href="{{ url('/admin/shop/item/add') }}" class="btn btn-success">
+                                            <i class="fa fa-plus"></i> &nbsp;@lang('admin.shop.item.add')
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -59,7 +61,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="" class="btn btn-primary">@lang('global.edit')</a>
+                                                    <a href="{{ url('/admin/shop/item/edit/' . $item->id) }}" class="btn btn-primary">@lang('global.edit')</a>
                                                     <a href="{{ url('/admin/shop/item/delete/' . $item->id) }}" class="btn btn-danger">@lang('global.delete')</a>
                                                 </td>
                                             </tr>
@@ -78,9 +80,11 @@
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    <li>
+                                        <a href="{{ url('/admin/shop/category/add') }}" class="btn btn-success">
+                                            <i class="fa fa-plus"></i> &nbsp;@lang('admin.shop.category.add')
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -106,7 +110,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="" class="btn btn-primary">@lang('global.edit')</a>
+                                                <a href="{{ url('/admin/shop/category/edit/' . $category->id) }}" class="btn btn-primary">@lang('global.edit')</a>
                                                 <a href="{{ url('/admin/shop/category/delete/' . $category->id) }}" class="btn btn-danger">@lang('global.delete')</a>
                                             </td>
                                         </tr>
@@ -125,9 +129,6 @@
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -169,9 +170,11 @@
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
-                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                    <li>
+                                        <a href="{{ url('/admin/shop/sale/add') }}" class="btn btn-success">
+                                            <i class="fa fa-plus"></i> &nbsp;@lang('admin.shop.sale.add')
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -207,7 +210,7 @@
                                             </td>
                                             <td>-{{ $sale->reduction }}%</td>
                                             <td>
-                                                <a href="" class="btn btn-primary">@lang('global.edit')</a>
+                                                <a href="{{ url('/admin/shop/sale/edit/' . $sale->id) }}" class="btn btn-primary">@lang('global.edit')</a>
                                                 <a href="{{ url('/admin/shop/sale/delete/' . $sale->id) }}" class="btn btn-danger">@lang('global.delete')</a>
                                             </td>
                                         </tr>

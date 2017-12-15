@@ -204,9 +204,21 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
 
     // Boutique
     Route::get('/shop/items', 'ShopController@items');
+
     Route::get('/shop/item/delete/{id}', 'ShopController@deleteItem')->where('id', '[0-9]*');
+    Route::get('/shop/item/edit/{id}', 'ShopController@editItem')->where('id', '[0-9]*');
+    Route::get('/shop/item/add', 'ShopController@editItem');
+    Route::post('/shop/item/edit/{id}', 'ShopController@editItemData')->where('id', '[0-9]*');
+    Route::post('/shop/item/add', 'ShopController@editItemData');
+
+    Route::get('/shop/category/edit/{id}', 'ShopController@editCategory')->where('id', '[0-9]*');
+    Route::get('/shop/category/add', 'ShopController@editCategory');
+    Route::post('/shop/category/edit/{id}', 'ShopController@editCategoryData')->where('id', '[0-9]*');
+    Route::post('/shop/category/add', 'ShopController@editCategoryData');
     Route::get('/shop/category/delete/{id}', 'ShopController@deleteCategory')->where('id', '[0-9]*');
+
     Route::get('/shop/sale/delete/{id}', 'ShopController@deleteSale')->where('id', '[0-9]*');
+
     Route::get('/shop/history', 'ShopController@history');
     Route::get('/shop/history/data/items', 'ShopController@historyDataItems');
     Route::get('/shop/history/data/credits', 'ShopController@historyDataCredits');

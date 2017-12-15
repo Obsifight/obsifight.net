@@ -115,6 +115,23 @@
                                             </table>
                                         @endif
 
+                                        <h4 class="form-section"><i class="ft-mail"></i> @lang('admin.users.profile.money')</h4>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>@lang('admin.users.profile.money.money')</label>
+                                                    <input type="text" value="{{ $user->money }} points" class="form-control border-primary" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>@lang('admin.users.profile.money.refund')</label>
+                                                    <input type="text" value="{{ $user->refundHistory ? $user->refundHistory->amount : '0' }} points" class="form-control border-primary" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div class="form-actions right">
@@ -290,6 +307,157 @@
                     </div>
                 </div>
 
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title" id="basic-layout-colored-form-control">@lang('admin.users.purchase.items.history')</h4>
+                            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+
+                                <table class="table table-striped table-bordered datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>@lang('admin.shop.history.item.name')</th>
+                                        <th>@lang('admin.shop.history.item.price')</th>
+                                        <th>@lang('admin.shop.history.ip')</th>
+                                        <th>@lang('admin.shop.history.date')</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($user->purchaseItemsHistory->reverse() as $log)
+                                        <tr>
+                                            <td>{{ ($log->item) ? $log->item->name : 'N/A' }}</td>
+                                            <td>{{ ($log->item) ? $log->item->price . ' points' : 'N/A' }}</td>
+                                            <td>{{ $log->ip }}</td>
+                                            <td>{{ $log->created_at->diffForHumans() }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title" id="basic-layout-colored-form-control">@lang('admin.users.purchase.credits.history')</h4>
+                            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+
+                                <table class="table table-striped table-bordered datatable">
+                                    <thead>
+                                    <tr>
+                                        <th>@lang('admin.shop.history.transaction.type')</th>
+                                        <th>@lang('admin.shop.history.transaction.money')</th>
+                                        <th>@lang('admin.shop.history.transaction.amount')</th>
+                                        <th>@lang('admin.shop.history.date')</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($user->purchaseCreditsHistory->reverse() as $log)
+                                        <tr>
+                                            <td>{{ $log->transaction_type }}</td>
+                                            <td>{{ $log->money }} points</td>
+                                            <td>{{ $log->amount }} €</td>
+                                            <td>{{ $log->created_at->diffForHumans() }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title" id="basic-layout-colored-form-control">@lang('admin.users.youtube.videos')</h4>
+                            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                    <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+
+                                @if (!$user->youtubeChannel)
+                                    <div class="alert bg-danger alert-dismissible mb-2" role="alert">
+                                        @lang('admin.users.youtube.no_channel')
+                                    </div>
+                                @else
+                                    <table class="table table-striped table-bordered datatable">
+                                        <thead>
+                                        <tr>
+                                            <th>@lang('admin.users.youtube.videos.title')</th>
+                                            <th>@lang('admin.users.youtube.videos.views')</th>
+                                            <th>@lang('admin.users.youtube.videos.likes')</th>
+                                            <th>@lang('admin.users.youtube.videos.publication')</th>
+                                            <th>@lang('admin.users.youtube.videos.eligible')</th>
+                                            <th>@lang('admin.users.youtube.videos.payed')</th>
+                                            <th>@lang('admin.users.youtube.videos.created')</th>
+                                            <th>@lang('admin.users.youtube.videos.updated')</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($user->youtubeChannel->videos->reverse() as $video)
+                                            <tr>
+                                                <td><a href="https://www.youtube.com/watch?v={{ $video->id }}" target="_blank">{{ $video->title }}</a></td>
+                                                <td>{{ $video->views_count }} &nbsp;<i class="fa fa-eye"></i></td>
+                                                <td>{{ $video->likes_count }} &nbsp;<i class="fa fa-thumbs-up"></i></td>
+                                                <td>{{ $video->publication_date->diffForHumans() }}</td>
+                                                <td>
+                                                    @if ($video->eligible)
+                                                        <i class="fa fa-check text-success"></i>
+                                                    @else
+                                                        <i class="fa fa-remove text-danger"></i>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($video->eligible && $video->payed)
+                                                        <span class="badge badge-success">{{ $video->remunerationHistory->remuneration }} points</span>
+                                                    @elseif ($video->eligible)
+                                                        <span class="badge badge-warning">~{{ $video->remuneration }} points</span>
+                                                    @else
+                                                        <span class="text-muted">N/A</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $video->created_at->diffForHumans() }}</td>
+                                                <td>{{ $video->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                @endif
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </div>
@@ -306,6 +474,11 @@
 @section('script')
     <script src="{{ url('/admin-assets/vendors/js/tables/datatable/datatables.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
+        $('.datatable').DataTable({
+            lengthChange: false,
+            ordering: false,
+            language: datatableLang
+        });
         $('#obsiguardLogs').DataTable({
             lengthChange: false,
             ordering: false,

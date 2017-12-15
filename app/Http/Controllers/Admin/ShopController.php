@@ -168,4 +168,47 @@ class ShopController extends Controller
             ]);
     }
 
+    public function editSale(Request $request)
+    {
+        if (isset($request->id)) {
+            $sale = ShopSale::where('id', $request->id)->first();
+            $title = __('admin.shop.sale.edit');
+        }
+        else {
+            $title = __('admin.shop.sale.add');
+            $sale = new ShopSale();
+        }
+        $items = ShopItem::get();
+        $categories = ShopCategory::get();
+        return view('admin.shop.sale_edit', compact('sale', 'title', 'items', 'categories'));
+    }
+
+    public function editSaleData(Request $request)
+    {
+        if (isset($request->id))
+            $sale = ShopSale::where('id', $request->id)->first();
+        else
+            $sale = new ShopSale();
+        foreach (['product_id', 'product_type', 'reduction'] as $name)
+        {
+            if (!$request->has($name) && $name !== 'product_id')
+                return response()->json([
+                    'status' => false,
+                    'error' => __('form.error.fields'),
+                ]);
+            $sale->{$name} = $request->input($name);
+        }
+        if ($sale->save())
+            return response()->json([
+                'status' => true,
+                'success' => __('admin.shop.sale.edit.success'),
+                'redirect' => url('/admin/shop/items')
+            ]);
+        else
+            return response()->json([
+                'status' => false,
+                'error' => __('form.error.internal')
+            ]);
+    }
+
 }

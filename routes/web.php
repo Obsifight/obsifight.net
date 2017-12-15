@@ -217,6 +217,10 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::post('/shop/category/add', 'ShopController@editCategoryData');
     Route::get('/shop/category/delete/{id}', 'ShopController@deleteCategory')->where('id', '[0-9]*');
 
+    Route::get('/shop/sale/edit/{id}', 'ShopController@editSale')->where('id', '[0-9]*');
+    Route::get('/shop/sale/add', 'ShopController@editSale');
+    Route::post('/shop/sale/edit/{id}', 'ShopController@editSaleData')->where('id', '[0-9]*');
+    Route::post('/shop/sale/add', 'ShopController@editSaleData');
     Route::get('/shop/sale/delete/{id}', 'ShopController@deleteSale')->where('id', '[0-9]*');
 
     Route::get('/shop/history', 'ShopController@history');
@@ -226,4 +230,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::get('/shop/history/data/dedipass', 'ShopController@historyDataDedipass');
     Route::get('/shop/history/data/hipay', 'ShopController@historyDataHipay');
     Route::get('/shop/history/data/paysafecard', 'ShopController@historyDataPaysafecard');
+
+    // Stats
+    Route::get('/stats/shop/graph/purchases/credits', 'StatsController@graphPurchasesCredits');
+    Route::get('/stats/shop/graph/purchases/items', 'StatsController@graphPurchasesItems');
+    Route::get('/stats/shop/graph/transfers', 'StatsController@graphTransfers');
 });

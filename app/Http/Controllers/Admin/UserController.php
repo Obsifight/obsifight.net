@@ -57,8 +57,13 @@ class UserController extends Controller
                     ->with('obsiguardIP')
                     ->with('obsiguardLog')
                     ->with('refundHistory')
+                    ->with('purchaseItemsHistory')
+                    ->with('purchaseCreditsHistory')
+                    ->with('purchaseItemsHistory.item')
                     ->with('twitterAccount')
                     ->with('youtubeChannel')
+                    ->with('youtubeChannel.videos')
+                    ->with('youtubeChannel.videos.remunerationHistory')
                     ->with('transferMoneyHistory')
                     ->with('transferMoneyHistory.user')
                     ->firstOrFail();

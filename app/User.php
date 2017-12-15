@@ -51,6 +51,16 @@ class User extends Authenticatable
         return $this->hasMany('App\UsersTransferMoneyHistory');
     }
 
+    public function purchaseItemsHistory()
+    {
+        return $this->hasMany('App\ShopItemsPurchaseHistory');
+    }
+
+    public function purchaseCreditsHistory()
+    {
+        return $this->hasMany('App\ShopCreditHistory');
+    }
+
     static public function hash($password, $username)
     {
         return sha1($username . 'PApVSuS8hDUEsOEP0fWZESmODaHkXVst27CTnYMM' . $password);

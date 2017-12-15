@@ -122,7 +122,7 @@ class UserControllerTest extends TestCase
   }
   public function testValidLoginWithInvalidCode()
   {
-    $this->session(['twoFactorAuth' => ['user_id' => 2, 'remember_me' => false]]);
+    $this->session(['twoFactorAuth' => ['user_id' => 2, 'remember_me' => false, 'user_pass' => 'ok']]);
     $response = $this->call('POST', '/login/two-factor-auth', ['code' => 'invalid']);
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('user.login.error.two_factor_auth'))), $response->getContent());

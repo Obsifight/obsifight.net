@@ -26,6 +26,6 @@ class Notification extends Model
   static public function translate($notification)
   {
     $message = __($notification['key'], $notification['vars']);
-    return ['type' => $notification['type'], 'message' => $message];
+    return ['type' => $notification['type'], 'message' => $message, 'auto_seen' => $notification['auto_seen'], 'id' => $notification['id']];
   }
 }

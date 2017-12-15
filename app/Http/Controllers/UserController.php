@@ -309,6 +309,13 @@ class UserController extends Controller
 		return view('user.profile', compact('votesCount', 'rewardsWaitedCount', 'confirmedAccount', 'twoFactorEnabled', 'findObsiGuardIPs', 'obsiguardDynamicIP', 'notifications', 'websiteLoginLogs', 'launcherLoginLogs', 'youtube', 'twitter', 'spendings', 'cape'));
 	}
 
+	public function setNotificationAsSeen(Request $request)
+    {
+        $notification = \App\Notification::where('user_id', Auth::user()->id)->where('id', $request->id)->firstOrFail();
+        $notification->delete();
+        return redirect('/user');
+    }
+
 	public function forgotPassword(Request $request)
 	{
 		if (!$request->has('email'))

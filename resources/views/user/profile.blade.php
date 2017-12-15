@@ -38,8 +38,8 @@
       @foreach ($notifications as $notification)
         <div class="ui {{ $notification['type'] }} message">
           {!! $notification['message'] !!}
-          @if (!$notification->auto_seen)
-            /user/notification/seen/
+          @if (!$notification['auto_seen'])
+            <a href="{{ url('/user/notification/seen/' . $notification['id']) }}" class="ui button" style="float: right;margin-top: -8px">@lang('user.notification.set_seen')</a>
           @endif
         </div>
       @endforeach

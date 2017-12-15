@@ -1,5 +1,7 @@
 <?php
 return [
+  'notification.set_seen' => 'Marquer comme lue',
+
   'signup' => "S'inscrire",
   'login' => 'Se connecter',
   'logout' => 'Se déconnecter',

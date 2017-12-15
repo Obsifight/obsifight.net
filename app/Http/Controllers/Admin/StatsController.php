@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ShopCreditHistory;
+use App\ShopItemsPurchaseHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -9,6 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 class StatsController extends Controller
 {
+
+    public function shop(Request $request)
+    {
+        $purchasesItemsCount = ShopItemsPurchaseHistory::count();
+        $purchasesCreditsCount = ShopCreditHistory::count();
+        $profitTotal = ShopCreditHistory::getProfitTotal();
+        $profitThisMonth = ShopCreditHistory::getProfitBetween(date('Y-m-01 00:00:00'), date('Y-m-d H:i:s'));
+
+        return view('admin.stats.shop', compact('purchasesCreditsCount', 'purchasesItemsCount', 'profitThisMonth', 'profitTotal'));
+    }
 
     public function graphPurchasesCredits(Request $request)
     {
@@ -20,6 +32,26 @@ class StatsController extends Controller
             Cache::put('admin.graph.purchases.credits', $data, 30); // 30 minutes
         }
         return response()->json(['status' => true, 'graph' => Cache::get('admin.graph.purchases.credits')]);
+    }
+
+    public function graphPurchasesCreditsModes(Request $request)
+    {
+        $data = [
+            'PAYPAL' => [],
+            'DEDIPASS' => [],
+            'HIPAY' => [],
+            'PAYSAFECARD' => []
+        ];
+        foreach ($data as $mode => $d) {
+            for ($i = date('m', strtotime('-5 months')); $i <= date('m'); $i++)
+                $data[$mode][intval($i)] = 0;
+            $class = '\App\ShopCredit' . ucfirst(strtolower($mode)) . 'History';
+            $req = $class::select(DB::raw('SUM(' . $class::payoutColumn() . ') AS sum'), DB::raw('MONTH(created_at) AS month'))->groupBy(DB::raw('MONTH(created_at)'))->where('created_at', '>=', date('Y-m-01 00:00:00', strtotime('-5 months')))->get();
+            foreach ($req->toArray() as $res)
+                $data[$mode][$res['month']] = $res['sum'];
+            $data[$mode] = array_values($data[$mode]);
+        }
+        return response()->json(['status' => true, 'graph' => $data]);
     }
 
     public function graphPurchasesItems(Request $request)

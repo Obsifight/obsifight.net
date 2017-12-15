@@ -148,5 +148,17 @@ return [
     'users.emails.update.requests' => 'Demande de changement d\'email',
     'users.emails.new' => 'Nouvel email',
     'users.emails.update.requests.valid' => 'Valider',
-    'users.emails.update.requests.invalid' => 'Refuser'
+    'users.emails.update.requests.invalid' => 'Refuser',
+
+    'stats.title' => 'Statistiques',
+    'stats.shop.title' => 'Statistiques sur la boutique',
+    'stats.shop.purchases.items.count' => 'Articles achetés',
+    'stats.shop.purchases.credits.count' => 'Achat de crédits',
+    'stats.shop.profit.total' => 'Profit total',
+    'stats.shop.profit.month' => 'Profit ce mois-ci',
+    'stats.shop.graph.payments_modes' => 'Statistiques sur les modes de paiements',
+    'stats.shop.graph.payments_modes.paypal' => 'PayPal',
+    'stats.shop.graph.payments_modes.dedipass' => 'Dédipass',
+    'stats.shop.graph.payments_modes.hipay' => 'HiPay',
+    'stats.shop.graph.payments_modes.paysafecard' => 'Paysafecard'
 ];

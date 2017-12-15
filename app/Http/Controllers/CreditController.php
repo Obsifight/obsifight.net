@@ -331,11 +331,7 @@ class CreditController extends Controller
             ->create($client);
 
         // Redirect to Paysafecard payment page
-        return response()->json([
-           'status' => true,
-           'success' => '',
-           'redirect' => $payment->getAuthUrl()
-        ]);
+        return redirect($payment->getAuthUrl());
     }
 
     public function paysafecardNotification(Request $request)

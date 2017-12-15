@@ -233,7 +233,9 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::get('/shop/history/data/paysafecard', 'ShopController@historyDataPaysafecard');
 
     // Stats
+    Route::get('/stats/shop', 'StatsController@shop')->middleware('permission:view-admin-stats-shop');
     Route::get('/stats/shop/graph/purchases/credits', 'StatsController@graphPurchasesCredits');
+    Route::get('/stats/shop/graph/purchases/credits/modes', 'StatsController@graphPurchasesCreditsModes');
     Route::get('/stats/shop/graph/purchases/items', 'StatsController@graphPurchasesItems');
     Route::get('/stats/shop/graph/transfers', 'StatsController@graphTransfers');
 });

@@ -506,8 +506,8 @@
                         $('.step-3-method[data-payment-method="paypal"] form input[name="business"]').val(infos.paypalEmail)
                     }
                     if (paymentMethod == 'paysafecard') {
-                        amount = parseFloat($('.step-2-method[data-payment-method="paysafecard"] .form-group input[name="amount"]').val())
-                        infos.currency = $('.step-2-method[data-payment-method="paysafecard"] .form-group input[name="currency"]').val()
+                        amount = parseFloat($('.step-2-method[data-payment-method="paysafecard"] input[name="amount"]').val())
+                        infos.currency = $('.step-2-method[data-payment-method="paysafecard"] input[name="currency"]').val()
                         $('.step-3-method[data-payment-method="paysafecard"] form input[name="amount"]').val(amount)
                         $('.step-3-method[data-payment-method="paysafecard"] form input[name="currency"]').val(infos.currency)
                         // info

@@ -135,6 +135,21 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body sales-growth-chart">
+                            <div id="items-sales" class="height-250"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="chart-title mb-1 text-center">
+                            <h6>@lang('admin.stats.shop.items.sales.total').</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -362,6 +377,34 @@
                         pointRadius: 4
                     }]
                 }
+            });
+        });
+    </script>
+    <script>
+        // Purchase credits modes
+        // ----------------------
+        $.get('{{ url('/admin/stats/shop/graph/purchases/items/total') }}', function (data) {
+            data = data.graph;
+
+            Morris.Bar.prototype.fillForSeries = function(i) {
+                return "0-#fff-#f00:20-#000";
+            };
+
+            Morris.Bar({
+                element: 'items-sales',
+                data: data,
+                xkey: 'name',
+                ykeys: ['count'],
+                labels: ['{{ __('admin.stats.shop.items.sales') }}'],
+                barGap: 4,
+                barSizeRatio: 0.3,
+                gridTextColor: '#bfbfbf',
+                gridLineColor: '#E4E7ED',
+                numLines: 5,
+                gridtextSize: 14,
+                resize: true,
+                barColors: ['#00B5B8'],
+                hideHover: 'auto'
             });
         });
     </script>

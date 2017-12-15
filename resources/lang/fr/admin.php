@@ -160,5 +160,7 @@ return [
     'stats.shop.graph.payments_modes.paypal' => 'PayPal',
     'stats.shop.graph.payments_modes.dedipass' => 'Dédipass',
     'stats.shop.graph.payments_modes.hipay' => 'HiPay',
-    'stats.shop.graph.payments_modes.paysafecard' => 'Paysafecard'
+    'stats.shop.graph.payments_modes.paysafecard' => 'Paysafecard',
+    'stats.shop.items.sales' => 'Ventes',
+    'stats.shop.items.sales.total' => 'Total des ventes d\'articles'
 ];

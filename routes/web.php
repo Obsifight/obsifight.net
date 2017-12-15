@@ -237,5 +237,6 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::get('/stats/shop/graph/purchases/credits', 'StatsController@graphPurchasesCredits');
     Route::get('/stats/shop/graph/purchases/credits/modes', 'StatsController@graphPurchasesCreditsModes');
     Route::get('/stats/shop/graph/purchases/items', 'StatsController@graphPurchasesItems');
+    Route::get('/stats/shop/graph/purchases/items/total', 'StatsController@graphPurchasesItemsTotal');
     Route::get('/stats/shop/graph/transfers', 'StatsController@graphTransfers');
 });

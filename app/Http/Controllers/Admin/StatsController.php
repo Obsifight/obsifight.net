@@ -83,4 +83,14 @@ class StatsController extends Controller
         return response()->json(['status' => true, 'graph' => Cache::get('admin.graph.transfers')]);
     }
 
+    public function graphPurchasesItemsTotal(Request $request)
+    {
+        $data = \App\ShopItemsPurchaseHistory::select('shop_items.name', DB::raw('COUNT(item_id) AS count'))
+                                            ->leftJoin('shop_items', 'shop_items.id', '=', 'item_id')
+                                            ->groupBy('item_id')
+                                            ->groupBy('shop_items.name')
+                                            ->get()->toArray();
+        return response()->json(['status' => true, 'graph' => $data]);
+    }
+
 }

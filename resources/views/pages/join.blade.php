@@ -35,13 +35,13 @@
       <p>
         @lang('join.step.two.content')
       </p>
-      <a href="" class="circular ui icon yellow massive button">
+      <a href="http://dl.obsifight.fr/ObsiFight.jar" class="circular ui icon yellow massive button">
         <i class="linux icon"></i>
       </a>
-      <a href="" class="circular ui icon grey massive button">
+      <a href="http://dl.obsifight.fr/ObsiFight.jar" class="circular ui icon grey massive button">
         <i class="apple icon"></i>
       </a>
-      <a href="" class="circular ui icon primary massive button">
+      <a href="http://dl.obsifight.fr/ObsiFight.exe" class="circular ui icon primary massive button">
         <i class="windows icon"></i>
       </a>
 
@@ -72,6 +72,22 @@
       </h2>
       @lang('join.step.four.content', ['link' => 'http://www.teamspeak.com/?page=downloads'])
       <img src="{{ url('/img/teamspeak.png') }}" alt="">
+    </div>
+  </div>
+  <div class="colored-block">
+    <div class="ui container text-center">
+      <h2 class="ui header">
+        <img src="{{ url('/img/logo-min.png') }}" class="ui circular image">
+        <div class="content">
+          Discord
+          <div class="sub header">@lang('join.step.four.subtitle')</div>
+        </div>
+      </h2>
+      <a class="ui primary labeled icon big button" href="https://discord.gg/2Gz6SED" style="background-color: #7289da;border-color:#7289da;">
+        <i class="discord icon">
+          <img src="{{ url('/img/discord.png') }}" style="width: 32px;margin-top: 5px;" alt="">
+        </i> @lang('join.discord')
+      </a>
     </div>
   </div>
   <div class="black-block">

@@ -1,6 +1,7 @@
 <?php
 return [
   'title' => 'Nous rejoindre',
+  'discord' => 'Rejoindre notre discord',
 
   'step.one.title' => 'Inscrivez-vous',
   'step.one.subtitle' => "Nous n'attendons plus que vous !",

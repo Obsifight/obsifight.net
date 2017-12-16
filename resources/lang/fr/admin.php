@@ -95,6 +95,12 @@ return [
     'shop.sale.edit.type.category' => 'Sur une catégorie',
     'shop.sale.edit.product' => 'Produit appliquant la promotion',
     'shop.sale.edit.reduction' => 'Réduction en pourcentage appliquée',
+    'shop.voucher.add' => 'Ajouter un bon de points',
+    'shop.voucher.edit' => 'Éditer un bon de points',
+    'shop.voucher.edit.success' => 'Le bon de points a bien été modifié !',
+    'shop.voucher.edit.code' => 'Code du bon',
+    'shop.voucher.edit.money' => 'Points donnés par le bon',
+    'shop.vouchers' => 'Bons de points',
 
     'shop.history.hipay' => 'Transactions HiPay',
 

@@ -166,6 +166,8 @@ Route::post('/shop/credit/add/hipay/notification', 'CreditController@hipayNotifi
 Route::post('/shop/credit/add/paysafecard/notification', 'CreditController@paysafecardNotification');
 Route::post('/shop/credit/add/paysafecard/init', 'CreditController@paysafecardInit')->middleware('auth')->middleware('permission:shop-credit-add');
 
+Route::post('/shop/credit/add/voucher', 'CreditController@voucher')->middleware('auth')->middleware('permission:shop-credit-add');
+
 /*
 ===========
   SANCTIONS
@@ -223,6 +225,12 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['per
     Route::post('/shop/sale/edit/{id}', 'ShopController@editSaleData')->where('id', '[0-9]*');
     Route::post('/shop/sale/add', 'ShopController@editSaleData');
     Route::get('/shop/sale/delete/{id}', 'ShopController@deleteSale')->where('id', '[0-9]*');
+
+    Route::get('/shop/voucher/edit/{id}', 'ShopController@editVoucher')->where('id', '[0-9]*')->middleware('permission:shop-admin-vouchers');
+    Route::get('/shop/voucher/add', 'ShopController@editVoucher')->middleware('permission:shop-admin-vouchers');
+    Route::post('/shop/voucher/edit/{id}', 'ShopController@editVoucherData')->where('id', '[0-9]*')->middleware('permission:shop-admin-vouchers');
+    Route::post('/shop/voucher/add', 'ShopController@editVoucherData')->middleware('permission:shop-admin-vouchers');
+    Route::get('/shop/voucher/delete/{id}', 'ShopController@deleteVoucher')->where('id', '[0-9]*')->middleware('permission:shop-admin-vouchers');
 
     Route::get('/shop/history', 'ShopController@history');
     Route::get('/shop/history/data/items', 'ShopController@historyDataItems');

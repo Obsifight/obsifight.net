@@ -27,6 +27,9 @@ class ShopCreditHistory extends Model
             case 'PAYSAFECARD';
                 $model = 'App\ShopCreditPaysafecardHistory';
                 break;
+            case 'VOUCHER';
+                $model = 'App\ShopVouchersHistory';
+                break;
             default:
                 return NULL;
             break;

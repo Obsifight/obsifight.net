@@ -131,6 +131,23 @@ class CreateShopTables extends Migration
         $table->string('payment_id');
         $table->timestamps();
       });
+      Schema::create('shop_vouchers', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('code', 50);
+        $table->float('money');
+        $table->timestamps();
+      });
+
+      Schema::create('shop_vouchers_histories', function (Blueprint $table) {
+        $table->increments('id');
+        $table->integer('user_id')->unsigned();
+        $table->foreign('user_id')->references('id')->on('users');
+        $table->integer('voucher_id')->unsigned();
+        $table->foreign('voucher_id')->references('id')->on('shop_vouchers');
+        $table->integer('history_id')->unsigned()->nullable()->default(null);
+        $table->foreign('history_id')->references('id')->on('shop_credit_histories');
+        $table->timestamps();
+      });
     }
 
     /**
@@ -152,5 +169,7 @@ class CreateShopTables extends Migration
       Schema::dropIfExists('shop_credit_paypal_histories');
       Schema::dropIfExists('shop_credit_hipay_histories');
       Schema::dropIfExists('shop_credit_paysafecard_histories');
+      Schema::dropIfExists('shop_vouchers');
+      Schema::dropIfExists('shop_vouchers_histories');
     }
 }

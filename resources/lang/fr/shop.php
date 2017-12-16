@@ -64,6 +64,12 @@ return [
   'credit.add.paysafecard.confirm' => 'Vous allez payer :amount€ sur paysafecard. Une fois le paiement effectué, vous serez automatiquement redirigé sur notre site et crédité de :money points.',
   'credit.add.hipay.details' => 'Achat de :money points sur le compte de :username sur ObsiFight.',
 
+  'credit.add.voucher' => 'Bon de points',
+  'credit.add.voucher.valid' => 'Valider le code',
+  'credit.add.voucher.code' => 'Code',
+  'credit.add.error.voucher' => 'Le code n\'a pas été trouvé ou a déjà été utilisé.',
+  'credit.add.success.voucher' => 'Vous avez bien été crédité de :money points !',
+
   'no_items.title' => 'Aucun article',
   'no_items.subtitle' => 'Aucun article n\'est disponible pour le moment.',
 

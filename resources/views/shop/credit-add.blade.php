@@ -312,10 +312,34 @@
             </div>
 
         </div>
+
+        <div class="ui divider"></div>
+
+        <div class="ui full card">
+            <div class="content">
+                <div class="header">@lang('shop.credit.add.voucher')</div>
+            </div>
+            <div class="content">
+                <form class="ui form" id="voucher" data-ajax method="post" action="{{ url('/shop/credit/add/voucher') }}">
+                    <div class="field">
+                        <label>@lang('shop.credit.add.voucher.code')</label>
+                        <input type="text" name="code">
+                    </div>
+                </form>
+            </div>
+            <div class="extra right aligned content">
+                <button onclick="$('#voucher').submit()" class="ui button">@lang('shop.credit.add.voucher.valid')</button>
+            </div>
+        </div>
+
     </div>
 @endsection
 @section('style')
     <style>
+        div.full.card {
+            width: 100%;
+        }
+
         div.price-table {
             background: rgba(0, 0, 0, 0.03);
             margin: 30px 0;

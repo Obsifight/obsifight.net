@@ -289,6 +289,14 @@ class PermissionsTablesSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
+        DB::table('permissions')->insert([
+            'id' => 29,
+            'name' => 'shop-admin-vouchers',
+            'display_name' => 'Modifier les bons',
+            'description' => 'Modifier sur le panel admin les bons de points',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
 
         // link permissiosn
 
@@ -450,6 +458,10 @@ class PermissionsTablesSeeder extends Seeder
         ]);
         DB::table('permission_role')->insert([
             'permission_id' => 28,
+            'role_id' => 4
+        ]);
+        DB::table('permission_role')->insert([
+            'permission_id' => 29,
             'role_id' => 4
         ]);
     }

@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use App\ShopCreditHistory;
+use App\ShopVoucher;
+use App\ShopVouchersHistory;
 use App\User;
 use App\ShopCreditDedipassHistory;
 use App\ShopCreditHipayHistory;
@@ -397,6 +399,33 @@ class CreditController extends Controller
             ]);
 
         return redirect('/shop/credit/add/success');
+    }
+
+    public function voucher(Request $request)
+    {
+        if (!$request->has('code'))
+            return response()->json([
+                'status' => false,
+                'error' => __('form.error.fields')
+            ]);
+        $voucher = ShopVoucher::where('code', $request->input('code'))->doesntHave('history')->first();
+        if (!$voucher)
+            return response()->json([
+                'status' => false,
+                'error' => __('shop.credit.add.error.voucher')
+            ]);
+
+        $history = new ShopVouchersHistory();
+        $history->voucher_id = $voucher->id;
+        $history->user_id = Auth::user()->id;
+        $history->save();
+
+        $this->save(Auth::user(), $voucher->money, 0, 'VOUCHER', $history);
+
+        return response()->json([
+            'status' => true,
+            'success' => __('shop.credit.add.success.voucher', ['money' => $voucher->money])
+        ]);
     }
 
     private function save($user, $money, $amount, $type, $transaction)

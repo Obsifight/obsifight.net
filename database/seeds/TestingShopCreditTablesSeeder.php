@@ -85,5 +85,37 @@ class TestingShopCreditTablesSeeder extends Seeder
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s')
       ]);
+
+      DB::table('shop_vouchers')->truncate();
+      DB::table('shop_vouchers')->insert([
+        'code' => "valid_code",
+        'money' => 10,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+
+      DB::table('shop_vouchers')->insert([
+        'code' => "already_used",
+        'money' => 10,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('shop_credit_histories')->insert([
+        'user_id' => 1,
+        'money' => 10,
+        'amount' => 0,
+        'transaction_type' => 'VOUCHER',
+        'transaction_id' => 1,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
+      DB::table('shop_vouchers_histories')->truncate();
+      DB::table('shop_vouchers_histories')->insert([
+        'voucher_id' => 2,
+        'history_id' => 1,
+        'user_id' => 1,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+      ]);
     }
 }

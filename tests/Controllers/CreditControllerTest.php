@@ -8,7 +8,9 @@ use App\ShopCreditHipayHistory;
 use App\ShopCreditHistory;
 use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
+use App\ShopVouchersHistory;
 use Illuminate\Support\Facades\App;
+use Mockery\Matcher\Not;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -732,12 +734,7 @@ class CreditControllerTest extends TestCase
         $this->app->instance('\SebastianWalker\Paysafecard\Payment', $paymentObject);
 
         $response = $this->post('/shop/credit/add/paysafecard/init', ['amount' => '10.00']);
-        $response->assertStatus(200);
-        $response->assertJson([
-            'status' => true,
-            'success' => '',
-            'redirect' => '/redirect/to/paysafecard'
-        ]);
+        $response->assertStatus(302);
     }
 
     public function testPaysafecardNotificationInvalidRequest()
@@ -918,5 +915,85 @@ class CreditControllerTest extends TestCase
         $response = $this->get('/shop/credit/add/paysafecard/success?payment_id=382YDBS');
         $response->assertStatus(302);
         $response->assertRedirect('/shop/credit/add/success');
+    }
+
+    public function testVoucherNotLogged()
+    {
+        $response = $this->post('/shop/credit/add/voucher');
+        $response->assertStatus(302);
+    }
+
+    public function testVoucherWithoutPermission()
+    {
+        $user = \App\User::find(2);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/voucher');
+        $response->assertStatus(403);
+    }
+
+    public function testVoucherWithEmptyCode()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/voucher', []);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => false,
+            'error' => __('form.error.fields')
+        ]);
+    }
+
+    public function testVoucherWithInvalidCode()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/voucher', ['code' => 'invalid']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => false,
+            'error' => __('shop.credit.add.error.voucher')
+        ]);
+    }
+
+    public function testVoucherWithCodeAlreadyUsed()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/voucher', ['code' => 'already_used']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => false,
+            'error' => __('shop.credit.add.error.voucher')
+        ]);
+    }
+
+    public function testVoucher()
+    {
+        $user = \App\User::find(1);
+        $this->be($user);
+
+        $response = $this->post('/shop/credit/add/voucher', ['code' => 'valid_code']);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'status' => true,
+            'success' => __('shop.credit.add.success.voucher', ['money' => "10.0"])
+        ]);
+
+        // Check history
+        $transaction = ShopVouchersHistory::where('voucher_id', 1)->where('user_id', 1);
+        $history = ShopCreditHistory::where('transaction_type', 'VOUCHER')->where('user_id', 1)->where('money', 10)->where('amount', 0)->where('transaction_id', $transaction->first()->id);
+        $this->assertEquals(1, $transaction->count());
+        $this->assertEquals(1, $history->count());
+        $this->assertEquals($history->first()->id, $transaction->first()->history_id);
+
+        // Check user money
+        $this->assertEquals($user->money + (10), \App\User::find(1)->money);
+
+        // Check notification
+        $this->assertEquals(1, Notification::where('user_id', 1)->where('type', 'success')->where('key', 'shop.credit.add.success')->where('vars', json_encode(['money' => "10.0"]))->where('auto_seen', 1)->count());
     }
 }

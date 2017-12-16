@@ -12,6 +12,7 @@ use App\ShopItem;
 use App\ShopItemsPurchaseHistory;
 use App\ShopRank;
 use App\ShopSale;
+use App\ShopVoucher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Facades\Datatables;
@@ -59,9 +60,9 @@ class ShopController extends Controller
         $items = ShopItem::get();
         $categories = ShopCategory::orderBy('order')->get();
         $sales = ShopSale::with('item')->with('category')->get();
-        $ranks = ShopRank::with('item')->get();
+        $vouchers = ShopVoucher::doesntHave('history')->get();
 
-        return view('admin.shop.items', compact('items', 'categories', 'sales', 'ranks'));
+        return view('admin.shop.items', compact('items', 'categories', 'sales', 'vouchers'));
     }
 
     public function deleteItem(Request $request)
@@ -82,6 +83,12 @@ class ShopController extends Controller
     public function deleteSale(Request $request)
     {
         ShopSale::where('id', $request->id)->firstOrFail()->delete();
+        return response()->redirectTo('/admin/shop/items');
+    }
+
+    public function deleteVoucher(Request $request)
+    {
+        ShopVoucher::where('id', $request->id)->firstOrFail()->delete();
         return response()->redirectTo('/admin/shop/items');
     }
 
@@ -202,6 +209,47 @@ class ShopController extends Controller
             return response()->json([
                 'status' => true,
                 'success' => __('admin.shop.sale.edit.success'),
+                'redirect' => url('/admin/shop/items')
+            ]);
+        else
+            return response()->json([
+                'status' => false,
+                'error' => __('form.error.internal')
+            ]);
+    }
+
+    public function editVoucher(Request $request)
+    {
+        if (isset($request->id)) {
+            $voucher = ShopVoucher::where('id', $request->id)->first();
+            $title = __('admin.shop.sale.edit');
+        }
+        else {
+            $title = __('admin.shop.sale.add');
+            $voucher = new ShopVoucher();
+        }
+        return view('admin.shop.voucher_edit', compact('voucher', 'title'));
+    }
+
+    public function editVoucherData(Request $request)
+    {
+        if (isset($request->id))
+            $sale = ShopVoucher::where('id', $request->id)->first();
+        else
+            $sale = new ShopVoucher();
+        foreach (['code', 'money'] as $name)
+        {
+            if (!$request->has($name))
+                return response()->json([
+                    'status' => false,
+                    'error' => __('form.error.fields'),
+                ]);
+            $sale->{$name} = $request->input($name);
+        }
+        if ($sale->save())
+            return response()->json([
+                'status' => true,
+                'success' => __('admin.shop.voucher.edit.success'),
                 'redirect' => url('/admin/shop/items')
             ]);
         else

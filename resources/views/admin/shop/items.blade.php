@@ -125,10 +125,15 @@
                 <div class="col-md-6">
                     <div class="card" id="items">
                         <div class="card-header">
-                            <h4 class="card-title">@lang('admin.shop.ranks')</h4>
+                            <h4 class="card-title">@lang('admin.shop.vouchers')</h4>
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
+                                    <li>
+                                        <a href="{{ url('/admin/shop/voucher/add') }}" class="btn btn-success">
+                                            <i class="fa fa-plus"></i> &nbsp;@lang('admin.shop.voucher.add')
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -137,22 +142,23 @@
                                 <table class="table table-striped table-bordered zero-configuration datatable">
                                     <thead>
                                     <tr>
-                                        <th>@lang('admin.shop.item.name')</th>
-                                        <th>@lang('admin.shop.rank.slug')</th>
-                                        <th>@lang('admin.shop.item.displayed')</th>
+                                        <th>@lang('admin.shop.voucher.edit.code')</th>
+                                        <th>@lang('admin.shop.voucher.edit.money')</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($ranks as $rank)
+                                    @foreach($vouchers as $voucher)
                                         <tr>
-                                            <td>{{ $rank->item->name }}</td>
-                                            <td>{{ $rank->slug }}</td>
-                                            <td style="text-align: center;">
-                                                @if ($rank->item->displayed)
-                                                    <span class="badge badge-success">@lang('global.yes')</span>
-                                                @else
-                                                    <span class="badge badge-danger">@lang('global.no')</span>
-                                                @endif
+                                            <td>
+                                                @permission('shop-admin-vouchers')
+                                                    {{ $voucher->code }}
+                                                @endpermission
+                                            </td>
+                                            <td>{{ $voucher->money }} points</td>
+                                            <td>
+                                                <a href="{{ url('/admin/shop/voucher/edit/' . $voucher->id) }}" class="btn btn-primary">@lang('global.edit')</a>
+                                                <a href="{{ url('/admin/shop/voucher/delete/' . $voucher->id) }}" class="btn btn-danger">@lang('global.delete')</a>
                                             </td>
                                         </tr>
                                     @endforeach

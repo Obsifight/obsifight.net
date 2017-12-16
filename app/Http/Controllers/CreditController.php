@@ -180,7 +180,8 @@ class CreditController extends Controller
             abort(403);
 
         // Try to find transaction
-        $transaction = ShopCreditPaypalHistory::where('payment_id', $request->input('txn_id'))->first();
+        $id_key = (strtoupper($request->input('payment_status')) === 'COMPLETED') ? 'txn_id' : 'parent_txn_id';
+        $transaction = ShopCreditPaypalHistory::where('payment_id', $request->input($id_key))->first();
 
         // Handle types
         switch (strtoupper($request->input('payment_status'))) {

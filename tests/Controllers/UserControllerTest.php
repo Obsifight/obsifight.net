@@ -406,6 +406,10 @@ class UserControllerTest extends TestCase
     $log->new_username = 'Test';
     $log->ip = '127.0.0.1';
     $log->save();
+    $ability = new \App\UsersEditUsernameAbility();
+    $ability->user_id = 1;
+    $ability->history_id = $log->id;
+    $ability->save();
 
     $user = \App\User::find(1);
     $this->be($user);
@@ -423,12 +427,20 @@ class UserControllerTest extends TestCase
     $log->new_username = 'Test';
     $log->ip = '127.0.0.1';
     $log->save();
+    $ability = new \App\UsersEditUsernameAbility();
+    $ability->user_id = 1;
+    $ability->history_id = $log->id;
+    $ability->save();
     $log = new \App\UsersEditUsernameHistory();
     $log->user_id = 1;
     $log->old_username = 'Test';
     $log->new_username = 'Tester';
     $log->ip = '127.0.0.1';
     $log->save();
+    $ability = new \App\UsersEditUsernameAbility();
+    $ability->user_id = 1;
+    $ability->history_id = $log->id;
+    $ability->save();
 
     $user = \App\User::find(1);
     $this->be($user);

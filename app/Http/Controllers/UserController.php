@@ -501,7 +501,7 @@ class UserController extends Controller
 					'error' => __('user.profile.edit.username.error.purchase')
 			]);
 		// Check if already edited 2 times
-		$findEdits = \App\UsersEditUsernameAbility::where('user_id', Auth::user()->id)->whereNotNull('history_id')->get();
+		$findEdits = \App\UsersEditUsernameAbility::where('user_id', Auth::user()->id)->whereNotNull('history_id')->orderBy('id', 'DESC')->get();
 		if (count($findEdits) >= 2)
 			return response()->json([
 					'status' => false,

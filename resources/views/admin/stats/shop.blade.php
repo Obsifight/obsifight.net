@@ -236,19 +236,19 @@
                 // Chart Data
                 data : {
                     labels: [
-                        moment().subtract(7, 'day').format('dddd'),
                         moment().subtract(6, 'day').format('dddd'),
                         moment().subtract(5, 'day').format('dddd'),
                         moment().subtract(4, 'day').format('dddd'),
                         moment().subtract(3, 'day').format('dddd'),
                         moment().subtract(2, 'day').format('dddd'),
-                        moment().subtract(1, 'day').format('dddd')
+                        moment().subtract(1, 'day').format('dddd'),
+                        moment().format('dddd')
                     ],
                     datasets: [{
                         label: "@lang('dashboard.stats.credits.graph.credits')",
                         data: creditsData,
-                        backgroundColor: "rgba(255,82,82,.7)",
-                        borderColor: "transparent",
+                        backgroundColor: "rgba(255,82,82,.2)",
+                        borderColor: "rgba(255,82,82,1)",
                         pointBorderColor: "#FF5252",
                         pointBackgroundColor: "#FFF",
                         pointBorderWidth: 2,
@@ -257,8 +257,8 @@
                     }, {
                         label: "@lang('dashboard.stats.credits.graph.items')",
                         data: itemsData,
-                        backgroundColor: "rgba(255,160,0,.7)",
-                        borderColor: "transparent",
+                        backgroundColor: "rgba(255,160,0,.2)",
+                        borderColor: "rgba(255,160,0,1)",
                         pointBorderColor: "#FFA000",
                         pointBackgroundColor: "#FFF",
                         pointBorderWidth: 2,
@@ -267,8 +267,8 @@
                     }, {
                         label: "@lang('dashboard.stats.credits.graph.transfer')",
                         data: transfersData,
-                        backgroundColor: "rgba(0,191,165,.7)",
-                        borderColor: "transparent",
+                        backgroundColor: "rgba(0,191,165,.2)",
+                        borderColor: "rgba(0,191,165,1)",
                         pointBorderColor: "#00BFA5",
                         pointBackgroundColor: "#FFF",
                         pointBorderWidth: 2,

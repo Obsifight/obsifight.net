@@ -148,7 +148,7 @@ class CreateUsersTable extends Migration
     });
     Schema::create('users_youtube_channel_videos', function (Blueprint $table) {
       $table->increments('id');
-      $table->integer('channel_id')->unsigned();
+      $table->string('channel_id');
       $table->foreign('channel_id')->references('id')->on('users_youtube_channels');
       $table->string('video_id');
       $table->string('title');
@@ -165,7 +165,7 @@ class CreateUsersTable extends Migration
       $table->increments('id');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id', 'ytchanvid_remhistory_id_foreign')->references('id')->on('users');
-      $table->integer('video_id')->unsigned();
+      $table->string('video_id');
       $table->foreign('video_id', 'ytchanvid_remuhistory_id_foreign')->references('id')->on('users_youtube_channel_videos');
       $table->float('remuneration');
       $table->ipAddress('ip');
@@ -177,7 +177,7 @@ class CreateUsersTable extends Migration
       $table->increments('id');
       $table->integer('user_id')->unsigned();
       $table->foreign('user_id')->references('id')->on('users');
-      $table->integer('twitter_id')->unsigned();
+      $table->string('twitter_id', 50);
       $table->string('screen_name', 50);
       $table->string('access_token');
       $table->string('access_secret');

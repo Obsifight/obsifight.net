@@ -101,6 +101,7 @@ return [
   'profile.transfer.money.field.to' => 'Pseudo du joueur',
   'profile.transfer.money.field.amount' => 'Montant du transfert',
   'profile.transfer.money.send' => 'Envoyer les points',
+  'profile.transfer.money.error.negative' => 'Vous ne pouvez pas envoyer un montant négatif.',
 
   'profile.appearence.specifics' => 'Informations',
   'profile.appearence.specifics.width' => 'Taille',

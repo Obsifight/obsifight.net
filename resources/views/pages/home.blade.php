@@ -46,7 +46,7 @@
       </div>
     </div>
   </div>
-  <div class="parallax-block">
+  <div class="parallax-block" style="background-image: url('https://obsifight.net/forum/styles/material/uix/bg/1.png')">
     <div class="ui container text-center ">
       <div class="ui huge header text-center">
         @lang('home.trailer.title', ['version' => env('APP_VERSION_COUNT')])

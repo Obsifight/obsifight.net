@@ -199,13 +199,13 @@
                 // Chart Data
                 data : {
                     labels: [
-                        moment().subtract(7, 'day').format('dddd'),
                         moment().subtract(6, 'day').format('dddd'),
                         moment().subtract(5, 'day').format('dddd'),
                         moment().subtract(4, 'day').format('dddd'),
                         moment().subtract(3, 'day').format('dddd'),
                         moment().subtract(2, 'day').format('dddd'),
-                        moment().subtract(1, 'day').format('dddd')
+                        moment().subtract(1, 'day').format('dddd'),
+                        moment().format('dddd')
                     ],
                     datasets: [{
                         label: "@lang('dashboard.stats.users.graph.visits')",
@@ -299,13 +299,13 @@
                 // Chart Data
                 data : {
                     labels: [
-                        moment().subtract(7, 'day').format('dddd'),
                         moment().subtract(6, 'day').format('dddd'),
                         moment().subtract(5, 'day').format('dddd'),
                         moment().subtract(4, 'day').format('dddd'),
                         moment().subtract(3, 'day').format('dddd'),
                         moment().subtract(2, 'day').format('dddd'),
-                        moment().subtract(1, 'day').format('dddd')
+                        moment().subtract(1, 'day').format('dddd'),
+                        moment().format('dddd')
                     ],
                     datasets: [{
                         label: "@lang('dashboard.stats.credits.graph.credits')",

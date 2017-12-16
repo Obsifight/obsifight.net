@@ -54,9 +54,9 @@ class ShopCreditHistory extends Model
               "UNION " .
                  "(SELECT (`payout`) AS `payout`, `id`, 'DEDIPASS' AS `type` FROM `shop_credit_dedipass_histories`) " .
               "UNION " .
-                 "(SELECT (`payment_amount`) AS `payout`, `id`, 'PAYSAFECARD' AS `type` FROM `shop_credit_hipay_histories`) " .
+                 "(SELECT (`payment_amount`) AS `payout`, `id`, 'HIPAY' AS `type` FROM `shop_credit_hipay_histories`) " .
               "UNION " .
-                 "(SELECT (`payment_amount`) AS `payout`, `id`, 'HIPAY' AS `type` FROM `shop_credit_paysafecard_histories`) " .
+                 "(SELECT (`payment_amount`) AS `payout`, `id`, 'PAYSAFECARD' AS `type` FROM `shop_credit_paysafecard_histories`) " .
             ") `history` ON `shop_credit_histories`.`transaction_id` = `history`.`id` AND `shop_credit_histories`.`transaction_type` = `history`.`type` " .
             $where,
             [$from, $to]

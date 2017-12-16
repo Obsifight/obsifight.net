@@ -12,6 +12,8 @@ use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Fahim\PaypalIPN\PaypalIPNListener;
+use Illuminate\Support\Facades\Log;
 
 class CreditController extends Controller
 {
@@ -123,10 +125,10 @@ class CreditController extends Controller
     public function dedipassNotification(Request $request)
     {
         $this->request = $request;
-        if (!$request->has('public_key') || !$request->has('code') || !$request->has('rate'))
+        if (!$request->has('key') || !$request->has('code') || !$request->has('rate'))
             abort(400);
         // Check if public key match with config
-        if ($request->input('public_key') !== env('DEDIPASS_PUBLIC_KEY'))
+        if ($request->input('key') !== env('DEDIPASS_PUBLIC_KEY'))
             abort(403);
 
         // Check if payment is valid
@@ -160,11 +162,11 @@ class CreditController extends Controller
     {
         $this->request = $request;
         // Check request
-        $paypal = resolve('\Srmklive\PayPal\Services\ExpressCheckout');
-        $request->merge(['cmd' => '_notify-validate']);
-        $response = (string)$paypal->verifyIPN($request->all());
-        if ($response !== 'VERIFIED')
+        $ipn = new PaypalIPNListener();
+        if (!$ipn->processIpn()) {
+            Log::error($ipn->getTextReport());
             abort(403);
+        }
 
         // Find user
         $user = User::where('id', $request->input('custom'))->firstOrFail();
@@ -197,7 +199,7 @@ class CreditController extends Controller
                 $transaction->payment_tax = $request->input('mc_fee');
                 $transaction->payment_id = $request->input('txn_id');
                 $transaction->buyer_email = $request->input('payer_email');
-                $transaction->payment_date = $request->input('payment_date');
+                $transaction->payment_date = date('Y-m-d H:i:s', strtotime($request->input('payment_date')));
                 $transaction->status = 'COMPLETED';
                 $transaction->save();
 
@@ -309,7 +311,7 @@ class CreditController extends Controller
     public function paysafecardInit(Request $request)
     {
         // Check request
-        if (!$request->has('amount'))
+        if (!$request->has('amount') || floatval($request->input('amount')) <= 0)
             abort(400);
 
         // Setup payment

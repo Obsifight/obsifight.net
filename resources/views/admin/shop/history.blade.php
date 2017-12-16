@@ -77,7 +77,7 @@
                                         <th>@lang('admin.shop.history.user')</th>
                                         <th>@lang('admin.shop.history.transaction.type')</th>
                                         <th>@lang('admin.shop.history.transaction.money')</th>
-                                        <th>@lang('admin.shop.history.transaction.amount')</th>
+                                        <!--<th>@lang('admin.shop.history.transaction.amount')</th>-->
                                         <th>@lang('admin.shop.history.date')</th>
                                     </tr>
                                     </thead>
@@ -292,8 +292,8 @@
             'columns': [
                 {"data": "user.username"},
                 {"data": "transaction_type"},
-                {"data": "money"},
                 {"data": "amount"},
+                //{"data": "money"},
                 {"data": "created_at"}
             ],
             "columnDefs": [
@@ -309,12 +309,12 @@
                     },
                     "targets": 2
                 },
-                {
+                /*{
                     "render": function ( data, type, row ) {
                         return data + ' points';
                     },
                     "targets": 3
-                }
+                }*/
             ],
             'language': datatableLang
         });

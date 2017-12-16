@@ -97,7 +97,7 @@ class CreditControllerTest extends TestCase
         $this->be($user);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'invalid',
+            'key' => 'invalid',
             'rate' => 'FR-SMS-10'
         ]);
         $response->assertStatus(400);
@@ -109,7 +109,7 @@ class CreditControllerTest extends TestCase
         $this->be($user);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'invalid',
+            'key' => 'invalid',
             'code' => '1808ABAB'
         ]);
         $response->assertStatus(400);
@@ -121,7 +121,7 @@ class CreditControllerTest extends TestCase
         $this->be($user);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'invalid',
+            'key' => 'invalid',
             'code' => '1808ABAB',
             'rate' => 'FR-SMS-10'
         ]);
@@ -145,7 +145,7 @@ class CreditControllerTest extends TestCase
         $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'fake',
+            'key' => 'fake',
             'code' => '1808ABAB',
             'rate' => 'FR-SMS-10'
         ]);
@@ -169,7 +169,7 @@ class CreditControllerTest extends TestCase
         $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'fake',
+            'key' => 'fake',
             'code' => '1808ABAB',
             'rate' => 'FR-SMS-10'
         ]);
@@ -193,7 +193,7 @@ class CreditControllerTest extends TestCase
         $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'fake',
+            'key' => 'fake',
             'code' => '1808USED',
             'rate' => 'FR-SMS-10'
         ]);
@@ -217,7 +217,7 @@ class CreditControllerTest extends TestCase
         $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
 
         $response = $this->post('/shop/credit/add/dedipass/notification', [
-            'public_key' => 'fake',
+            'key' => 'fake',
             'code' => '1808ABAB',
             'rate' => 'FR-SMS-10'
         ]);

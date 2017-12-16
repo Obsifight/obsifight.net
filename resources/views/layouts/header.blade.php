@@ -1,4 +1,4 @@
-<div class="site-header">
+<div class="site-header" style="background-image: url('https://obsifight.net/forum/styles/material/uix/bg/4.png')">
   @include('layouts.navbar')
   <div class="ui container">
     @if (isset($didYouKnow))

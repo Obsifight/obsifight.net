@@ -186,8 +186,8 @@ return [
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Urb\XenforoBridge\XenforoBridgeServiceProvider::class,
-        Srmklive\PayPal\Providers\PayPalServiceProvider::class,
-        Yajra\Datatables\DatatablesServiceProvider::class
+        Yajra\Datatables\DatatablesServiceProvider::class,
+        Fahim\PaypalIPN\PaypalIPNServiceProvider::class
     ],
 
     /*

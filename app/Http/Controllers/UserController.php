@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use function GuzzleHttp\Psr7\str;
 use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
 use Urb\XenforoBridge\XenforoBridge;
@@ -500,7 +501,7 @@ class UserController extends Controller
 					'error' => __('user.profile.edit.username.error.purchase')
 			]);
 		// Check if already edited 2 times
-		$findEdits = \App\UsersEditUsernameHistory::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+		$findEdits = \App\UsersEditUsernameAbility::where('user_id', Auth::user()->id)->whereNotNull('history_id')->get();
 		if (count($findEdits) >= 2)
 			return response()->json([
 					'status' => false,
@@ -609,7 +610,7 @@ class UserController extends Controller
 		}
 
 		// check username
-		if (Auth::user()->username == $request->input('to'))
+		if (strtolower(Auth::user()->username) == strtolower($request->input('to')))
 			return response()->json([
 					'status' => false,
 					'error' => __('user.profile.transfer.money.error.himself')

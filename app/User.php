@@ -114,10 +114,10 @@ class User extends Authenticatable
         foreach ($staff as $group => $users) {
             if ($group === 'Fondateur')
                 $group = 'Administrateur';
-            if ($group === 'Anim-Test' || $group === 'Chef-Anim')
+            if ($group === 'AnimTest' || $group === 'ChefAnim')
                 $group = 'Animateur';
-            if ($group === 'Chef-Modo' || $group === 'Modo-Test')
-                $group = 'Modo-Joueur';
+            if ($group === 'ChefModo' || $group === 'ModoTest')
+                $group = 'ModoJoueur';
             $group = $group . 's';
             if (!isset($staffList[$group]))
                 $staffList[$group] = ['color' => $staffColors[$i++], 'users' => []];

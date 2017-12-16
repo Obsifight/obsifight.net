@@ -458,11 +458,11 @@ class PermissionsTablesSeeder extends Seeder
         ]);
         DB::table('permission_role')->insert([
             'permission_id' => 28,
-            'role_id' => 4
+            'role_id' => 5
         ]);
         DB::table('permission_role')->insert([
             'permission_id' => 29,
-            'role_id' => 4
+            'role_id' => 5
         ]);
     }
 }

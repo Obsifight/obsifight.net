@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+use Mockery\Exception;
 use Urb\XenforoBridge\XenforoBridge;
 use Validator;
 use Illuminate\Http\Request;
@@ -123,7 +125,13 @@ class UserController extends Controller
 		Auth::loginUsingId($userId, ($rememberMe ? true : false));
 
 		if (env('APP_FORUM_ENABLED', false))
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->login(Auth::user()->username, $password, $rememberMe);
+        {
+            try {
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->login(Auth::user()->username, $password, $rememberMe);
+            } catch (\Exception $e) {
+                Log::warning($e->getMessage());
+            }
+        }
 
 		return response()->json([
 				'status' => true,
@@ -133,8 +141,13 @@ class UserController extends Controller
 
 	public function logout(Request $request)
 	{
-        if (env('APP_FORUM_ENABLED', false))
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->logout(Auth::user()->username);
+        if (env('APP_FORUM_ENABLED', false)) {
+            try {
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->logout(Auth::user()->username);
+            } catch (\Exception $e) {
+                Log::warning($e->getMessage());
+            }
+        }
 		Auth::logout();
 		return redirect('/');
 	}
@@ -205,8 +218,12 @@ class UserController extends Controller
 
 		// Add to Xenforo
 		if (env('APP_FORUM_ENABLED', false)) {
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->register($request->input('username'), $request->input('password'), $request->input('email'));
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->login($request->input('username'), $request->input('password'), false);
+            try {
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->register($request->input('username'), $request->input('password'), $request->input('email'));
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->login($request->input('username'), $request->input('password'), false);
+            } catch (\Exception $e) {
+                Log::warning($e->getMessage());
+            }
         }
 
 		// generate confirmation token
@@ -373,8 +390,12 @@ class UserController extends Controller
 
         // Add to Xenforo
         if (env('APP_FORUM_ENABLED', false)) {
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'password', $request->input('password'));
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->login($user->username, $request->input('password'), false);
+            try {
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'password', $request->input('password'));
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->login($user->username, $request->input('password'), false);
+            } catch (\Exception $e) {
+                Log::warning($e->getMessage());
+            }
         }
 
 		// login
@@ -409,7 +430,13 @@ class UserController extends Controller
 
         // Add to Xenforo
         if (env('APP_FORUM_ENABLED', false))
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'password', $request->input('password'));
+        {
+            try {
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'password', $request->input('password'));
+            } catch (\Exception $e) {
+                Log::warning($e->getMessage());
+            }
+        }
 
             // success
 		return response()->json([
@@ -531,7 +558,13 @@ class UserController extends Controller
 		$findAbility->save();
 
         if (env('APP_FORUM_ENABLED', false))
-            resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'username', $request->input('username'));
+        {
+            try {
+                resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'username', $request->input('username'));
+            } catch (\Exception $e) {
+                Log::warning($e->getMessage());
+            }
+        }
 
 		// success message
 		return response()->json([

@@ -11,7 +11,7 @@
             <p>
                 @lang('vote.tutorial.title')
             </p>
-            <a class="ui primary button" style="position:absolute;right:10px;top:23px;">
+            <a href="{{ url(env('VOTE_HELP_LINK')) }}" target="_blank" class="ui primary button" style="position:absolute;right:10px;top:23px;">
                 @lang('vote.tutorial.btn')
             </a>
         </div>

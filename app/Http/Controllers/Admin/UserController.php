@@ -9,6 +9,7 @@ use App\UsersObsiguardIP;
 use App\UsersTransferMoneyHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Validator;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -77,7 +78,13 @@ class UserController extends Controller
         if ($request->has('password')) {
             $user->password = User::hash($request->input('password'), $user->username);
             if (env('APP_FORUM_ENABLED', false))
-                resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'password', $request->input('password'));
+            {
+                try {
+                    resolve(\Urb\XenforoBridge\XenforoBridge::class)->editUser($user->username, 'password', $request->input('password'));
+                } catch (\Exception $e) {
+                    Log::warning($e->getMessage());
+                }
+            }
         }
         if ($user->email != $request->input('email')) {
             if (Validator::make(['email' => $request->input('email')], ['email' => 'required|email'])->fails() || User::where('email', $request->input('email'))->count() > 0)

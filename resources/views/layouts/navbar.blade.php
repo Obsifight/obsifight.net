@@ -19,7 +19,7 @@
     <i class="globe icon"></i> @lang('global.navbar.community')
     <i class="dropdown icon"></i>
     <div class="menu">
-      <a href="https://forum.obsifight.net" class="item"><i class="comments icon"></i> @lang('global.navbar.forum')</a>
+      <a href="{{ url('/forum') }}" class="item"><i class="comments icon"></i> @lang('global.navbar.forum')</a>
       <a href="{{ url('/ranking') }}" class="item"><i class="sort numeric ascending icon"></i> @lang('global.navbar.ranking')</a>
       <a href="{{ url('/sanctions') }}" class="item"><i class="ban icon"></i> @lang('global.navbar.sanctions')</a>
       <a href="{{ url('/stats') }}" class="item"><i class="bar chart icon"></i> @lang('global.navbar.stats')</a>

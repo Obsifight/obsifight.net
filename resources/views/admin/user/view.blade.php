@@ -90,7 +90,7 @@
                                                 </a>
                                             @endif
                                             @if ($user->twitterAccount)
-                                                <a href="https://twitter.com/{{ $user->twitterAccount }}"
+                                                <a href="https://twitter.com/{{ $user->twitterAccount->screen_name }}"
                                                    class="btn btn-social width-200 mr-1 mb-1 btn-vimeo">
                                                     <span class="fa fa-twitter font-medium-3"></span> @lang('user.field.twitter_account')
                                                 </a>

@@ -50,7 +50,7 @@ class ShopCreditHistory extends Model
         return DB::select("SELECT DISTINCT SUM(`history`.`payout`) AS `profit` " .
             "FROM `shop_credit_histories` " .
             "JOIN ( " .
-                 "(SELECT (`payment_amount` - `payment_tax`) AS `payout`, `id`, 'PAYPAL' AS `type` FROM `shop_credit_paypal_histories`) " .
+                 "(SELECT (`payment_amount` - `payment_tax`) AS `payout`, `id`, 'PAYPAL' AS `type` FROM `shop_credit_paypal_histories` WHERE `status` = 'COMPLETED') " .
               "UNION " .
                  "(SELECT (`payout`) AS `payout`, `id`, 'DEDIPASS' AS `type` FROM `shop_credit_dedipass_histories`) " .
               "UNION " .

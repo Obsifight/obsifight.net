@@ -55,8 +55,15 @@ class VoteControllerTest extends TestCase
   }
   public function testStepOneWithAlreadyVoted()
   {
-    \App\Vote::create(['user_id' => 1, 'out' => 10, 'reward_id' => 1, 'reward_getted' => 1, 'money_earned' => 0]);
+    \App\Vote::create(['user_id' => 1, 'out' => 10, 'reward_id' => 1, 'reward_getted' => 1, 'money_earned' => 0, 'ip' => '127.0.0.2']);
     $response = $this->call('POST', '/vote/step/one', ['username' => 'Test']);
+    $response->assertStatus(200);
+    $this->assertEquals(json_encode(array('status' => false, 'error' => __('vote.step.one.error.already', ['hours' => '04', 'minutes' => '00', 'seconds' => '00']))), $response->getContent());
+  }
+  public function testStepOneWithAlreadyVotedIP()
+  {
+    \App\Vote::create(['user_id' => 2, 'out' => 10, 'reward_id' => 1, 'reward_getted' => 1, 'money_earned' => 0, 'ip' => '127.0.0.1']);
+      $response = $this->call('POST', '/vote/step/one', ['username' => 'Test']);
     $response->assertStatus(200);
     $this->assertEquals(json_encode(array('status' => false, 'error' => __('vote.step.one.error.already', ['hours' => '04', 'minutes' => '00', 'seconds' => '00']))), $response->getContent());
   }

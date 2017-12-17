@@ -45,7 +45,12 @@ class VoteController extends Controller
       ]);
 
     // check if user can vote
-    $findVote = Vote::where('user_id', $user->id)->where('created_at', '>=', date('Y-m-d H:i:s', strtotime('- ' . env('VOTE_TIME') . ' minutes')))->first();
+    $findVote = Vote::where(function ($query) use ($request, $user) {
+                             $query->where('user_id', $user->id)
+                                   ->orWhere('ip', $request->ip());
+                    })
+                    ->where('created_at', '>=', date('Y-m-d H:i:s', strtotime('- ' . env('VOTE_TIME') . ' minutes')))
+                    ->first();
     if ($findVote && !empty($findVote)) {
       $nextVote = $findVote->created_at->addMinutes(env('VOTE_TIME'));
       $diff = \Carbon\Carbon::now()->diffInSeconds($nextVote);
@@ -109,6 +114,17 @@ class VoteController extends Controller
       return abort(400);
     if (!$request->session()->has('vote.valid'))
       return response()->json(['status' => false, 'error' => __('vote.step.error.valid')], 403);
+
+    // Check if not already voted
+    $findVote = Vote::where(function ($query) use ($request) {
+                        $query->where('user_id', $request->user->id)
+                              ->orWhere('ip', $request->ip());
+                    })
+                    ->where('created_at', '>=', date('Y-m-d H:i:s', strtotime('- ' . env('VOTE_TIME') . ' minutes')))
+                    ->first();
+    if ($findVote && !empty($findVote))
+        return response()->json(['status' => false, 'error' => __('vote.step.error.valid')], 403);
+
     $reward_getted = false;
 
     // get reward
@@ -140,6 +156,7 @@ class VoteController extends Controller
     $vote->reward_id = $reward->id;
     $vote->reward_getted = $reward_getted;
     $vote->money_earned = $money_earned;
+    $vote->ip = $request->ip();
     $vote->save();
 
     // success

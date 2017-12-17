@@ -30,6 +30,7 @@ class CreateVoteTables extends Migration
         $table->foreign('reward_id')->references('id')->on('vote_rewards');
         $table->boolean('reward_getted');
         $table->float('money_earned');
+        $table->ipAddress('ip');
         $table->timestamps();
       });
 

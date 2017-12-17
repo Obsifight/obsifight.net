@@ -56,6 +56,7 @@ class TestingVoteTablesSeeder extends Seeder
         'reward_id' => 1,
         'reward_getted' => 0,
         'money_earned' => 0,
+        'ip' => '127.0.0.2',
         'created_at' => date('Y-m-d H:i:s', strtotime('- '.(env('VOTE_TIME')+1).' minutes')),
         'updated_at' => date('Y-m-d H:i:s', strtotime('- '.(env('VOTE_TIME')+1).' minutes'))
       ]);
@@ -65,6 +66,7 @@ class TestingVoteTablesSeeder extends Seeder
         'reward_id' => 1,
         'reward_getted' => 0,
         'money_earned' => 0,
+        'ip' => '127.0.0.2',
         'created_at' => date('Y-m-13 12:00:00', strtotime('- 1 month')),
         'updated_at' => date('Y-m-13 12:00:00', strtotime('- 1 month'))
       ]);

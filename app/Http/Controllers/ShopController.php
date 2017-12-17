@@ -67,7 +67,7 @@ class ShopController extends Controller
     /* ====
       Handle price
     ==== */
-    if (Auth::user()->money < $totalPrice)
+    if (floatval(Auth::user()->money) < $totalPrice)
       return response()->json([
         'status' => false,
         'error' => __('shop.buy.error.price')
@@ -103,14 +103,15 @@ class ShopController extends Controller
       Handle user debit
     ==== */
     $currentUser = User::find(Auth::user()->id);
-    $currentUser->money = ($currentUser->money - floatval($totalPrice));
+    $currentUser->money = (floatval($currentUser->money) - floatval($totalPrice));
     $currentUser->save();
     /* ====
       Handle server commands
     ==== */
     if (!empty($item->commands)) {
       foreach ($item->commands as $command) {
-        $command = $server->sendCommand(str_replace('{PLAYER}', Auth::user()->username, $command))->get();
+        for ($i = 0; $i < $item->quantity; $i++)
+            $server->sendCommand(str_replace('{PLAYER}', Auth::user()->username, $command))->get();
       }
     }
     $server->sendCommand(strtr(env('SHOP_GLOBAL_CMD'), ['{PLAYER}' => Auth::user()->username, '{NAME}' => $item->name]))->get();

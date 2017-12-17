@@ -9,8 +9,6 @@ use App\ShopCreditHistory;
 use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use App\ShopVouchersHistory;
-use Illuminate\Support\Facades\App;
-use Mockery\Matcher\Not;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -240,13 +238,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationWithInvalidRequest()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('UNVERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(0);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', []);
         $response->assertStatus(403);
@@ -254,13 +252,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationWithUnknownUser()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', ['custom' => 10]);
         $response->assertStatus(404);
@@ -268,13 +266,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationWithoutPermission()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', ['custom' => 2]);
         $response->assertStatus(403);
@@ -282,13 +280,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationWithInvalidCurrency()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', ['custom' => 1, 'mc_currency' => 'USD']);
         $response->assertStatus(403);
@@ -296,13 +294,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationWithInvalidReceiver()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', ['custom' => 1, 'mc_currency' => 'EUR', 'receiver_email' => 'paypal@fake.de']);
         $response->assertStatus(403);
@@ -310,13 +308,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationAlreadyCompleted()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', [
             'custom' => 1,
@@ -330,13 +328,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationWithInvalidAmount()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $response = $this->post('/shop/credit/add/paypal/notification', [
             'custom' => 1,
@@ -351,13 +349,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationCompleted()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $date = date('Y-m-d H:i:s');
         $user = \App\User::find(1);
@@ -390,13 +388,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationReversedWithUnknownTransaction()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $date = date('Y-m-d H:i:s');
         $user = \App\User::find(1);
@@ -404,7 +402,7 @@ class CreditControllerTest extends TestCase
             'custom' => 1,
             'mc_currency' => 'EUR',
             'receiver_email' => 'paypal@obsifight.net',
-            'txn_id' => '47374DHE',
+            'parent_txn_id' => '47374DHE',
             'mc_gross' => 10.00,
             'mc_fee' => 0.8,
             'payer_email' => 'paypal@buyer.net',
@@ -416,13 +414,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationReversed()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         if (!class_exists('ApiObsifight'))
             require base_path('vendor/eywek/obsifight/API/ApiObsifight.class.php');
@@ -440,7 +438,7 @@ class CreditControllerTest extends TestCase
             'custom' => 1,
             'mc_currency' => 'EUR',
             'receiver_email' => 'paypal@obsifight.net',
-            'txn_id' => '47374DHD',
+            'parent_txn_id' => '47374DHD',
             'mc_gross' => 10.00,
             'mc_fee' => 0.8,
             'payer_email' => 'paypal@buyer.net',
@@ -460,13 +458,13 @@ class CreditControllerTest extends TestCase
 
     public function testPaypalNotificationCanceledReversalWithUnknownTransaction()
     {
-        $paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-            ->setMethods(['verifyIPN'])
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
             ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         $date = date('Y-m-d H:i:s');
         $user = \App\User::find(1);
@@ -474,7 +472,7 @@ class CreditControllerTest extends TestCase
             'custom' => 1,
             'mc_currency' => 'EUR',
             'receiver_email' => 'paypal@obsifight.net',
-            'txn_id' => '47374DHE',
+            'parent_txn_id' => '47374DHE',
             'mc_gross' => 10.00,
             'mc_fee' => 0.8,
             'payer_email' => 'paypal@buyer.net',
@@ -485,13 +483,14 @@ class CreditControllerTest extends TestCase
     }
 
     public function testPaypalNotificationCanceledReversal()
-    {$paypalClient = $this->getMockBuilder(\Srmklive\PayPal\Services\ExpressCheckout::class)
-        ->setMethods(['verifyIPN'])
-        ->getMock();
+    {
+        $paypalClient = $this->getMockBuilder(\Fahim\PaypalIPN\PaypalIPNListener::class)
+            ->setMethods(['processIpn'])
+            ->getMock();
         $paypalClient->expects($this->once())
-            ->method('verifyIPN')
-            ->willReturn('VERIFIED');
-        $this->app->instance('\Srmklive\PayPal\Services\ExpressCheckout', $paypalClient);
+            ->method('processIpn')
+            ->willReturn(1);
+        $this->app->instance('\Fahim\PaypalIPN\PaypalIPNListener', $paypalClient);
 
         if (!class_exists('ApiObsifight'))
             require base_path('vendor/eywek/obsifight/API/ApiObsifight.class.php');
@@ -512,7 +511,7 @@ class CreditControllerTest extends TestCase
             'custom' => 1,
             'mc_currency' => 'EUR',
             'receiver_email' => 'paypal@obsifight.net',
-            'txn_id' => '47374DHD',
+            'parent_txn_id' => '47374DHD',
             'mc_gross' => 10.00,
             'mc_fee' => 0.8,
             'payer_email' => 'paypal@buyer.net',

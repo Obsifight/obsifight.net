@@ -12,7 +12,6 @@ use App\ShopCreditPaypalHistory;
 use App\ShopCreditPaysafecardHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Fahim\PaypalIPN\PaypalIPNListener;
 use Illuminate\Support\Facades\Log;
 
 class CreditController extends Controller
@@ -162,7 +161,7 @@ class CreditController extends Controller
     {
         $this->request = $request;
         // Check request
-        $ipn = new PaypalIPNListener();
+        $ipn = resolve('\Fahim\PaypalIPN\PaypalIPNListener');
         if (!$ipn->processIpn()) {
             Log::error($ipn->getTextReport());
             abort(403);

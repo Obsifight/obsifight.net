@@ -424,6 +424,10 @@ class CreditController extends Controller
 
         $this->save(Auth::user(), $voucher->money, 0, 'VOUCHER', $history);
 
+        // Send notification to server
+        $server = resolve('\Server');
+        $server->sendCommand(strtr(env('DISCORD_SRV_BROADCAST'), ['{PLAYER}' => Auth::user()->username, '{MONEY}' => $voucher->money]))->get();
+
         return response()->json([
             'status' => true,
             'success' => __('shop.credit.add.success.voucher', ['money' => $voucher->money])

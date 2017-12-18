@@ -22,9 +22,9 @@
                 <tr>
                     <th>Positon</th>
                     <th>Nom</th>
-                    <th>Claims</th>
-                    <th>Kills</th>
-                    <th>Deaths</th>
+                    <th>Territoires</th>
+                    <th>Tués</th>
+                    <th>Morts</th>
                     <th>Score</th>
                 </tr>
             </thead>
@@ -54,6 +54,10 @@
     <script type="text/javascript" src="{{ url('/js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ url('/js/dataTables.semanticui.min.js') }}"></script>
     <script type="text/javascript">
+        var round = function (nb) {
+          return Math.round(nb * 100) / 100;
+        };
+
         $('table').DataTable({
             'processing': true,
             'serverSide': true,
@@ -83,6 +87,25 @@
                         return '<b><a href="{{ url('/stats/faction') }}/' + data + '">' + data + '</a></b>';
                     },
                     "targets": 1
+                },
+                {
+                    "render": function ( data, type, row ) {
+                        var details = JSON.parse(row.details);
+                        var detailsString = '';
+                        detailsString += '<b>Tués:</b> <span style=\'color: #016936\'>+' + round(details.kills) + ' points</span>';
+                        detailsString += '<br><b>Morts:</b> <span style=\'color: #B03060\'>' + round(details.deaths) + ' points</span>';
+                        detailsString += '<br><b>Argent:</b> <span style=\'color: #016936\'>+' + round(details.money) + ' points</span>';
+                        detailsString += '<br><b>Territoires:</b> <span style=\'color: #016936\'>+' + round(details.claims) + ' points</span>';
+                        detailsString += '<br><b>Avant-Postes:</b> <span style=\'color: #016936\'>+' + round(details.outpost) + ' points</span>';
+                        detailsString += '<br><b>Joueurs:</b> <span style=\'color: #016936\'>+' + round(details.max_power) + ' points</span>';
+                        detailsString += '<br><b>Ressources:</b> <span style=\'color: #016936\'>+' + round(details.materials) + ' points</span>';
+
+                        return data + '<div style="float: right" class="ui yellow button" data-placement="right center" data-toggle="popup"\n' +
+                            '        data-content="' + detailsString + '">\n' +
+                            '        Détails\n' +
+                            '</div>';
+                    },
+                    "targets": 5
                 }
             ],
             'createdRow': function( row, data, dataIndex) {
@@ -92,6 +115,14 @@
                     $(row).css('background-color', 'rgba(192, 192, 192, 0.3)');
                 else if (data.position === 3)
                     $(row).css('background-color', 'rgba(205, 127, 50, 0.3)');
+            },
+            'drawCallback': function(settings, json) {
+                $('[data-toggle="popup"]').each(function (k, el) {
+                    $(el).popup({
+                        html: $(el).attr('data-content'),
+                        position: $(el).attr('data-placement')
+                    })
+                })
             },
             'language': datatableLang
         });

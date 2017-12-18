@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Psy\Command\Command;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +16,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
       Commands\GetYoutubeVideos::class,
       Commands\VoteReset::class,
-      Commands\RefundV8::class
+      Commands\RefundV8::class,
+      Commands\DiscordVoucher::class
     ];
 
     /**
@@ -28,6 +30,7 @@ class Kernel extends ConsoleKernel
     {
       $schedule->command('youtube:videos')->cron('0 */5 * * *');
       $schedule->command('vote:reset')->monthlyOn(1, '00:00');
+      $schedule->command('bot:discord-voucher')->dailyAt('18:00');
     }
 
     /**

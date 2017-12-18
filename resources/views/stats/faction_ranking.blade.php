@@ -87,24 +87,6 @@
 
             <h3>Ressources</h3>
 
-            <?php
-            /*
-                          tmp = f.materials.GARNET_INGOT * 0.00015
-                          tmp += f.materials.GARNET_BLOCK * 0.00135
-                          tmp += f.materials.AMETHYST_INGOT * 0.002
-                          tmp += f.materials.AMETHYST_BLOCK * 0.018
-                          tmp += f.materials.TITANIUM_INGOT * 0.003
-                          tmp += f.materials.TITANIUM_BLOCK * 0.027
-                          tmp += f.materials.OBSIDIAN_INGOT * 0.003
-                          tmp += f.materials.OBSIDIAN_BLOCK * 0.027
-                          tmp += f.materials.INGOT_XENOTIUM * 3
-                          tmp += f.materials.XENOTIUM_BLOCK * 27
-                          tmp += f.materials.TNT * 0.01
-                          tmp += f.materials.XTNT * 9
-                          tmp += f.materials.ENDER_PEARL * 0.005
-                          tmp += f.materials.GOLDEN_APPLE * 0.1
-            */ ?>
-
             <div class="ui two column grid">
                 <div class="column">
                     <table class="ui celled table">

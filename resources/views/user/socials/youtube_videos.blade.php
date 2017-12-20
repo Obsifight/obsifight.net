@@ -52,7 +52,7 @@
               </div>
             </div>
             <br>
-            <p><em>@lang('user.profile.socials.youtube.videos.date', ['date' => \Carbon\Carbon::parse($video->publication_date)->diffForHumans()])</em></p>
+            <p><em>@lang('user.profile.socials.youtube.videos.date', ['date' => $video->publication_date->diffForHumans()])</em></p>
             @if ($video->eligible && !$video->payed)
               <span style="color:#2C9600" data-toggle="popup" data-placement="top center" data-content="{{ __('user.profile.socials.youtube.remuneration.alert.eligible', ['remuneration' => $video->remuneration]) }}"><i class="check icon"></i> @lang('user.profile.socials.youtube.remuneration.alert.title.eligible')</span>
             @elseif (!$video->payed)

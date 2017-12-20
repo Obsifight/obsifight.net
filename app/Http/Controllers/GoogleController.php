@@ -78,7 +78,7 @@ class GoogleController extends Controller
     // Check if have a channel
     $channel = \App\UsersYoutubeChannel::where('user_id', Auth::user()->id)->firstOrFail();
     // Get videos
-    $videos = \App\UsersYoutubeChannelVideo::where('channel_id', $channel->channel_id)->orderBy('id', 'DESC')->get();
+    $videos = \App\UsersYoutubeChannelVideo::where('channel_id', $channel->channel_id)->get();
 
     return view('user.socials.youtube_videos', compact('channel', 'videos'));
   }

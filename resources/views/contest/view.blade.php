@@ -52,7 +52,7 @@
                                         </p>
                                         <p>
                                             <b>@lang('sanction.contest.content'): </b>
-                                            &laquo; <em>{{ nl2br($contest->reason) }}</em> &raquo;
+                                            &laquo; <em>{!! nl2br(htmlentities($contest->reason)) !!}</em> &raquo;
                                         </p>
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@
                                             <span class="date">{{ $action->data->created_at->diffForHumans() }}</span>
                                         </div>
                                         <div class="text">
-                                            {{ nl2br($action->data->content) }}
+                                            {!! nl2br(htmlentities($action->data->content)) !!}
                                         </div>
                                     </div>
                                 </div>

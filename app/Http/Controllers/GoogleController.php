@@ -88,7 +88,7 @@ class GoogleController extends Controller
     // Check if have a channel
     $channel = \App\UsersYoutubeChannel::where('user_id', Auth::user()->id)->firstOrFail();
     // Get video
-    $video = \App\UsersYoutubeChannelVideo::where('channel_id', $channel->id)->where('id', $request->id)->where('eligible', 1)->where('payed', 0)->firstOrFail();
+    $video = \App\UsersYoutubeChannelVideo::where('channel_id', $channel->channel_id)->where('id', $request->id)->where('eligible', 1)->where('payed', 0)->firstOrFail();
     $remuneration = $video->remuneration;
 
     // Add money to user

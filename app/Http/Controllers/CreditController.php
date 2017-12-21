@@ -391,13 +391,13 @@ class CreditController extends Controller
     public function paysafecardSuccess(Request $request)
     {
         // Get ID
-        if (!$request->has('payment_id'))
+        if (!$request->query('payment_id'))
             abort(400);
 
         // Request notification to capture it
         resolve('\GuzzleHttp\Client')
             ->post('/shop/credit/add/paysafecard/notification', [
-                'mtid' => $request->input('payment_id')
+                'mtid' => $request->query('payment_id')
             ]);
 
         return redirect('/shop/credit/add/success');

@@ -12,7 +12,7 @@ class UsersYoutubeChannelVideo extends Model
 
     public function channel()
     {
-        return $this->belongsTo('App\UsersYoutubeChannel', 'channel_id');
+        return $this->belongsTo('App\UsersYoutubeChannel', 'channel_id', 'channel_id');
     }
 
     public function remunerationHistory()

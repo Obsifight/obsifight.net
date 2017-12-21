@@ -211,12 +211,12 @@ class VoteController extends Controller
 
   public function getRewardKit(Request $request)
   {
-    $kit = \App\VoteUserKit::where('user_id', Auth::user()->id)->firstOrFail();
+    $kit = \App\VoteUserKit::where('user_id', Auth::user()->id)->with('kit')->firstOrFail();
     // give kit
     $server = resolve('\Server');
     if (!$server->isConnected(Auth::user()->username)->get()['isConnected'])
       return redirect('/user')->with('flash.error', __('vote.reset.kit.get.error.connected'));
-    $command = "kit {$kit->name} " . Auth::user()->username;
+    $command = "kit {$kit->kit->name} " . Auth::user()->username;
     if (!$server->sendCommand($command)->get()['sendCommand'])
       return redirect('/user')->with('flash.error', __('vote.reset.kit.get.error.server'));
     // remove kit

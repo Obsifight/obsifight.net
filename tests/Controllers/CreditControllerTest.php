@@ -905,15 +905,15 @@ class CreditControllerTest extends TestCase
             ->getMock();
         $guzzleClient->expects($this->once())
             ->method('post')
-            ->with('/shop/credit/add/paysafecard/notification', [
-                'mtid' => '382YDBS'
+            ->with(url('/shop/credit/add/paysafecard/notification'), [
+                'form_params' => ['mtid' => '382YDBS']
             ])
             ->willReturn($guzzleClient);
         $this->app->instance('\GuzzleHttp\Client', $guzzleClient);
 
         $response = $this->get('/shop/credit/add/paysafecard/success?payment_id=382YDBS');
         $response->assertStatus(302);
-        $response->assertRedirect('/shop/credit/add/success');
+        $response->assertRedirect(url('/shop/credit/add/success'));
     }
 
     public function testVoucherNotLogged()

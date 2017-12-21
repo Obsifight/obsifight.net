@@ -377,7 +377,7 @@
                         if (data === 'COMPLETED')
                             return '<span class="badge badge-success">' + data + '</span>';
                         else if (data === 'REVERSED')
-                            return '<span class="badge badge-error">' + data + '</span>';
+                            return '<span class="badge badge-danger">' + data + '</span>';
                         else if (data === 'REFUNDED')
                             return '<span class="badge badge-warning">' + data + '</span>';
                         else if (data === 'CANCELED_REVERSAL')

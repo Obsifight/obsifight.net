@@ -354,9 +354,14 @@ class CreditController extends Controller
 
         // Find the payment
         $payment = resolve('\SebastianWalker\Paysafecard\Payment');
-        $payment = $payment::find($request->input('mtid'), $client);
-        // Check if the payment was authorized
+        try {
+            $payment = $payment::find($request->input('mtid'), $client);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            abort(404);
+        }
 
+        // Check if the payment was authorized
         if (!$payment->isAuthorized())
             abort(403);
         // capture
@@ -391,14 +396,17 @@ class CreditController extends Controller
     public function paysafecardSuccess(Request $request)
     {
         // Get ID
-        if (!$request->query('payment_id'))
+        if (!$request->has('payment_id'))
             abort(400);
 
         // Request notification to capture it
-        resolve('\GuzzleHttp\Client')
-            ->post('/shop/credit/add/paysafecard/notification', [
-                'mtid' => $request->query('payment_id')
-            ]);
+        try {
+            resolve('\GuzzleHttp\Client')
+                ->post(url('/shop/credit/add/paysafecard/notification'), [
+                    'form_params' => ['mtid' => $request->input('payment_id')]
+                ]);
+        } catch (\Exception $e) {
+        }
 
         return redirect('/shop/credit/add/success');
     }

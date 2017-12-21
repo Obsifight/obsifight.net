@@ -13,6 +13,6 @@ class UsersYoutubeChannel extends Model
 
     public function videos()
     {
-        return $this->hasMany('App\UsersYoutubeChannelVideo', 'channel_id');
+        return $this->hasMany('App\UsersYoutubeChannelVideo', 'channel_id', 'channel_id');
     }
 }

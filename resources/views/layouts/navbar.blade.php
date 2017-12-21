@@ -38,7 +38,7 @@
   </div>
 
   <div class="right menu">
-    @if (Auth::user())
+    @if (Auth::check())
       <div class="item">
         <a href="{{ url('/user') }}" class="ui obsifight button"><i class="user icon"></i> {{ Auth::user()->username }}</a>
       </div>

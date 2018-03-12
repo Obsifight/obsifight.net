@@ -149,7 +149,7 @@ class CreateUsersTable extends Migration
     Schema::create('users_youtube_channel_videos', function (Blueprint $table) {
       $table->increments('id');
       $table->string('channel_id');
-      $table->foreign('channel_id')->references('id')->on('users_youtube_channels');
+      $table->foreign('channel_id', 'ytchanvid_id_foreign')->references('id')->on('users_youtube_channels');
       $table->string('video_id');
       $table->string('title');
       $table->text('description');

@@ -11,7 +11,7 @@
                 "name": "eywek/obsifight",
                 "version":"1.0.0",
                 "source": {
-                    "url": "git@github.com:Eywek/obsifight-libs.git",
+                    "url": "https://github.com/Eywek/obsifight-libs.git",
                     "type": "git",
                     "reference":"master"
                 }
@@ -23,7 +23,7 @@
                 "name": "xpaw/ping",
                 "version":"1.0.0",
                 "source": {
-                    "url": "git@github.com:xPaw/PHP-Minecraft-Query.git",
+                    "url": "https://github.com/xPaw/PHP-Minecraft-Query.git",
                     "type": "git",
                     "reference":"master"
                 }
@@ -35,7 +35,7 @@
                 "name": "urb/xenforobridge",
                 "version":"1.0.1",
                 "source": {
-                    "url": "git@github.com:Eywek/XenforoBridge.git",
+                    "url": "https://github.com/Eywek/XenforoBridge.git",
                     "type": "git",
                     "reference":"master"
                 },

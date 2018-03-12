@@ -18,7 +18,7 @@ Multiples functions are available like :
 
 ## Launch
 
-You need to configure website into .env file. Install composer dependencies with `php composer.phar install`.
+You need to configure website into .env file. Use makefile with this command `make install`.
 
 
 ## Tests
